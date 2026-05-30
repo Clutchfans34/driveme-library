@@ -351,9 +351,9 @@ body::before{
         <input id="q" type="text" placeholder="Пошук по назві, автору, опису…" oninput="render()">
       </div>
       <div class="cats">
-        <button class="cat on" id="ca" onclick="setC('all',this)">Всі <span class="cat-n">20</span></button>
-        <button class="cat" id="cp" onclick="setC('personal',this)">🧠 Особистий розвиток <span class="cat-n">8</span></button>
-        <button class="cat" id="cb" onclick="setC('business',this)">💼 Бізнес <span class="cat-n">8</span></button>
+        <button class="cat on" id="ca" onclick="setC('all',this)">Всі <span class="cat-n">25</span></button>
+        <button class="cat" id="cp" onclick="setC('personal',this)">🧠 Особистий розвиток <span class="cat-n">11</span></button>
+        <button class="cat" id="cb" onclick="setC('business',this)">💼 Бізнес <span class="cat-n">10</span></button>
         <button class="cat" id="cl" onclick="setC('leadership',this)">🎯 Лідерство <span class="cat-n">4</span></button>
       </div>
     </div>
@@ -461,6 +461,17 @@ const B=[
    d:'Дисциплінована гонитва за меншим. Мистецтво відмовляти несуттєвому і фокусуватись на головному.'},
   {id:'extreme',e:'⚔️',t:'Extreme Ownership',a:'Джоко Вілінк',f:'FB2',s:'1.6 MB',c:'business',hot:false,new:true,ceo:false,
    d:'Принципи командування Navy SEAL для бізнесу. Лідер відповідає за все — без виправдань.'},
+  // NEW REAL BOOKS
+  {id:'jobs',e:'🍎',t:'iКона: Стів Джобс',a:'Джеффрі Янг',f:'FB2',s:'1.1 MB',c:'business',hot:true,new:true,ceo:true,file:'books/jobs.fb2',
+   d:'Повна біографія Стіва Джобса — від гаража до Apple. Геній, перфекціоніст, візіонер. Як одна людина змінила індустрію технологій, музики та кіно.'},
+  {id:'gtd',e:'✅',t:'Як привести справи до порядку',a:'Девід Аллен',f:'FB2',s:'864 KB',c:'personal',hot:false,new:true,ceo:false,file:'books/gtd.fb2',
+   d:'GTD — система продуктивності без стресу. Як звільнити голову від думок, організувати задачі і зосередитись на важливому. Класика тайм-менеджменту.'},
+  {id:'ford',e:'🏭',t:'Моє життя, мої досягнення',a:'Генрі Форд',f:'FB2',s:'524 KB',c:'business',hot:false,new:true,ceo:false,file:'books/ford.fb2',
+   d:'Автобіографія засновника Ford Motor Company. Як конвеєр змінив світ, філософія праці та лідерства від людини яка переосмислила виробництво.'},
+  {id:'covey',e:'7️⃣',t:'7 звичок надзвичайно ефективних людей',a:'Стівен Кові',f:'FB2',s:'490 KB',c:'personal',hot:true,new:true,ceo:true,file:'books/covey.fb2',
+   d:'Принципи ефективності що витримали час. Від проактивності до синергії — 7 звичок які змінюють мислення, стосунки і результати. 40 млн проданих копій.'},
+  {id:'babylon',e:'🏛️',t:'Найбагатша людина у Вавилоні',a:'Джордж Клейсон',f:'FB2',s:'445 KB',c:'personal',hot:false,new:true,ceo:false,file:'books/babylon.fb2',
+   d:'Притчі давнього Вавилону про фінансову мудрість. Правило 10% — плати спочатку собі. Прості але потужні закони багатства через вічні історії.'},
   // LEADERSHIP
   {id:'culture',e:'🎭',t:'Культурний код',a:'Деніел Койл',f:'FB2',s:'1.4 MB',c:'leadership',hot:false,new:false,ceo:true,
    d:'3 принципи виняткових команд: безпека, вразливість, спільна мета. Досвід Google, Pixar і спецназу.'},
@@ -521,7 +532,7 @@ function setC(c,btn){
 function bhtml(b){
   const f=favs.includes(b.id);
   return `<div class="bi" onclick="openM('${b.id}')">
-    <button class="bi-dl" onclick="event.stopPropagation();toast('⬇','Завантаження: ${b.t}')">↓ ${b.f}</button>
+    <button class="bi-dl" onclick="event.stopPropagation();dlBook('${b.id}')">↓ ${b.f}</button>
     <div class="bi-title">${b.t}</div>
     <div class="bi-meta">${b.a} · ${b.f} · ${b.s}</div>
     <div class="bi-desc">${b.d}</div>
@@ -645,7 +656,7 @@ function openM(id){
   document.getElementById('m-a').textContent=b.a;
   document.getElementById('m-d').textContent=b.d;
   document.getElementById('m-f').textContent=`${b.f} · ${b.s}`;
-  document.getElementById('m-dl').onclick=()=>{closeM();toast('⬇','Завантаження розпочато!')};
+  document.getElementById('m-dl').onclick=()=>{closeM();dlBook(id)};
   const fv=document.getElementById('m-fv');
   const upFv=()=>{fv.textContent=favs.includes(id)?'★ В обраних':'☆ В обрані'};
   upFv();fv.onclick=()=>{fav(id);upFv()};
@@ -654,6 +665,20 @@ function openM(id){
 function closeM(){document.getElementById('overlay').classList.remove('open')}
 document.getElementById('overlay').addEventListener('click',e=>{if(e.target.id==='overlay')closeM()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
+
+// ── DOWNLOAD ──
+function dlBook(id){
+  const b=B.find(x=>x.id===id);
+  if(b&&b.file){
+    const a=document.createElement('a');
+    a.href=b.file;
+    a.download=b.t+'.fb2';
+    a.click();
+    toast('⬇',`Завантаження: ${b.t}`);
+  } else {
+    toast('⬇',`Завантаження: ${b?b.t:'файл'}`);
+  }
+}
 
 // ── TOAST ──
 let _t;
