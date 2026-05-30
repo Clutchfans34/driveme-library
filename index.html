@@ -336,6 +336,77 @@ body::before{
 /* ── EMPTY ── */
 .empty{text-align:center;padding:40px 16px;color:var(--t3);font-size:13px}
 
+/* ── READER ── */
+.reader-overlay{
+  position:fixed;inset:0;z-index:300;
+  background:var(--bg);
+  display:flex;flex-direction:column;
+  transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);
+}
+.reader-overlay.open{transform:none}
+.reader-topbar{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 24px;border-bottom:1px solid var(--border);
+  background:var(--col);flex-shrink:0;position:sticky;top:0;z-index:2;
+}
+.reader-title{font-size:14px;font-weight:700;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.reader-author{font-size:12px;color:var(--t2);margin-top:1px;white-space:nowrap}
+.reader-controls{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.reader-btn{
+  width:34px;height:34px;border-radius:9px;
+  background:var(--item);border:1px solid var(--border);
+  color:var(--text);font-size:14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Inter',sans-serif;font-weight:700;transition:.13s;
+}
+.reader-btn:hover{background:var(--item-h);border-color:var(--border2)}
+.reader-close{
+  width:34px;height:34px;border-radius:9px;
+  background:var(--item);border:1px solid var(--border);
+  color:var(--t2);font-size:16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:.13s;
+}
+.reader-close:hover{background:var(--accent-bg);color:var(--accent)}
+.reader-progress-bar{
+  height:3px;background:var(--border);flex-shrink:0;
+}
+.reader-progress-fill{
+  height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-l));
+  transition:width .1s;width:0%;
+}
+.reader-body{
+  flex:1;overflow-y:auto;padding:0;
+  scroll-behavior:smooth;
+}
+.reader-content{
+  max-width:680px;margin:0 auto;
+  padding:40px 24px 80px;
+}
+.reader-content h1{font-size:22px;font-weight:800;margin:32px 0 16px;letter-spacing:-.4px;line-height:1.3}
+.reader-content h2{font-size:17px;font-weight:700;margin:28px 0 12px;color:var(--accent);letter-spacing:-.2px}
+.reader-content h3{font-size:15px;font-weight:600;margin:20px 0 8px}
+.reader-content p{
+  font-size:var(--reader-fs,17px);line-height:1.85;
+  margin-bottom:14px;color:var(--text);
+  text-align:justify;
+}
+.reader-content p:first-child{margin-top:0}
+.reader-content .epigraph{
+  border-left:3px solid var(--accent);padding-left:16px;
+  margin:24px 0;color:var(--t2);font-style:italic;
+}
+.reader-loading{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;height:300px;color:var(--t2);gap:14px;
+}
+.reader-spinner{
+  width:36px;height:36px;border:3px solid var(--border2);
+  border-top-color:var(--accent);border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.reader-fs-label{font-size:12px;color:var(--t3);min-width:28px;text-align:center}
+
 /* ── DIVIDER ── */
 .sep{height:1px;background:var(--border);margin:4px 0}
 
@@ -674,6 +745,28 @@ body::before{
 
 </div>
 
+<!-- READER -->
+<div class="reader-overlay" id="reader-overlay">
+  <div class="reader-topbar">
+    <div style="flex:1;min-width:0">
+      <div class="reader-title" id="reader-title">…</div>
+      <div class="reader-author" id="reader-author"></div>
+    </div>
+    <div class="reader-controls">
+      <button class="reader-btn" onclick="readerFontSize(-1)" title="Менший шрифт">A−</button>
+      <span class="reader-fs-label" id="reader-fs-label">17</span>
+      <button class="reader-btn" onclick="readerFontSize(+1)" title="Більший шрифт">A+</button>
+      <button class="reader-close" onclick="closeReader()" title="Закрити">✕</button>
+    </div>
+  </div>
+  <div class="reader-progress-bar"><div class="reader-progress-fill" id="reader-progress"></div></div>
+  <div class="reader-body" id="reader-body" onscroll="updateReaderProgress()">
+    <div class="reader-content" id="reader-content">
+      <div class="reader-loading"><div class="reader-spinner"></div><span>Завантажуємо книгу…</span></div>
+    </div>
+  </div>
+</div>
+
 <!-- LOGIN OVERLAY -->
 <div class="login-overlay hidden" id="login-overlay">
   <div class="login-box">
@@ -704,6 +797,7 @@ body::before{
       <button class="st-btn" id="st-done"  onclick="setStatus('done')" >✅ Прочитав</button>
     </div>
     <div class="modal-btns">
+      <button class="btn-dl-lg" id="m-read" style="background:linear-gradient(135deg,#3D8EE8,#5BA8F5)">📖 Читати</button>
       <button class="btn-dl-lg" id="m-dl">⬇ Завантажити</button>
       <button class="btn-sec" id="m-fv">☆ В обрані</button>
     </div>
@@ -1359,12 +1453,16 @@ function openM(id) {
   document.getElementById('m-a').textContent = b.a;
   document.getElementById('m-d').innerHTML = (b.ld||b.d).split('\n\n').map(p=>`<p>${p}</p>`).join('');
   document.getElementById('m-f').textContent = `${b.f} · ${b.s}`;
-  const dlBtn = document.getElementById('m-dl');
+  const dlBtn   = document.getElementById('m-dl');
+  const readBtn = document.getElementById('m-read');
   if (b.file) {
     dlBtn.textContent='⬇ Завантажити'; dlBtn.style.opacity='1'; dlBtn.style.pointerEvents='auto';
     dlBtn.onclick=()=>{ closeM(); dlBook(id); };
+    readBtn.style.display='';
+    readBtn.onclick=()=>{ closeM(); openReader(id); };
   } else {
     dlBtn.textContent='⏳ Скоро'; dlBtn.style.opacity='0.5'; dlBtn.style.pointerEvents='none';
+    readBtn.style.display='none';
   }
   renderStatusBtns(id);
   const fv=document.getElementById('m-fv');
@@ -1401,6 +1499,111 @@ function toggleTheme(){
 }
 // Застосувати збережену тему одразу при завантаженні
 (()=>{ applyTheme(localStorage.getItem('dml-theme')||'dark'); })();
+
+// ── READER ──
+let readerFontSizePx = parseInt(localStorage.getItem('dml-fs')||'17');
+
+function applyReaderFs(){
+  document.getElementById('reader-content').style.setProperty('--reader-fs', readerFontSizePx+'px');
+  document.getElementById('reader-fs-label').textContent = readerFontSizePx;
+}
+function readerFontSize(delta){
+  readerFontSizePx = Math.min(24, Math.max(13, readerFontSizePx + delta));
+  localStorage.setItem('dml-fs', readerFontSizePx);
+  applyReaderFs();
+}
+function updateReaderProgress(){
+  const body = document.getElementById('reader-body');
+  const pct  = body.scrollTop / (body.scrollHeight - body.clientHeight) * 100;
+  document.getElementById('reader-progress').style.width = Math.min(100,pct)+'%';
+}
+
+async function openReader(id){
+  const b = B.find(x=>x.id===id); if(!b?.file) return;
+  const overlay = document.getElementById('reader-overlay');
+  document.getElementById('reader-title').textContent  = b.t;
+  document.getElementById('reader-author').textContent = b.a;
+  document.getElementById('reader-content').innerHTML  =
+    '<div class="reader-loading"><div class="reader-spinner"></div><span>Завантажуємо книгу…</span></div>';
+  document.getElementById('reader-body').scrollTop = 0;
+  document.getElementById('reader-progress').style.width = '0%';
+  applyReaderFs();
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  try {
+    const resp = await fetch(b.file);
+    const raw  = await resp.arrayBuffer();
+    // Визначаємо кодування з XML-заголовку
+    const utf8sniff = new TextDecoder('utf-8').decode(new Uint8Array(raw,0,200));
+    let encoding = 'utf-8';
+    const encMatch = utf8sniff.match(/encoding=["']([^"']+)/i);
+    if(encMatch) encoding = encMatch[1].toLowerCase();
+    const text = new TextDecoder(encoding).decode(raw);
+
+    const parser = new DOMParser();
+    const xml    = parser.parseFromString(text, 'text/xml');
+
+    let html = '';
+
+    // Заголовок книги
+    const bookTitle = xml.querySelector('book-title');
+    if(bookTitle) html += `<h1>${bookTitle.textContent}</h1>`;
+
+    // Анотація
+    const annot = xml.querySelector('annotation');
+    if(annot){
+      html += '<div class="epigraph">';
+      annot.querySelectorAll('p').forEach(p=>{ html+=`<p>${p.textContent}</p>`; });
+      html += '</div>';
+    }
+
+    // Основний текст
+    const bodies = xml.querySelectorAll('body');
+    bodies.forEach(body=>{
+      if(body.getAttribute('name')==='notes') return;
+      body.querySelectorAll('section').forEach(section=>{
+        // Заголовок секції
+        const titles = section.querySelectorAll(':scope > title');
+        titles.forEach(t=>{
+          const tp = t.querySelectorAll('p');
+          if(tp.length) html+=`<h2>${[...tp].map(p=>p.textContent).join(' ')}</h2>`;
+        });
+        // Параграфи
+        section.querySelectorAll(':scope > p, :scope > section > p').forEach(p=>{
+          const txt = p.textContent.trim();
+          if(txt) html+=`<p>${txt}</p>`;
+        });
+        // Вкладені секції
+        section.querySelectorAll(':scope > section').forEach(sub=>{
+          const st = sub.querySelector(':scope > title p');
+          if(st) html+=`<h3>${st.textContent}</h3>`;
+          sub.querySelectorAll(':scope > p').forEach(p=>{
+            const txt = p.textContent.trim();
+            if(txt) html+=`<p>${txt}</p>`;
+          });
+        });
+      });
+    });
+
+    if(!html.trim()) html='<p style="color:var(--t3)">Не вдалось відобразити текст книги. Спробуй завантажити файл.</p>';
+    document.getElementById('reader-content').innerHTML = html;
+
+    // Зберігаємо факт читання
+    if(currentUser && statuses[id]!=='done' && statuses[id]!=='reading'){
+      statuses[id]='reading'; saveUserData(); updateNavCounters(); renderShelves();
+    }
+  } catch(e){
+    document.getElementById('reader-content').innerHTML =
+      `<p style="color:var(--accent)">Помилка завантаження: ${e.message}</p>`;
+  }
+}
+
+function closeReader(){
+  document.getElementById('reader-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeReader(); });
 
 // ── TOAST ──
 let _t;
