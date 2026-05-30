@@ -819,7 +819,7 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
   background:var(--col);border-top:1px solid var(--border2);
   padding:8px 4px env(safe-area-inset-bottom,0);
   display:none;
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:repeat(5,1fr);
   gap:2px;
 }
 .mob-nav-btn{
@@ -839,13 +839,40 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
   min-width:14px;text-align:center;
 }
 
+/* ── AUDIO PAGE ── */
+.audio-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:20px}
+.audio-card{background:var(--item);border:1px solid var(--border2);border-radius:18px;padding:20px;cursor:pointer;transition:.18s;position:relative;overflow:hidden}
+.audio-card:hover{background:var(--item-h);border-color:var(--accent-border)}
+.audio-card.playing{border-color:var(--accent);background:var(--item-h)}
+.audio-card-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px}
+.audio-cover{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-l));display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.audio-info{flex:1;min-width:0}
+.audio-title{font-size:14px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:3px}
+.audio-author{font-size:12px;color:var(--t2)}
+.audio-size{font-size:11px;color:var(--t3);margin-top:4px}
+/* Player controls */
+.audio-player{display:none;flex-direction:column;gap:10px;margin-top:4px}
+.audio-card.playing .audio-player{display:flex}
+.audio-progress-wrap{display:flex;align-items:center;gap:8px}
+.audio-progress{flex:1;height:4px;background:var(--border2);border-radius:4px;cursor:pointer;position:relative}
+.audio-progress-fill{height:100%;border-radius:4px;background:var(--accent);width:0%;transition:width .2s}
+.audio-time{font-size:11px;color:var(--t3);white-space:nowrap;min-width:70px;text-align:right}
+.audio-controls{display:flex;align-items:center;gap:10px}
+.audio-play-btn{width:42px;height:42px;border-radius:50%;background:var(--accent);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:.15s}
+.audio-play-btn:hover{background:var(--accent-l)}
+.audio-speed-btn{background:var(--item-h);border:1px solid var(--border2);border-radius:8px;color:var(--t2);font-size:11px;font-weight:700;padding:5px 9px;cursor:pointer;font-family:'Inter',sans-serif;transition:.15s}
+.audio-speed-btn:hover{color:var(--text);border-color:var(--accent)}
+.audio-open-btn{margin-left:auto;background:none;border:none;color:var(--t3);font-size:20px;cursor:pointer;padding:4px;line-height:1;transition:.15s}
+.audio-open-btn:hover{color:var(--accent)}
+.audio-empty{text-align:center;padding:60px 20px;color:var(--t3);font-size:14px}
+
 /* ── MOBILE STYLES ── */
 @media(max-width:600px){
   /* Page wrapper */
   .page{padding:0 14px}
 
   /* Add bottom padding for fixed nav */
-  #p-lib,#p-reading,#p-favs,#p-done,#p-admin{padding-bottom:80px}
+  #p-lib,#p-reading,#p-favs,#p-done,#p-admin,#p-audio{padding-bottom:80px}
 
   /* Header */
   .header{padding:14px 0 0}
@@ -968,6 +995,7 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
           <button class="nav-btn" onclick="setPage('reading',this)">Читаю <span id="readingn" style="color:var(--accent)"></span></button>
           <button class="nav-btn" onclick="setPage('favs',this)">Обрані <span id="favn" style="color:var(--accent)"></span></button>
           <button class="nav-btn" onclick="setPage('done',this)">Прочитано <span id="donen" style="color:var(--accent)"></span></button>
+          <button class="nav-btn" onclick="setPage('audio',this)">🎧 Аудіо</button>
           <button class="nav-btn" id="admin-nav-btn" style="display:none;color:var(--accent)" onclick="setPage('admin',this)">👑 Адмін</button>
         </div>
         <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Змінити тему">🌙</button>
@@ -1029,6 +1057,15 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
     <div class="sec-h">✅ Прочитано</div>
     <div class="sec-sub">Книги які ти вже прочитав</div>
     <div id="done-cnt"></div>
+  </div>
+
+  <!-- PAGE: AUDIO -->
+  <div id="p-audio" style="display:none;padding-top:32px">
+    <div class="sec-h">🎧 Аудіокниги</div>
+    <div class="sec-sub">Слухай книги у дорозі — натисни на картку щоб розпочати</div>
+    <div class="audio-grid" id="audio-grid">
+      <div class="audio-empty">Аудіокниги ще не додані.<br>Адмін може завантажити MP3 файли.</div>
+    </div>
   </div>
 
   <!-- PAGE: CHALLENGE -->
@@ -1122,6 +1159,43 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
       </div>
     </div>
 
+    <!-- ADD AUDIOBOOK -->
+    <div class="add-book-section" id="aa-section" style="margin-top:12px"
+      ondragover="event.preventDefault();this.classList.add('drag')"
+      ondragleave="this.classList.remove('drag')"
+      ondrop="event.preventDefault();this.classList.remove('drag');onAaDrop(event)">
+      <div class="add-book-title">🎧 Додати аудіокнигу</div>
+      <div class="ab-file-zone" id="aa-file-zone">
+        <input type="file" class="ab-file-input" id="aa-file" accept=".mp3,.m4a,.m4b" onchange="onAaFile(this)">
+        <div class="ab-file-ico" id="aa-file-ico">🎵</div>
+        <div class="ab-file-lbl" id="aa-file-lbl">Перетягни MP3/M4A або натисни щоб вибрати</div>
+        <div class="ab-file-sub">Файл буде збережено в Firebase Storage</div>
+      </div>
+      <div class="ab-progress" id="aa-progress"><div class="ab-progress-bar" id="aa-progress-bar"></div></div>
+      <div id="aa-confirm-card" style="display:none;margin-top:16px;background:var(--item);border:1px solid var(--border2);border-radius:14px;padding:18px 20px">
+        <div style="font-size:13px;font-weight:700;color:var(--t3);margin-bottom:12px">🎧 Дані аудіокниги</div>
+        <div class="add-book-grid">
+          <div><div class="ab-label">Назва</div><input class="ab-input" id="aa-title"></div>
+          <div><div class="ab-label">Автор</div><input class="ab-input" id="aa-author"></div>
+          <div>
+            <div class="ab-label">Категорія</div>
+            <select class="ab-select" id="aa-cat">
+              <option value="personal">🧠 Особистий розвиток</option>
+              <option value="business">💼 Бізнес-література</option>
+              <option value="leadership">🎯 Лідерство та команда</option>
+            </select>
+          </div>
+          <div><div class="ab-label">Емодзі обкладинки</div><input class="ab-input" id="aa-emoji" placeholder="🎧" maxlength="4"></div>
+          <div class="add-book-full"><div class="ab-label">Короткий опис</div><input class="ab-input" id="aa-desc" placeholder="1-2 речення про книгу"></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-top:14px">
+          <button class="ab-submit" id="aa-submit" onclick="submitAddAudio()">✅ Зберегти аудіокнигу</button>
+          <button onclick="resetAaForm()" style="padding:10px 18px;border-radius:10px;background:var(--item-h);border:1px solid var(--border2);color:var(--t2);font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">✕ Скасувати</button>
+          <span class="ab-msg" id="aa-msg"></span>
+        </div>
+      </div>
+    </div>
+
     <div style="background:var(--col);border:1px solid var(--border2);border-radius:16px;padding:4px 0;overflow-x:auto;margin-bottom:32px">
       <table class="admin-table" id="adm-table">
         <thead>
@@ -1187,6 +1261,10 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
   <button class="mob-nav-btn" id="mn-done" onclick="setPage('done',this);syncMobNav('done')">
     <span class="mn-ico">✅</span>
     <span class="mn-lbl">Прочитано</span>
+  </button>
+  <button class="mob-nav-btn" id="mn-audio" onclick="setPage('audio',this);syncMobNav('audio')">
+    <span class="mn-ico">🎧</span>
+    <span class="mn-lbl">Аудіо</span>
   </button>
 </nav>
 
@@ -1552,6 +1630,7 @@ async function showApp() {
   if (currentUser.isAdmin) showAdminNav();
 
   await loadCustomBooks();
+  await loadAudioBooks();
   render();
   renderShelves();
   updateFavn();
@@ -1565,7 +1644,7 @@ function showAdminNav() {
 }
 
 // ── PAGES ──
-const PG = ['lib','reading','favs','done','admin'];
+const PG = ['lib','reading','favs','done','audio','admin'];
 function setPage(p, btn) {
   PG.forEach(x => document.getElementById('p-'+x).style.display = x===p ? '' : 'none');
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('on'));
@@ -1574,6 +1653,7 @@ function setPage(p, btn) {
   if (p === 'reading') renderReading();
   if (p === 'done')    renderDone();
   if (p === 'admin')   renderAdmin();
+  if (p === 'audio')   renderAudio();
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
@@ -2169,6 +2249,76 @@ function showAbMsg(msg,cls){
   el.textContent=msg; el.className='ab-msg'+(cls?' '+cls:'');
 }
 
+// ── ADD AUDIOBOOK (ADMIN) ──
+let aaFile = null;
+
+function onAaDrop(e){ const f=e.dataTransfer?.files?.[0]; if(f) processAaFile(f); }
+function onAaFile(input){ const f=input.files[0]; if(f) processAaFile(f); }
+
+function resetAaForm(){
+  aaFile=null;
+  document.getElementById('aa-file').value='';
+  document.getElementById('aa-file-ico').textContent='🎵';
+  document.getElementById('aa-file-lbl').textContent='Перетягни MP3/M4A або натисни щоб вибрати';
+  document.getElementById('aa-confirm-card').style.display='none';
+  document.getElementById('aa-progress').style.display='none';
+  document.getElementById('aa-progress-bar').style.width='0%';
+  document.getElementById('aa-msg').textContent='';
+  document.getElementById('aa-submit').disabled=false;
+  document.getElementById('aa-submit').textContent='✅ Зберегти аудіокнигу';
+}
+
+function processAaFile(file){
+  const ext=file.name.split('.').pop().toLowerCase();
+  if(!['mp3','m4a','m4b'].includes(ext)){ alert('Підтримуються MP3, M4A, M4B'); return; }
+  aaFile=file;
+  const size=file.size<1024*1024?(file.size/1024).toFixed(0)+' KB':(file.size/1024/1024).toFixed(1)+' MB';
+  document.getElementById('aa-file-ico').textContent='✅';
+  document.getElementById('aa-file-lbl').textContent=file.name+' · '+size;
+  // Guess title from filename
+  const guessTitle = file.name.replace(/\.[^.]+$/,'').replace(/[-_]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+  document.getElementById('aa-title').value=guessTitle;
+  document.getElementById('aa-author').value='';
+  document.getElementById('aa-emoji').value='🎧';
+  document.getElementById('aa-desc').value='';
+  document.getElementById('aa-confirm-card').style.display='block';
+  document.getElementById('aa-msg').textContent='';
+}
+
+async function submitAddAudio(){
+  const title=document.getElementById('aa-title').value.trim();
+  const author=document.getElementById('aa-author').value.trim();
+  const cat=document.getElementById('aa-cat').value;
+  const emoji=document.getElementById('aa-emoji').value.trim()||'🎧';
+  const desc=document.getElementById('aa-desc').value.trim();
+  if(!title||!author){ document.getElementById('aa-msg').textContent='Заповни назву та автора'; return; }
+  if(!aaFile){ document.getElementById('aa-msg').textContent='Вибери файл'; return; }
+  const btn=document.getElementById('aa-submit');
+  btn.disabled=true; btn.textContent='Завантажуємо…';
+  const progress=document.getElementById('aa-progress');
+  const bar=document.getElementById('aa-progress-bar');
+  progress.style.display='block';
+  try{
+    const ext=aaFile.name.split('.').pop().toLowerCase();
+    const safeName=title.toLowerCase().replace(/[^a-zа-яіїєґ0-9]/gi,'_').substring(0,40)+'_'+Date.now()+'.'+ext;
+    const ref=storage.ref('audiobooks/'+safeName);
+    const task=ref.put(aaFile);
+    await new Promise((res,rej)=>task.on('state_changed',s=>{bar.style.width=(s.bytesTransferred/s.totalBytes*100)+'%';},rej,res));
+    const url=await ref.getDownloadURL();
+    const size=aaFile.size<1024*1024?(aaFile.size/1024).toFixed(0)+' KB':(aaFile.size/1024/1024).toFixed(1)+' MB';
+    const id='audio_'+Date.now();
+    const data={id,t:title,a:author,c:cat,e:emoji,d:desc||title,s:size,file:url,createdAt:firebase.firestore.FieldValue.serverTimestamp()};
+    await db.collection('audiobooks').doc(id).set(data);
+    AUDIO_BOOKS.push({id,t:title,a:author,c:cat,e:emoji,d:desc||title,s:size,file:url});
+    const saved=title; resetAaForm();
+    document.getElementById('aa-msg').textContent=`✅ "${saved}" додано!`;
+    document.getElementById('aa-msg').style.color='var(--green)';
+  } catch(e){
+    btn.disabled=false; btn.textContent='✅ Зберегти аудіокнигу';
+    document.getElementById('aa-msg').textContent='Помилка: '+e.message;
+  }
+}
+
 // Завантаження кастомних книг з Firestore при старті
 async function loadCustomBooks(){
   try {
@@ -2511,6 +2661,136 @@ function blocksToHtml(blocks){
     if(b.type==='epigraph') return `<div class="epigraph"><p>${t}</p></div>`;
     return `<p>${t}</p>`;
   }).join('');
+}
+
+// ── AUDIO ──
+const AUDIO_BOOKS = [];
+// Масив для аудіокниг — заповнюється з Firestore або тут вручну
+// Приклад: {id:'atomic_audio', e:'⚡', t:'Атомні звички', a:'Джеймс Клір', file:'URL', s:'120 MB', d:'Опис'}
+
+let currentAudio = null; // {id, el (HTMLAudioElement)}
+
+function renderAudio(){
+  const grid = document.getElementById('audio-grid');
+  if(!grid) return;
+  if(!AUDIO_BOOKS.length){
+    grid.innerHTML='<div class="audio-empty">🎧 Аудіокниги ще не додані.<br><span style="font-size:12px;margin-top:8px;display:block">Адмін може завантажити MP3 файли через панель керування</span></div>';
+    return;
+  }
+  grid.innerHTML = AUDIO_BOOKS.map(b=>`
+    <div class="audio-card" id="acard-${b.id}" onclick="toggleAudio('${b.id}')">
+      <div class="audio-card-top">
+        <div class="audio-cover">${b.e||'🎧'}</div>
+        <div class="audio-info">
+          <div class="audio-title">${b.t}</div>
+          <div class="audio-author">${b.a}</div>
+          <div class="audio-size">${b.s||''}</div>
+        </div>
+      </div>
+      <div class="audio-player" id="aplayer-${b.id}">
+        <div class="audio-progress-wrap">
+          <div class="audio-progress" id="aprog-${b.id}" onclick="seekAudio(event,'${b.id}')">
+            <div class="audio-progress-fill" id="aprogfill-${b.id}"></div>
+          </div>
+          <div class="audio-time" id="atime-${b.id}">0:00 / 0:00</div>
+        </div>
+        <div class="audio-controls">
+          <button class="audio-play-btn" id="aplaybtn-${b.id}" onclick="event.stopPropagation();playPauseAudio('${b.id}')">▶</button>
+          <button class="audio-speed-btn" id="aspeed-${b.id}" onclick="event.stopPropagation();cycleSpeed('${b.id}')">1×</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleAudio(id){
+  const card = document.getElementById('acard-'+id);
+  const isPlaying = card.classList.contains('playing');
+  // Зупиняємо поточне аудіо
+  if(currentAudio && currentAudio.id !== id){
+    stopAudio(currentAudio.id);
+  }
+  if(isPlaying) return; // вже відкрито — не закриваємо кліком на картку
+  card.classList.add('playing');
+  startAudio(id);
+}
+
+function startAudio(id){
+  const b = AUDIO_BOOKS.find(x=>x.id===id);
+  if(!b) return;
+  if(!currentAudio || currentAudio.id!==id){
+    if(currentAudio) { currentAudio.el.pause(); }
+    const audio = new Audio(b.file);
+    audio.addEventListener('timeupdate', ()=>updateAudioProgress(id, audio));
+    audio.addEventListener('ended', ()=>stopAudio(id));
+    currentAudio = {id, el:audio, speed:1};
+    audio.play();
+    document.getElementById('aplaybtn-'+id).textContent='⏸';
+  } else {
+    currentAudio.el.play();
+    document.getElementById('aplaybtn-'+id).textContent='⏸';
+  }
+}
+
+function stopAudio(id){
+  const card = document.getElementById('acard-'+id);
+  if(card) card.classList.remove('playing');
+  if(currentAudio && currentAudio.id===id){
+    currentAudio.el.pause();
+  }
+  const btn = document.getElementById('aplaybtn-'+id);
+  if(btn) btn.textContent='▶';
+}
+
+function playPauseAudio(id){
+  if(!currentAudio || currentAudio.id!==id){ startAudio(id); return; }
+  const audio = currentAudio.el;
+  if(audio.paused){ audio.play(); document.getElementById('aplaybtn-'+id).textContent='⏸'; }
+  else { audio.pause(); document.getElementById('aplaybtn-'+id).textContent='▶'; }
+}
+
+function updateAudioProgress(id, audio){
+  const fill = document.getElementById('aprogfill-'+id);
+  const time = document.getElementById('atime-'+id);
+  if(!fill||!time||!audio.duration) return;
+  const pct = audio.currentTime/audio.duration*100;
+  fill.style.width=pct+'%';
+  time.textContent=fmtTime(audio.currentTime)+' / '+fmtTime(audio.duration);
+}
+
+function seekAudio(e, id){
+  e.stopPropagation();
+  if(!currentAudio||currentAudio.id!==id) return;
+  const bar = document.getElementById('aprog-'+id);
+  const rect = bar.getBoundingClientRect();
+  const pct = (e.clientX-rect.left)/rect.width;
+  currentAudio.el.currentTime = pct * currentAudio.el.duration;
+}
+
+const SPEEDS=[1,1.25,1.5,2];
+function cycleSpeed(id){
+  if(!currentAudio||currentAudio.id!==id) return;
+  const idx = SPEEDS.indexOf(currentAudio.speed||1);
+  const next = SPEEDS[(idx+1)%SPEEDS.length];
+  currentAudio.speed=next;
+  currentAudio.el.playbackRate=next;
+  document.getElementById('aspeed-'+id).textContent=next+'×';
+}
+
+function fmtTime(s){
+  if(isNaN(s)) return '0:00';
+  const m=Math.floor(s/60), sec=Math.floor(s%60);
+  return m+':'+(sec<10?'0':'')+sec;
+}
+
+async function loadAudioBooks(){
+  try{
+    const snap = await db.collection('audiobooks').get();
+    snap.docs.forEach(doc=>{
+      const b=doc.data();
+      if(!AUDIO_BOOKS.find(x=>x.id===b.id)) AUDIO_BOOKS.push(b);
+    });
+  } catch(e){ console.warn('Audio load:', e); }
 }
 
 // ── RENDER PAGE ──
