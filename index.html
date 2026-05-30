@@ -1554,7 +1554,11 @@ function render(){
     if(langFilter==='uk') books=books.filter(b=>b.lang==='Укр');
     if(langFilter==='ru') books=books.filter(b=>b.lang==='Рос'||!b.lang);
     if(q)books=books.filter(b=>b.t.toLowerCase().includes(q)||b.a.toLowerCase().includes(q)||b.d.toLowerCase().includes(q));
-    books.sort((a,b)=>(b.file?1:0)-(a.file?1:0));
+    books.sort((a,b)=>{
+      const ua = (b.lang==='Укр'?2:0)+(b.file?1:0);
+      const ub = (a.lang==='Укр'?2:0)+(a.file?1:0);
+      return ua-ub;
+    });
     if(!books.length&&q)return;
     html+=`<div class="col">
       <div class="col-head">
