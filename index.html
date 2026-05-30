@@ -141,15 +141,26 @@ body::before{
 .search-wrap input{
   width:100%;
   background:var(--col);
-  border:1px solid var(--border);
+  border:1px solid rgba(232,115,42,0.35);
   border-radius:12px;
   padding:11px 16px 11px 42px;
   color:var(--text);font-size:13.5px;
-  outline:none;transition:all .18s;
+  outline:none;transition:all .22s;
   font-family:'Inter',sans-serif;
+  box-shadow:
+    0 0 0 1px rgba(232,115,42,0.10),
+    0 0 16px rgba(232,115,42,0.18),
+    0 0 32px rgba(232,115,42,0.08);
 }
 .search-wrap input::placeholder{color:var(--t3)}
-.search-wrap input:focus{border-color:var(--accent-border);background:var(--item);box-shadow:0 0 0 3px rgba(232,115,42,.07)}
+.search-wrap input:focus{
+  border-color:rgba(232,115,42,0.70);
+  background:var(--item);
+  box-shadow:
+    0 0 0 1px rgba(232,115,42,0.20),
+    0 0 22px rgba(232,115,42,0.30),
+    0 0 48px rgba(232,115,42,0.14);
+}
 .search-ico{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--t3);font-size:15px;pointer-events:none}
 .cats{display:flex;gap:6px;flex-wrap:wrap}
 .cat{
