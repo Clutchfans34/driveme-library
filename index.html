@@ -648,6 +648,88 @@ body::before{
 .admin-stat-n{font-size:28px;font-weight:800;color:var(--accent)}
 .admin-stat-l{font-size:11px;color:var(--t3);margin-top:2px}
 
+/* ── SUGGEST BUTTON ── */
+.suggest-btn{
+  display:flex;align-items:center;gap:7px;
+  padding:9px 18px;border-radius:11px;
+  background:var(--item);border:1px solid var(--border2);
+  color:var(--t2);font-size:13px;font-weight:600;
+  cursor:pointer;font-family:'Inter',sans-serif;transition:.14s;
+  white-space:nowrap;flex-shrink:0;
+}
+.suggest-btn:hover{background:var(--item-h);border-color:var(--accent-border);color:var(--text)}
+
+/* ── SUGGEST MODAL ── */
+.sug-overlay{
+  position:fixed;inset:0;z-index:250;
+  background:rgba(0,0,0,.75);backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .18s;
+}
+.sug-overlay.open{opacity:1;pointer-events:all}
+.sug-modal{
+  background:var(--col);border:1px solid var(--border2);
+  border-radius:20px;padding:32px 28px;max-width:460px;width:100%;
+  position:relative;
+  transform:translateY(10px);transition:transform .22s cubic-bezier(.34,1.56,.64,1);
+}
+.sug-overlay.open .sug-modal{transform:none}
+.sug-title{font-size:18px;font-weight:800;letter-spacing:-.3px;margin-bottom:4px}
+.sug-sub{font-size:13px;color:var(--t2);margin-bottom:24px}
+.sug-field{margin-bottom:14px}
+.sug-label{font-size:11.5px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.sug-input{
+  width:100%;padding:11px 14px;
+  background:var(--item);border:1px solid var(--border2);
+  border-radius:11px;color:var(--text);font-family:'Inter',sans-serif;
+  font-size:14px;outline:none;transition:.14s;box-sizing:border-box;
+}
+.sug-input:focus{border-color:var(--accent);background:var(--item-h)}
+.sug-input::placeholder{color:var(--t3)}
+textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
+.sug-actions{display:flex;gap:10px;margin-top:20px}
+.sug-send{
+  flex:1;padding:12px;border-radius:11px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-l));
+  color:#fff;font-size:14px;font-weight:700;border:none;cursor:pointer;
+  font-family:'Inter',sans-serif;transition:.14s;
+  box-shadow:0 4px 14px rgba(232,115,42,.3);
+}
+.sug-send:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(232,115,42,.4)}
+.sug-send:disabled{opacity:.5;pointer-events:none}
+.sug-cancel{
+  padding:12px 18px;border-radius:11px;
+  background:var(--item);border:1px solid var(--border2);
+  color:var(--t2);font-size:14px;font-weight:600;cursor:pointer;
+  font-family:'Inter',sans-serif;transition:.14s;
+}
+.sug-cancel:hover{background:var(--item-h)}
+
+/* ── SUGGESTIONS in ADMIN ── */
+.sug-card{
+  background:var(--item);border:1px solid var(--border);
+  border-radius:12px;padding:16px 18px;margin-bottom:10px;
+  display:flex;align-items:flex-start;gap:14px;
+}
+.sug-card-body{flex:1;min-width:0}
+.sug-card-title{font-size:14px;font-weight:700;margin-bottom:3px}
+.sug-card-author{font-size:12px;color:var(--accent);margin-bottom:6px}
+.sug-card-comment{font-size:12px;color:var(--t2);line-height:1.5;margin-bottom:8px}
+.sug-card-meta{font-size:11px;color:var(--t3)}
+.sug-card-actions{display:flex;gap:6px;flex-shrink:0;align-items:flex-start}
+.sug-done-btn{
+  padding:5px 12px;border-radius:7px;font-size:11px;font-weight:700;
+  background:rgba(44,200,138,.15);color:var(--green);border:1px solid rgba(44,200,138,.3);
+  cursor:pointer;font-family:'Inter',sans-serif;transition:.13s;white-space:nowrap;
+}
+.sug-done-btn:hover{background:rgba(44,200,138,.25)}
+.sug-del-btn{
+  padding:5px 10px;border-radius:7px;font-size:11px;font-weight:700;
+  background:rgba(232,115,42,.1);color:var(--accent);border:1px solid rgba(232,115,42,.2);
+  cursor:pointer;font-family:'Inter',sans-serif;transition:.13s;
+}
+.sug-del-btn:hover{background:rgba(232,115,42,.2)}
+
 /* ── MOBILE NAV BAR ── */
 .mob-nav{
   display:none;
@@ -719,9 +801,13 @@ body::before{
     gap:8px;
   }
   .search-wrap{max-width:100%;flex:1 1 100%}
+  .suggest-btn{order:3;width:100%;justify-content:center}
   /* iOS fix: font-size >= 16px prevents auto-zoom on focus */
   .search-wrap input{font-size:16px}
   .login-input{font-size:16px}
+  .sug-input{font-size:16px}
+  .sug-overlay{align-items:flex-end;padding:0 12px 20px}
+  .sug-modal{border-radius:20px;padding:28px 20px 24px}
   .cats{order:2;width:100%;flex-wrap:wrap;gap:6px}
   .cat{font-size:12px;padding:6px 11px}
 
@@ -826,6 +912,7 @@ body::before{
         <span class="search-ico">⌕</span>
         <input id="q" type="text" placeholder="Пошук по назві, автору, опису…" oninput="render()">
       </div>
+      <button class="suggest-btn" onclick="openSuggest()">💡 Запропонувати книгу</button>
       <div class="cats">
         <button class="cat on" id="ca" onclick="setC('all',this)">Всі <span class="cat-n">41</span></button>
         <button class="cat" id="cp" onclick="setC('personal',this)">🧠 Особистий розвиток <span class="cat-n">16</span></button>
@@ -892,7 +979,7 @@ body::before{
     <div class="sec-h">👑 Адмін-панель</div>
     <div class="sec-sub">Активність команди DriveMe в бібліотеці</div>
     <div class="admin-stat-row" id="adm-stats"></div>
-    <div style="background:var(--col);border:1px solid var(--border2);border-radius:16px;padding:4px 0;overflow-x:auto">
+    <div style="background:var(--col);border:1px solid var(--border2);border-radius:16px;padding:4px 0;overflow-x:auto;margin-bottom:32px">
       <table class="admin-table" id="adm-table">
         <thead>
           <tr>
@@ -908,8 +995,36 @@ body::before{
         <tbody id="adm-tbody"><tr><td colspan="7" style="text-align:center;color:var(--t3);padding:32px">Завантаження…</td></tr></tbody>
       </table>
     </div>
+    <!-- Suggestions -->
+    <div class="sec-h" style="margin-bottom:4px">💡 Пропозиції книг <span id="sug-count" style="font-size:14px;color:var(--accent)"></span></div>
+    <div class="sec-sub">Книги які пропонує команда</div>
+    <div id="adm-suggestions"><div style="color:var(--t3);font-size:13px;padding:16px 0">Завантаження…</div></div>
   </div>
 
+</div>
+
+<!-- SUGGEST MODAL -->
+<div class="sug-overlay" id="sug-overlay" onclick="if(event.target===this)closeSuggest()">
+  <div class="sug-modal">
+    <div class="sug-title">💡 Запропонувати книгу</div>
+    <div class="sug-sub">Твоя пропозиція буде розглянута адміністратором</div>
+    <div class="sug-field">
+      <div class="sug-label">Назва книги *</div>
+      <input class="sug-input" id="sug-title-inp" placeholder="Наприклад: Думай повільно, вирішуй швидко" maxlength="120">
+    </div>
+    <div class="sug-field">
+      <div class="sug-label">Автор *</div>
+      <input class="sug-input" id="sug-author-inp" placeholder="Наприклад: Деніел Канеман" maxlength="80">
+    </div>
+    <div class="sug-field">
+      <div class="sug-label">Чому варто прочитати?</div>
+      <textarea class="sug-input" id="sug-comment-inp" placeholder="Коротко розкажи про книгу та чому вона буде корисна команді…" maxlength="400"></textarea>
+    </div>
+    <div class="sug-actions">
+      <button class="sug-cancel" onclick="closeSuggest()">Скасувати</button>
+      <button class="sug-send" id="sug-send-btn" onclick="submitSuggest()">📨 Надіслати пропозицію</button>
+    </div>
+  </div>
 </div>
 
 <!-- MOBILE NAV -->
@@ -1667,6 +1782,7 @@ async function renderAdmin() {
     }).join('');
 
     document.getElementById('adm-tbody').innerHTML = rows || '<tr><td colspan="7" style="text-align:center;color:var(--t3);padding:32px">Поки що нікого немає</td></tr>';
+    renderSuggestions();
   } catch(e) {
     console.error('[Admin] Error:', e);
     document.getElementById('adm-tbody').innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--accent);padding:32px">
@@ -1705,6 +1821,92 @@ function openM(id) {
 function closeM(){document.getElementById('overlay').classList.remove('open')}
 document.getElementById('overlay').addEventListener('click',e=>{if(e.target.id==='overlay')closeM()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
+
+// ── SUGGEST BOOK ──
+function openSuggest(){
+  document.getElementById('sug-title-inp').value='';
+  document.getElementById('sug-author-inp').value='';
+  document.getElementById('sug-comment-inp').value='';
+  document.getElementById('sug-send-btn').disabled=false;
+  document.getElementById('sug-send-btn').textContent='📨 Надіслати пропозицію';
+  document.getElementById('sug-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  setTimeout(()=>document.getElementById('sug-title-inp').focus(),200);
+}
+function closeSuggest(){
+  document.getElementById('sug-overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+async function submitSuggest(){
+  const title   = document.getElementById('sug-title-inp').value.trim();
+  const author  = document.getElementById('sug-author-inp').value.trim();
+  const comment = document.getElementById('sug-comment-inp').value.trim();
+  if(!title||!author){ alert('Заповни назву та автора книги'); return; }
+  const btn = document.getElementById('sug-send-btn');
+  btn.disabled=true; btn.textContent='Надсилаємо…';
+  try {
+    await db.collection('suggestions').add({
+      title, author, comment,
+      from: currentUser?.displayName || 'Анонім',
+      fromId: currentUser?.id || '',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      status: 'new'
+    });
+    btn.textContent='✅ Надіслано!';
+    setTimeout(()=>closeSuggest(), 1200);
+  } catch(e){
+    btn.disabled=false;
+    btn.textContent='📨 Надіслати пропозицію';
+    alert('Помилка: '+e.message);
+  }
+}
+
+// ── RENDER SUGGESTIONS (admin) ──
+async function renderSuggestions(){
+  const el = document.getElementById('adm-suggestions');
+  if(!el) return;
+  try {
+    const snap = await db.collection('suggestions').orderBy('createdAt','desc').get();
+    const countEl = document.getElementById('sug-count');
+    if(countEl) countEl.textContent = snap.size ? `(${snap.size})` : '';
+    if(snap.empty){ el.innerHTML='<div style="color:var(--t3);font-size:13px;padding:16px 0">Поки що пропозицій немає</div>'; return; }
+    const fmtDate = ts => {
+      if(!ts) return '—';
+      const d = ts.toDate?ts.toDate():new Date(ts);
+      const diff = Math.floor((new Date()-d)/86400000);
+      if(diff===0) return 'Сьогодні';
+      if(diff===1) return 'Вчора';
+      return `${diff} дн. тому`;
+    };
+    el.innerHTML = snap.docs.map(doc=>{
+      const s = doc.data();
+      const done = s.status==='done';
+      return `<div class="sug-card" style="${done?'opacity:.45':''}">
+        <div class="sug-card-body">
+          <div class="sug-card-title">${s.title||'—'}${done?' <span style="color:var(--green);font-size:11px">✅ Додано</span>':''}</div>
+          <div class="sug-card-author">${s.author||'—'}</div>
+          ${s.comment?`<div class="sug-card-comment">"${s.comment}"</div>`:''}
+          <div class="sug-card-meta">від <b>${s.from||'—'}</b> · ${fmtDate(s.createdAt)}</div>
+        </div>
+        <div class="sug-card-actions">
+          ${!done?`<button class="sug-done-btn" onclick="markSugDone('${doc.id}')">✅ Додано</button>`:''}
+          <button class="sug-del-btn" onclick="delSug('${doc.id}')">✕</button>
+        </div>
+      </div>`;
+    }).join('');
+  } catch(e){
+    el.innerHTML=`<div style="color:var(--accent);font-size:13px">Помилка: ${e.message}</div>`;
+  }
+}
+async function markSugDone(id){
+  await db.collection('suggestions').doc(id).update({status:'done'});
+  renderSuggestions();
+}
+async function delSug(id){
+  if(!confirm('Видалити пропозицію?')) return;
+  await db.collection('suggestions').doc(id).delete();
+  renderSuggestions();
+}
 
 // ── DOWNLOAD ──
 function dlBook(id) {
