@@ -1068,11 +1068,21 @@ async function doLogin() {
 
   // Зберігаємо/оновлюємо профіль у Firestore
   try {
-    await db.collection('users').doc(id).set({
-      name, surname, displayName: name+' '+surname,
-      lastVisit: firebase.firestore.FieldValue.serverTimestamp(),
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    }, { merge: true });
+    const userRef = db.collection('users').doc(id);
+    const existing = await userRef.get();
+    if (!existing.exists) {
+      await userRef.set({
+        name, surname, displayName: name+' '+surname,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        lastVisit: firebase.firestore.FieldValue.serverTimestamp(),
+        favorites: [], statuses: {}, downloads: {}, progress: {}
+      });
+    } else {
+      await userRef.update({
+        name, surname, displayName: name+' '+surname,
+        lastVisit: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
   } catch(e) { console.warn('Firebase error:', e); }
 
   document.getElementById('login-overlay').classList.add('hidden');
@@ -1433,7 +1443,9 @@ async function renderChallenge() {
 async function renderAdmin() {
   document.getElementById('adm-tbody').innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--t3);padding:32px">Завантаження…</td></tr>';
   try {
+    console.log('[Admin] Fetching users from Firestore...');
     const snap = await db.collection('users').get();
+    console.log('[Admin] Got', snap.size, 'users:', snap.docs.map(d=>d.id));
     const users = snap.docs.map(d=>({id:d.id,...d.data()}));
 
     // Stats
@@ -1488,7 +1500,11 @@ async function renderAdmin() {
 
     document.getElementById('adm-tbody').innerHTML = rows || '<tr><td colspan="7" style="text-align:center;color:var(--t3);padding:32px">Поки що нікого немає</td></tr>';
   } catch(e) {
-    document.getElementById('adm-tbody').innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--accent);padding:32px">Помилка: ${e.message}</td></tr>`;
+    console.error('[Admin] Error:', e);
+    document.getElementById('adm-tbody').innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--accent);padding:32px">
+      ⚠️ Помилка завантаження: <b>${e.message}</b><br>
+      <span style="font-size:11px;color:var(--t3);margin-top:8px;display:block">Перевір правила безпеки Firestore (Firebase Console → Firestore → Rules)</span>
+    </td></tr>`;
   }
 }
 
