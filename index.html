@@ -975,7 +975,7 @@ function bhtml(b){
 
 // ── SHELF DEFINITIONS ──
 const SHELVES = [
-  { id:'ceo',  label:'👑 CEO рекомендує',    books:()=>B.filter(b=>b.ceo&&b.file).slice(0,5) },
+  { id:'ceo',  label:'CEO рекомендує',    books:()=>B.filter(b=>b.ceo&&b.file).slice(0,5) },
   { id:'hot',  label:'🔥 Популярне',          books:()=>B.filter(b=>b.hot&&b.file).slice(0,5) },
   { id:'new',  label:'✨ Нові надходження',   books:()=>B.filter(b=>b.new&&b.file).slice(0,5) },
   { id:'best', label:'⭐ Бестселери',         books:()=>B.filter(b=>['atomic','covey','influence','good2great','jobs','culture','five','radical','mindset'].includes(b.id)&&b.file).slice(0,5) },
