@@ -1613,11 +1613,22 @@ async function renderChallenge() {
 async function renderAdmin() {
   document.getElementById('adm-tbody').innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--t3);padding:32px">Завантаження…</td></tr>';
   try {
-    // Таймаут 10 секунд
-    const snap = await Promise.race([
-      db.collection('users').get(),
-      new Promise((_,reject)=>setTimeout(()=>reject(new Error('Timeout — Firebase не відповідає. Перевір підключення або правила Firestore.')),10000))
-    ]);
+    // Спроба отримати дані (до 20 сек)
+    let snap;
+    try {
+      snap = await Promise.race([
+        db.collection('users').get(),
+        new Promise((_,reject)=>setTimeout(()=>reject(new Error('timeout')),20000))
+      ]);
+    } catch(e1) {
+      if(e1.message==='timeout') {
+        // Повторна спроба через server source
+        snap = await Promise.race([
+          db.collection('users').get({source:'server'}),
+          new Promise((_,reject)=>setTimeout(()=>reject(new Error('Timeout — Firebase не відповідає. Перевір підключення або правила Firestore.')),15000))
+        ]);
+      } else { throw e1; }
+    }
     const users = snap.docs.map(d=>({id:d.id,...d.data()}));
 
     // Stats
