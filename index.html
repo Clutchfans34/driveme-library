@@ -648,6 +648,18 @@ body::before{
 .admin-stat-n{font-size:28px;font-weight:800;color:var(--accent)}
 .admin-stat-l{font-size:11px;color:var(--t3);margin-top:2px}
 
+/* ── LANG FILTER ── */
+.lang-filter{display:flex;gap:5px;align-items:center;margin-left:auto;flex-shrink:0}
+.lf-btn{
+  display:flex;align-items:center;gap:5px;
+  padding:7px 12px;border-radius:9px;font-size:12px;font-weight:600;
+  background:var(--col);border:1px solid var(--border);color:var(--t2);
+  cursor:pointer;font-family:'Inter',sans-serif;transition:.14s;white-space:nowrap;
+}
+.lf-btn:hover{background:var(--item);color:var(--text)}
+.lf-btn.on{background:var(--item);border-color:var(--accent-border);color:var(--text);font-weight:700}
+.lf-flag{font-size:15px;line-height:1}
+
 /* ── SUGGEST BUTTON ── */
 .suggest-btn{
   display:flex;align-items:center;gap:7px;
@@ -801,7 +813,9 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
     gap:8px;
   }
   .search-wrap{max-width:100%;flex:1 1 100%}
-  .suggest-btn{order:3;width:100%;justify-content:center}
+  .lang-filter{order:2;margin-left:0;width:100%;justify-content:flex-start}
+  .lf-btn{font-size:11.5px;padding:6px 10px}
+  .suggest-btn{order:4;width:100%;justify-content:center}
   /* iOS fix: font-size >= 16px prevents auto-zoom on focus */
   .search-wrap input{font-size:16px}
   .login-input{font-size:16px}
@@ -910,6 +924,11 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
       <div class="search-wrap">
         <span class="search-ico">⌕</span>
         <input id="q" type="text" placeholder="Пошук по назві, автору, опису…" oninput="render()">
+      </div>
+      <div class="lang-filter">
+        <button class="lf-btn on" id="lf-all" onclick="setLang('all',this)">Всі мови</button>
+        <button class="lf-btn" id="lf-uk" onclick="setLang('uk',this)"><span class="lf-flag">🇺🇦</span> Українська</button>
+        <button class="lf-btn" id="lf-ru" onclick="setLang('ru',this)"><span class="lf-flag">🇷🇺</span> Російська</button>
       </div>
       <button class="suggest-btn" onclick="openSuggest()">💡 Запропонувати книгу</button>
       <div class="cats">
@@ -1423,9 +1442,16 @@ function setPage(p, btn) {
 }
 
 // ── CAT ──
+let langFilter = 'all'; // 'all' | 'uk' | 'ru'
 function setC(c,btn){
   cat=c;
   ['ca','cp','cb','cl'].forEach(id=>document.getElementById(id)?.classList.remove('on'));
+  if(btn)btn.classList.add('on');
+  render();
+}
+function setLang(l,btn){
+  langFilter=l;
+  ['lf-all','lf-uk','lf-ru'].forEach(id=>document.getElementById(id)?.classList.remove('on'));
   if(btn)btn.classList.add('on');
   render();
 }
@@ -1508,6 +1534,8 @@ function render(){
   const cols=cat==='all'?COLS:COLS.filter(c=>c.id===cat);
   cols.forEach(col=>{
     let books=B.filter(b=>b.c===col.id);
+    if(langFilter==='uk') books=books.filter(b=>b.lang==='Укр');
+    if(langFilter==='ru') books=books.filter(b=>b.lang==='Рос'||!b.lang);
     if(q)books=books.filter(b=>b.t.toLowerCase().includes(q)||b.a.toLowerCase().includes(q)||b.d.toLowerCase().includes(q));
     books.sort((a,b)=>(b.file?1:0)-(a.file?1:0));
     if(!books.length&&q)return;
