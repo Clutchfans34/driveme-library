@@ -664,12 +664,22 @@ body::before{
 .suggest-btn{
   display:flex;align-items:center;gap:7px;
   padding:9px 18px;border-radius:11px;
-  background:var(--item);border:1px solid var(--border2);
-  color:var(--t2);font-size:13px;font-weight:600;
-  cursor:pointer;font-family:'Inter',sans-serif;transition:.14s;
+  background:linear-gradient(135deg,#F5C030,#F0A500);
+  border:none;
+  color:#1A1000;font-size:13px;font-weight:700;
+  cursor:pointer;font-family:'Inter',sans-serif;transition:.2s;
   white-space:nowrap;flex-shrink:0;
+  box-shadow:0 0 0 1px rgba(245,192,48,.3), 0 0 18px rgba(245,192,48,.45), 0 4px 14px rgba(245,192,48,.3);
+  animation:suggest-pulse 2.5s ease-in-out infinite;
 }
-.suggest-btn:hover{background:var(--item-h);border-color:var(--accent-border);color:var(--text)}
+.suggest-btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 0 0 1px rgba(245,192,48,.5), 0 0 28px rgba(245,192,48,.65), 0 6px 20px rgba(245,192,48,.45);
+}
+@keyframes suggest-pulse{
+  0%,100%{box-shadow:0 0 0 1px rgba(245,192,48,.3), 0 0 18px rgba(245,192,48,.45), 0 4px 14px rgba(245,192,48,.3)}
+  50%{box-shadow:0 0 0 1px rgba(245,192,48,.5), 0 0 32px rgba(245,192,48,.7), 0 4px 20px rgba(245,192,48,.5)}
+}
 
 /* ── SUGGEST MODAL ── */
 .sug-overlay{
@@ -927,8 +937,8 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
       </div>
       <div class="lang-filter">
         <button class="lf-btn on" id="lf-all" onclick="setLang('all',this)">Всі мови</button>
-        <button class="lf-btn" id="lf-uk" onclick="setLang('uk',this)"><span class="lf-flag">🇺🇦</span> Українська</button>
-        <button class="lf-btn" id="lf-ru" onclick="setLang('ru',this)"><span class="lf-flag">🇷🇺</span> Російська</button>
+        <button class="lf-btn" id="lf-uk" onclick="setLang('uk',this)"><span class="lf-flag">🇺🇦</span> Укр.</button>
+        <button class="lf-btn" id="lf-ru" onclick="setLang('ru',this)">Рус.</button>
       </div>
       <button class="suggest-btn" onclick="openSuggest()">💡 Запропонувати книгу</button>
       <div class="cats">
