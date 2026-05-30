@@ -1000,7 +1000,7 @@ function bhtml(b){
       : `<span class="bi-soon">Скоро</span>`
     }
     <div class="bi-title">${b.t}</div>
-    <div class="bi-meta">${b.a} · ${b.f} · ${b.s}${b.lang?' · '+b.lang:''}</div>
+    <div class="bi-meta">${b.a} · ${b.f} · ${b.s}</div>
     <div class="bi-desc">${b.d}</div>
     ${(b.new||b.hot||b.ceo)?`<div class="bi-chips">
       ${b.new?'<span class="chip c-new">New</span>':''}
@@ -1307,7 +1307,7 @@ function openM(id) {
   document.getElementById('m-t').textContent = b.t;
   document.getElementById('m-a').textContent = b.a;
   document.getElementById('m-d').innerHTML = (b.ld||b.d).split('\n\n').map(p=>`<p>${p}</p>`).join('');
-  document.getElementById('m-f').textContent = `${b.f} · ${b.s}${b.lang?' · '+b.lang:''}`;
+  document.getElementById('m-f').textContent = `${b.f} · ${b.s}`;
   const dlBtn = document.getElementById('m-dl');
   if (b.file) {
     dlBtn.textContent='⬇ Завантажити'; dlBtn.style.opacity='1'; dlBtn.style.pointerEvents='auto';
