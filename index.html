@@ -19,6 +19,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -653,6 +654,60 @@ body::before{
 .admin-stat-n{font-size:28px;font-weight:800;color:var(--accent)}
 .admin-stat-l{font-size:11px;color:var(--t3);margin-top:2px}
 
+/* ── ADD BOOK FORM ── */
+.add-book-section{
+  background:var(--col);border:1px solid var(--border2);
+  border-radius:16px;padding:24px 28px;margin-bottom:28px;
+}
+.add-book-title{font-size:15px;font-weight:800;margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.add-book-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.add-book-full{grid-column:1/-1}
+.ab-label{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.ab-input{
+  width:100%;padding:10px 13px;background:var(--item);
+  border:1px solid var(--border2);border-radius:10px;
+  color:var(--text);font-family:'Inter',sans-serif;font-size:13.5px;
+  outline:none;transition:.14s;box-sizing:border-box;
+}
+.ab-input:focus{border-color:var(--accent);background:var(--item-h)}
+.ab-input::placeholder{color:var(--t3)}
+textarea.ab-input{resize:vertical;min-height:70px;line-height:1.5}
+.ab-select{
+  width:100%;padding:10px 13px;background:var(--item);
+  border:1px solid var(--border2);border-radius:10px;
+  color:var(--text);font-family:'Inter',sans-serif;font-size:13.5px;
+  outline:none;cursor:pointer;box-sizing:border-box;
+  appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;
+}
+.ab-file-zone{
+  grid-column:1/-1;border:2px dashed var(--border2);border-radius:12px;
+  padding:28px 20px;text-align:center;cursor:pointer;transition:.2s;
+  background:var(--item);position:relative;
+}
+.ab-file-zone:hover,.ab-file-zone.drag{border-color:var(--accent);background:var(--accent-bg)}
+.ab-file-ico{font-size:32px;margin-bottom:8px}
+.ab-file-lbl{font-size:13px;font-weight:600;color:var(--t2)}
+.ab-file-sub{font-size:11px;color:var(--t3);margin-top:3px}
+.ab-file-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.ab-file-chosen{font-size:12px;color:var(--accent);margin-top:8px;font-weight:600}
+.ab-progress{
+  height:4px;background:var(--item-h);border-radius:4px;overflow:hidden;margin-top:12px;display:none;
+}
+.ab-progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-l));width:0%;transition:width .3s}
+.ab-submit{
+  padding:11px 28px;border-radius:11px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-l));
+  color:#fff;font-size:13px;font-weight:700;border:none;cursor:pointer;
+  font-family:'Inter',sans-serif;transition:.14s;
+  box-shadow:0 4px 14px rgba(232,115,42,.3);
+}
+.ab-submit:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(232,115,42,.4)}
+.ab-submit:disabled{opacity:.5;pointer-events:none}
+.ab-msg{font-size:12px;margin-left:12px;font-weight:600}
+.ab-msg.ok{color:var(--green)}.ab-msg.err{color:var(--accent)}
+
 /* ── LANG FILTER ── */
 .lang-filter{display:flex;gap:5px;align-items:center;margin-left:auto;flex-shrink:0}
 .lf-btn{
@@ -1011,6 +1066,60 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
     <div class="sec-h">👑 Адмін-панель</div>
     <div class="sec-sub">Активність команди DriveMe в бібліотеці</div>
     <div class="admin-stat-row" id="adm-stats"></div>
+
+    <!-- ADD BOOK FORM -->
+    <div class="add-book-section">
+      <div class="add-book-title">➕ Додати нову книгу</div>
+      <div class="add-book-grid">
+        <div>
+          <div class="ab-label">Назва книги *</div>
+          <input class="ab-input" id="ab-title" placeholder="Назва">
+        </div>
+        <div>
+          <div class="ab-label">Автор *</div>
+          <input class="ab-input" id="ab-author" placeholder="Ім'я Прізвище">
+        </div>
+        <div>
+          <div class="ab-label">Категорія *</div>
+          <select class="ab-select" id="ab-cat">
+            <option value="personal">🧠 Особистий розвиток</option>
+            <option value="business">💼 Бізнес-література</option>
+            <option value="leadership">🎯 Лідерство та команда</option>
+          </select>
+        </div>
+        <div>
+          <div class="ab-label">Мова</div>
+          <select class="ab-select" id="ab-lang">
+            <option value="Укр">🇺🇦 Українська</option>
+            <option value="Рос">Російська</option>
+          </select>
+        </div>
+        <div class="add-book-full">
+          <div class="ab-label">Короткий опис (для картки)</div>
+          <input class="ab-input" id="ab-desc" placeholder="1-2 речення про книгу">
+        </div>
+        <div class="add-book-full">
+          <div class="ab-label">Повний опис (для модального вікна)</div>
+          <textarea class="ab-input" id="ab-ldesc" placeholder="Детальний опис книги — 2-3 абзаци. Розділяй абзаци порожнім рядком."></textarea>
+        </div>
+        <div class="add-book-full">
+          <div class="ab-label">Файл книги (FB2 або EPUB) *</div>
+          <div class="ab-file-zone" id="ab-file-zone">
+            <input type="file" class="ab-file-input" id="ab-file" accept=".fb2,.epub" onchange="onAbFile(this)">
+            <div class="ab-file-ico">📁</div>
+            <div class="ab-file-lbl">Натисни або перетягни файл сюди</div>
+            <div class="ab-file-sub">Підтримується FB2 та EPUB</div>
+            <div class="ab-file-chosen" id="ab-file-name"></div>
+          </div>
+          <div class="ab-progress" id="ab-progress"><div class="ab-progress-bar" id="ab-progress-bar"></div></div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center">
+        <button class="ab-submit" id="ab-submit" onclick="submitAddBook()">📚 Додати книгу</button>
+        <span class="ab-msg" id="ab-msg"></span>
+      </div>
+    </div>
+
     <div style="background:var(--col);border:1px solid var(--border2);border-radius:16px;padding:4px 0;overflow-x:auto;margin-bottom:32px">
       <table class="admin-table" id="adm-table">
         <thead>
@@ -1330,6 +1439,7 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+const storage = firebase.storage();
 
 // ── USER STATE ──
 let currentUser = null; // { id, name, surname, displayName, isAdmin }
@@ -1436,6 +1546,7 @@ async function showApp() {
 
   if (currentUser.isAdmin) showAdminNav();
 
+  await loadCustomBooks();
   render();
   renderShelves();
   updateFavn();
@@ -1874,6 +1985,107 @@ function openM(id) {
 function closeM(){document.getElementById('overlay').classList.remove('open')}
 document.getElementById('overlay').addEventListener('click',e=>{if(e.target.id==='overlay')closeM()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
+
+// ── ADD BOOK (ADMIN) ──
+let abFile = null;
+
+function onAbFile(input){
+  abFile = input.files[0];
+  if(!abFile) return;
+  const ext = abFile.name.split('.').pop().toUpperCase();
+  const size = abFile.size < 1024*1024
+    ? (abFile.size/1024).toFixed(0)+' KB'
+    : (abFile.size/1024/1024).toFixed(1)+' MB';
+  document.getElementById('ab-file-name').textContent = `✓ ${abFile.name} · ${size}`;
+}
+
+async function submitAddBook(){
+  const title  = document.getElementById('ab-title').value.trim();
+  const author = document.getElementById('ab-author').value.trim();
+  const cat    = document.getElementById('ab-cat').value;
+  const lang   = document.getElementById('ab-lang').value;
+  const desc   = document.getElementById('ab-desc').value.trim();
+  const ldesc  = document.getElementById('ab-ldesc').value.trim();
+
+  if(!title||!author){ showAbMsg('Заповни назву та автора','err'); return; }
+  if(!abFile){ showAbMsg('Вибери файл книги','err'); return; }
+
+  const btn = document.getElementById('ab-submit');
+  btn.disabled=true; btn.textContent='Завантажуємо…';
+  showAbMsg('','');
+
+  try {
+    // 1. Завантаження файлу в Firebase Storage
+    const ext = abFile.name.split('.').pop().toLowerCase();
+    const safeName = title.toLowerCase().replace(/[^a-zа-яіїєґ0-9]/gi,'_').substring(0,40)+'_'+Date.now()+'.'+ext;
+    const fileRef = storage.ref('books/'+safeName);
+
+    // Прогрес-бар
+    const progress = document.getElementById('ab-progress');
+    const bar = document.getElementById('ab-progress-bar');
+    progress.style.display='block';
+
+    const uploadTask = fileRef.put(abFile);
+    await new Promise((resolve,reject)=>{
+      uploadTask.on('state_changed',
+        snap=>{ bar.style.width=(snap.bytesTransferred/snap.totalBytes*100)+'%'; },
+        reject, resolve
+      );
+    });
+
+    const downloadURL = await fileRef.getDownloadURL();
+    const fmt = ext.toUpperCase();
+    const size = abFile.size<1024*1024
+      ? (abFile.size/1024).toFixed(0)+' KB'
+      : (abFile.size/1024/1024).toFixed(1)+' MB';
+
+    // 2. Збереження метаданих у Firestore
+    const bookId = 'custom_'+Date.now();
+    await db.collection('books').doc(bookId).set({
+      id:bookId, t:title, a:author, c:cat, lang, f:fmt, s:size,
+      d:desc||title, ld:ldesc||desc||title,
+      file:downloadURL, e:'📖',
+      hot:false, new:true, ceo:false,
+      addedBy:currentUser?.displayName||'Admin',
+      createdAt:firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    // 3. Додаємо в локальний масив B та перерендеримо
+    B.push({id:bookId,t:title,a:author,c:cat,lang,f:fmt,s:size,
+      d:desc||title,ld:ldesc||desc||title,
+      file:downloadURL,e:'📖',hot:false,new:true,ceo:false});
+    render(); renderShelves();
+
+    // Очищуємо форму
+    ['ab-title','ab-author','ab-desc','ab-ldesc'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('ab-file-name').textContent='';
+    document.getElementById('ab-file').value='';
+    abFile=null; bar.style.width='0%'; progress.style.display='none';
+    btn.disabled=false; btn.textContent='📚 Додати книгу';
+    showAbMsg(`✅ "${title}" успішно додано!`,'ok');
+
+  } catch(e){
+    btn.disabled=false; btn.textContent='📚 Додати книгу';
+    showAbMsg('Помилка: '+e.message,'err');
+  }
+}
+
+function showAbMsg(msg,cls){
+  const el=document.getElementById('ab-msg');
+  el.textContent=msg; el.className='ab-msg'+(cls?' '+cls:'');
+}
+
+// Завантаження кастомних книг з Firestore при старті
+async function loadCustomBooks(){
+  try {
+    const snap = await db.collection('books').get();
+    snap.docs.forEach(doc=>{
+      const b=doc.data();
+      if(!B.find(x=>x.id===b.id)) B.push(b);
+    });
+    if(snap.size>0){ render(); renderShelves(); }
+  } catch(e){ console.warn('Custom books load:', e); }
+}
 
 // ── SUGGEST BOOK ──
 function openSuggest(){
