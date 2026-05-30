@@ -643,6 +643,133 @@ body::before{
 }
 .admin-stat-n{font-size:28px;font-weight:800;color:var(--accent)}
 .admin-stat-l{font-size:11px;color:var(--t3);margin-top:2px}
+
+/* ── MOBILE NAV BAR ── */
+.mob-nav{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;z-index:300;
+  background:var(--col);border-top:1px solid var(--border2);
+  padding:8px 4px env(safe-area-inset-bottom,0);
+  display:none;
+  grid-template-columns:repeat(4,1fr);
+  gap:2px;
+}
+.mob-nav-btn{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  background:none;border:none;cursor:pointer;
+  padding:6px 4px;border-radius:10px;
+  font-family:'Inter',sans-serif;transition:.13s;
+  color:var(--t3);
+}
+.mob-nav-btn .mn-ico{font-size:20px;line-height:1}
+.mob-nav-btn .mn-lbl{font-size:9.5px;font-weight:600;letter-spacing:.1px}
+.mob-nav-btn.on{color:var(--accent)}
+.mob-nav-btn .mn-badge{
+  font-size:8px;font-weight:700;
+  background:var(--accent);color:#fff;
+  border-radius:10px;padding:1px 5px;
+  min-width:14px;text-align:center;
+}
+
+/* ── MOBILE STYLES ── */
+@media(max-width:600px){
+  /* Page wrapper */
+  .page{padding:0 14px}
+
+  /* Add bottom padding for fixed nav */
+  #p-lib,#p-reading,#p-favs,#p-done,#p-admin{padding-bottom:80px}
+
+  /* Header */
+  .header{padding:14px 0 0}
+  .header-top{
+    align-items:center;
+    flex-wrap:nowrap;
+    gap:8px;
+    margin-bottom:4px;
+  }
+  .logo{gap:8px}
+  .logo-ico{width:36px;height:36px;border-radius:10px;font-size:18px;flex-shrink:0}
+  .logo-name{font-size:15px;letter-spacing:-.3px}
+  .logo-sub{display:none}
+  .header-sub{display:none}
+
+  /* Hide desktop nav — replaced by bottom bar */
+  .header-nav{display:none}
+
+  /* Right side: only theme + user avatar */
+  .user-name-chip{display:none}
+  .logout-btn{display:none}
+  .user-chip{padding:4px 6px;gap:4px;border-radius:8px}
+  .user-avatar{width:32px;height:32px;font-size:12px}
+
+  /* Show mobile nav */
+  .mob-nav{display:grid}
+
+  /* Featured shelf — HIDE on mobile */
+  .featured{display:none}
+
+  /* Search row */
+  .search-row{
+    flex-wrap:wrap;
+    padding-bottom:14px;
+    gap:8px;
+  }
+  .search-wrap{max-width:100%;flex:1 1 100%}
+  .cats{order:2;width:100%;flex-wrap:wrap;gap:6px}
+  .cat{font-size:12px;padding:6px 11px}
+
+  /* Columns — single column */
+  .cols,.cols.cols4{grid-template-columns:1fr;gap:12px;padding-bottom:16px}
+
+  /* Column header */
+  .col-head{padding:14px 16px 12px}
+  .col-head-ico{width:34px;height:34px;border-radius:9px;font-size:17px}
+  .col-head-name{font-size:14px}
+  .col-count{font-size:11px;padding:3px 10px}
+
+  /* Book item in column */
+  .col-body{padding:4px 6px}
+  .bi{padding:13px 10px 13px 10px}
+  .bi-title{font-size:13.5px;padding-right:52px}
+  .bi-meta{font-size:11px}
+  .bi-desc{font-size:12px;-webkit-line-clamp:2}
+  .bi-fmt,.bi-soon{top:12px;right:10px;font-size:10px;padding:3px 8px}
+  /* Always show fav on mobile (no hover) */
+  .bi-fav{opacity:.4}
+  .bi-fav.on{opacity:1}
+  .bi-status{bottom:8px;left:10px;font-size:10px}
+
+  /* Login modal */
+  .login-overlay{align-items:flex-end;padding:0}
+  .login-box{
+    border-radius:24px 24px 0 0;padding:32px 20px 36px;
+    max-width:100%;width:100%;
+    box-shadow:0 -20px 60px rgba(0,0,0,.5);
+  }
+
+  /* Book modal */
+  .overlay{align-items:flex-end;padding:0}
+  .modal{
+    border-radius:22px 22px 0 0;padding:24px 20px 36px;
+    max-width:100%;width:100%;max-height:92vh;
+  }
+
+  /* Docs column (Внутрішні документи) — goes last */
+  .cols.cols4 > .col:last-child{order:10}
+
+  /* Reader */
+  .reader-topbar{padding:10px 14px}
+  .reader-title{font-size:13px}
+  .reader-author{font-size:11px}
+  .reader-page-content{padding:24px 16px 16px}
+  .reader-nav{padding:10px 16px;gap:8px}
+  .reader-nav-btn{padding:8px 14px;font-size:12px}
+  .reader-topbar-right{gap:6px}
+
+  /* Sections */
+  .sec-h{font-size:16px}
+  .sec-sub{font-size:12px}
+}
 </style>
 </head>
 <body>
@@ -777,6 +904,26 @@ body::before{
   </div>
 
 </div>
+
+<!-- MOBILE NAV -->
+<nav class="mob-nav" id="mob-nav">
+  <button class="mob-nav-btn on" id="mn-lib" onclick="setPage('lib',this);syncMobNav('lib')">
+    <span class="mn-ico">📚</span>
+    <span class="mn-lbl">Бібліотека</span>
+  </button>
+  <button class="mob-nav-btn" id="mn-reading" onclick="setPage('reading',this);syncMobNav('reading')">
+    <span class="mn-ico">📖</span>
+    <span class="mn-lbl">Читаю <span class="mn-badge" id="mn-readingn" style="display:none"></span></span>
+  </button>
+  <button class="mob-nav-btn" id="mn-favs" onclick="setPage('favs',this);syncMobNav('favs')">
+    <span class="mn-ico">★</span>
+    <span class="mn-lbl">Обрані <span class="mn-badge" id="mn-favn" style="display:none"></span></span>
+  </button>
+  <button class="mob-nav-btn" id="mn-done" onclick="setPage('done',this);syncMobNav('done')">
+    <span class="mn-ico">✅</span>
+    <span class="mn-lbl">Прочитано</span>
+  </button>
+</nav>
 
 <!-- READER -->
 <div class="reader-overlay" id="reader-overlay">
@@ -1404,8 +1551,22 @@ function updateNavCounters() {
   const dn = document.getElementById('donen');
   const rc = Object.values(statuses).filter(s=>s==='reading').length;
   const dc = Object.values(statuses).filter(s=>s==='done').length;
+  const fc = favs.length;
   if(rn) rn.textContent = rc ? ` (${rc})` : '';
   if(dn) dn.textContent = dc ? ` (${dc})` : '';
+  // Mobile nav badges
+  const mrn = document.getElementById('mn-readingn');
+  const mfn = document.getElementById('mn-favn');
+  if(mrn){ mrn.textContent=rc||''; mrn.style.display=rc?'':'none'; }
+  if(mfn){ mfn.textContent=fc||''; mfn.style.display=fc?'':'none'; }
+}
+
+function syncMobNav(page) {
+  document.querySelectorAll('.mob-nav-btn').forEach(b=>b.classList.remove('on'));
+  const btn = document.getElementById('mn-'+page);
+  if(btn) btn.classList.add('on');
+  // Also sync desktop nav
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'));
 }
 
 // ── CHALLENGE ──
