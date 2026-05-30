@@ -618,7 +618,7 @@ body::before{
 </div>
 
 <!-- LOGIN OVERLAY -->
-<div class="login-overlay" id="login-overlay">
+<div class="login-overlay hidden" id="login-overlay">
   <div class="login-box">
     <div class="login-logo">📚</div>
     <div class="login-title">Бібліотека DriveMe</div>
@@ -839,7 +839,7 @@ window.onload = () => {
   const saved = localStorage.getItem('dml-user');
   if (saved) {
     currentUser = JSON.parse(saved);
-    showApp();
+    showApp(); // overlay вже hidden за замовчуванням
   } else {
     document.getElementById('login-overlay').classList.remove('hidden');
   }
