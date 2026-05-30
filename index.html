@@ -560,9 +560,9 @@ body::before{
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
         <div class="header-nav">
           <button class="nav-btn on" onclick="setPage('lib',this)">Бібліотека</button>
-          <button class="nav-btn" onclick="setPage('docs',this)">Документи</button>
+          <button class="nav-btn" onclick="setPage('reading',this)">Читаю <span id="readingn" style="color:var(--accent)"></span></button>
           <button class="nav-btn" onclick="setPage('favs',this)">Обрані <span id="favn" style="color:var(--accent)"></span></button>
-          <button class="nav-btn" onclick="setPage('chal',this)">Виклик місяця</button>
+          <button class="nav-btn" onclick="setPage('done',this)">Прочитано <span id="donen" style="color:var(--accent)"></span></button>
           <button class="nav-btn" id="admin-nav-btn" style="display:none;color:var(--accent)" onclick="setPage('admin',this)">👑 Адмін</button>
         </div>
         <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Змінити тему">🌙</button>
@@ -600,18 +600,25 @@ body::before{
     <div class="cols cols4" id="cols"></div>
   </div>
 
-  <!-- PAGE: DOCS -->
-  <div id="p-docs" style="display:none;padding-top:32px">
-    <div class="sec-h">Документи та матеріали</div>
-    <div class="sec-sub">Внутрішні документи, шаблони та корисні файли DriveMe</div>
-    <div class="docs-grid" id="docs-grid"></div>
+  <!-- PAGE: READING -->
+  <div id="p-reading" style="display:none;padding-top:32px">
+    <div class="sec-h">📖 Читаю зараз</div>
+    <div class="sec-sub">Книги які ти зараз читаєш</div>
+    <div id="reading-cnt"></div>
   </div>
 
   <!-- PAGE: FAVS -->
   <div id="p-favs" style="display:none;padding-top:32px">
-    <div class="sec-h">Обрані книги</div>
+    <div class="sec-h">★ Обрані книги</div>
     <div class="sec-sub">Книги які ти зберіг для себе</div>
     <div id="favs-cnt"></div>
+  </div>
+
+  <!-- PAGE: DONE -->
+  <div id="p-done" style="display:none;padding-top:32px">
+    <div class="sec-h">✅ Прочитано</div>
+    <div class="sec-sub">Книги які ти вже прочитав</div>
+    <div id="done-cnt"></div>
   </div>
 
   <!-- PAGE: CHALLENGE -->
@@ -971,6 +978,7 @@ async function showApp() {
   render();
   renderShelves();
   updateFavn();
+  updateNavCounters();
   // Виклик місяця — рендеримо з Firebase
   renderChallenge();
 }
@@ -980,14 +988,15 @@ function showAdminNav() {
 }
 
 // ── PAGES ──
-const PG = ['lib','docs','favs','chal','admin'];
+const PG = ['lib','reading','favs','done','admin'];
 function setPage(p, btn) {
   PG.forEach(x => document.getElementById('p-'+x).style.display = x===p ? '' : 'none');
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('on'));
   if (btn) btn.classList.add('on');
-  if (p === 'favs')  renderFavs();
-  if (p === 'admin') renderAdmin();
-  if (p === 'chal')  renderChallenge();
+  if (p === 'favs')    renderFavs();
+  if (p === 'reading') renderReading();
+  if (p === 'done')    renderDone();
+  if (p === 'admin')   renderAdmin();
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
@@ -1179,6 +1188,7 @@ function setStatus(st) {
   renderStatusBtns(modalBookId);
   updateCardStatus(modalBookId);
   renderShelves();
+  updateNavCounters();
   saveUserData();
   toast(st==='done'?'✅':st==='reading'?'📖':'🔖',
         st==='done'?'Відмічено як прочитане':st==='reading'?'Читаєш цю книгу':'Додано до списку читання');
@@ -1212,6 +1222,36 @@ function renderFavs() {
   c.innerHTML=`<div class="col" style="max-width:600px">
     <div class="col-body">${books.map((b,i)=>(i>0?'<div class="sep"></div>':'')+bhtml(b)).join('')}</div>
   </div>`;
+}
+
+// ── READING PAGE ──
+function renderReading() {
+  const books = B.filter(b => statuses[b.id]==='reading');
+  const c = document.getElementById('reading-cnt');
+  if (!books.length) { c.innerHTML='<div class="empty">Ти ще не почав жодної книги.<br>Відкрий книгу і натисни 📖 Читаю.</div>'; return; }
+  c.innerHTML=`<div class="col" style="max-width:600px">
+    <div class="col-body">${books.map((b,i)=>(i>0?'<div class="sep"></div>':'')+bhtml(b)).join('')}</div>
+  </div>`;
+}
+
+// ── DONE PAGE ──
+function renderDone() {
+  const books = B.filter(b => statuses[b.id]==='done');
+  const c = document.getElementById('done-cnt');
+  if (!books.length) { c.innerHTML='<div class="empty">Ще немає прочитаних книг.<br>Відкрий книгу і натисни ✅ Прочитав.</div>'; return; }
+  c.innerHTML=`<div class="col" style="max-width:600px">
+    <div class="col-body">${books.map((b,i)=>(i>0?'<div class="sep"></div>':'')+bhtml(b)).join('')}</div>
+  </div>`;
+}
+
+// ── NAV COUNTERS ──
+function updateNavCounters() {
+  const rn = document.getElementById('readingn');
+  const dn = document.getElementById('donen');
+  const rc = Object.values(statuses).filter(s=>s==='reading').length;
+  const dc = Object.values(statuses).filter(s=>s==='done').length;
+  if(rn) rn.textContent = rc ? ` (${rc})` : '';
+  if(dn) dn.textContent = dc ? ` (${dc})` : '';
 }
 
 // ── CHALLENGE ──
