@@ -3,26 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DriveMe Library — Бібліотека знань</title>
+<title>DriveMe — Бібліотека знань</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#0D0D12;
-  --col:#161620;
-  --card:#1E1E2A;
-  --card2:#252532;
-  --border:rgba(255,255,255,0.07);
-  --border2:rgba(255,255,255,0.12);
-  --text:#F0EFF8;
-  --t2:#9998B0;
-  --t3:#55546A;
-  --accent:#FF6B2B;
-  --accent-g:linear-gradient(135deg,#FF6B2B,#FF8E4B);
-  --green:#2DD4A0;
-  --blue:#4D9CFF;
-  --purple:#9B72FF;
+  --bg:#17130F;
+  --col:#1F1A15;
+  --item:#26211B;
+  --item-h:#2E2820;
+  --border:rgba(255,255,255,0.06);
+  --border2:rgba(255,255,255,0.10);
+  --text:#EDE8E0;
+  --t2:#9C9485;
+  --t3:#5C5548;
+  --accent:#E8732A;
+  --accent-l:#F5894A;
+  --accent-bg:rgba(232,115,42,0.12);
+  --accent-border:rgba(232,115,42,0.25);
+  --green:#2CC88A;
+  --blue:#5B9FE8;
+  --purple:#9B78E0;
 }
 html{scroll-behavior:smooth}
 body{
@@ -30,788 +32,624 @@ body{
   color:var(--text);
   font-family:'Inter',sans-serif;
   min-height:100vh;
+  line-height:1.5;
+}
+/* subtle noise */
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity:.5;
 }
 ::-webkit-scrollbar{width:5px}
 ::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--card2);border-radius:4px}
+::-webkit-scrollbar-thumb{background:var(--item-h);border-radius:4px}
 
-/* ─── WRAPPER ─── */
-.wrap{max-width:1320px;margin:0 auto;padding:0 32px}
+/* ── WRAPPER ── */
+.page{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:0 28px}
 
-/* ─── TOP NAV ─── */
-.topnav{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:18px 0;
-  border-bottom:1px solid var(--border);
-  margin-bottom:0;
+/* ── HEADER ── */
+.header{padding:28px 0 0}
+.header-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-ico{
+  width:44px;height:44px;border-radius:12px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-l));
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+  box-shadow:0 6px 20px rgba(232,115,42,.35);
 }
-.nav-logo{display:flex;align-items:center;gap:12px}
-.nav-logo-ico{
-  width:38px;height:38px;
-  background:var(--accent-g);
-  border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;
-  box-shadow:0 4px 16px rgba(255,107,43,.35);
+.logo-text{}
+.logo-name{font-size:20px;font-weight:800;letter-spacing:-.4px}
+.logo-sub{font-size:12px;color:var(--t3);margin-top:2px;font-weight:400}
+
+.header-nav{display:flex;align-items:center;gap:4px}
+.nav-btn{
+  padding:8px 16px;border-radius:10px;font-size:13px;font-weight:500;
+  color:var(--t2);background:none;border:none;cursor:pointer;
+  font-family:'Inter',sans-serif;transition:all .14s;
 }
-.nav-logo-txt{font-size:16px;font-weight:700;letter-spacing:-.2px}
-.nav-logo-sub{font-size:11px;color:var(--t3);margin-top:1px}
-.nav-links{display:flex;align-items:center;gap:6px}
-.nav-link{
-  padding:7px 14px;border-radius:9px;
-  font-size:13px;font-weight:500;color:var(--t2);
-  cursor:pointer;transition:all .15s;
-  background:none;border:none;font-family:'Inter',sans-serif;
-}
-.nav-link:hover{background:var(--card);color:var(--text)}
-.nav-link.active{background:var(--card);color:var(--text);font-weight:600}
-.nav-right{display:flex;align-items:center;gap:10px}
-.badge-live{
-  display:flex;align-items:center;gap:6px;
-  background:rgba(45,212,160,.08);
-  border:1px solid rgba(45,212,160,.2);
-  color:var(--green);
-  font-size:11px;font-weight:600;
-  padding:5px 12px;border-radius:20px;
-}
-.badge-live::before{
-  content:'';width:6px;height:6px;
-  background:var(--green);border-radius:50%;
-  box-shadow:0 0 6px var(--green);
-}
-.btn-suggest{
-  display:flex;align-items:center;gap:6px;
+.nav-btn:hover{background:var(--item);color:var(--text)}
+.nav-btn.on{background:var(--item);color:var(--text);font-weight:600}
+.btn-add{
   padding:8px 16px;border-radius:10px;
-  background:var(--accent-g);
-  color:#fff;font-size:13px;font-weight:600;
-  border:none;cursor:pointer;font-family:'Inter',sans-serif;
-  transition:all .15s;
-  box-shadow:0 4px 16px rgba(255,107,43,.3);
+  background:linear-gradient(135deg,var(--accent),var(--accent-l));
+  color:#fff;font-size:13px;font-weight:600;border:none;cursor:pointer;
+  font-family:'Inter',sans-serif;transition:all .14s;
+  box-shadow:0 4px 14px rgba(232,115,42,.3);
 }
-.btn-suggest:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(255,107,43,.45)}
+.btn-add:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(232,115,42,.4)}
 
-/* ─── HERO SECTION ─── */
-.hero{
-  padding:48px 0 0;
-  display:flex;align-items:flex-end;justify-content:space-between;
-  gap:24px;
-}
-.hero-left{}
-.hero-tag{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(255,107,43,.08);
-  border:1px solid rgba(255,107,43,.18);
-  color:var(--accent);
-  font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
-  padding:5px 12px;border-radius:20px;margin-bottom:16px;
-}
-.hero-title{
-  font-size:42px;font-weight:800;letter-spacing:-1.5px;
-  line-height:1.1;margin-bottom:10px;
-}
-.hero-title span{
-  background:linear-gradient(135deg,#fff 30%,var(--t2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-.hero-sub{font-size:15px;color:var(--t2);font-weight:400;line-height:1.5}
-.hero-stats{display:flex;gap:32px}
-.hero-stat{text-align:center}
-.hero-stat-n{font-size:28px;font-weight:800;letter-spacing:-1px;color:var(--text)}
-.hero-stat-l{font-size:11px;color:var(--t3);margin-top:2px;font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+.header-sub{font-size:13px;color:var(--t3);padding-bottom:24px;font-weight:400}
+.header-sub span{color:var(--t2)}
 
-/* ─── SEARCH ─── */
-.search-area{
-  padding:32px 0 28px;
-  display:flex;gap:10px;align-items:center;
+/* ── SEARCH ── */
+.search-row{
+  display:flex;align-items:center;gap:10px;
+  padding-bottom:24px;
 }
-.search-box{
-  flex:1;position:relative;max-width:600px;
-}
-.search-box input{
+.search-wrap{flex:1;position:relative;max-width:560px}
+.search-wrap input{
   width:100%;
   background:var(--col);
   border:1px solid var(--border);
-  border-radius:14px;
-  padding:13px 18px 13px 46px;
-  color:var(--text);font-size:14px;
-  outline:none;transition:all .2s;
+  border-radius:12px;
+  padding:11px 16px 11px 42px;
+  color:var(--text);font-size:13.5px;
+  outline:none;transition:all .18s;
   font-family:'Inter',sans-serif;
 }
-.search-box input::placeholder{color:var(--t3)}
-.search-box input:focus{
-  border-color:rgba(255,107,43,.4);
-  background:var(--card);
-  box-shadow:0 0 0 4px rgba(255,107,43,.06);
+.search-wrap input::placeholder{color:var(--t3)}
+.search-wrap input:focus{border-color:var(--accent-border);background:var(--item);box-shadow:0 0 0 3px rgba(232,115,42,.07)}
+.search-ico{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--t3);font-size:15px;pointer-events:none}
+.cats{display:flex;gap:6px;flex-wrap:wrap}
+.cat{
+  padding:7px 14px;border-radius:9px;font-size:12.5px;font-weight:500;
+  background:var(--col);border:1px solid var(--border);color:var(--t2);
+  cursor:pointer;transition:all .14s;font-family:'Inter',sans-serif;
 }
-.search-ico{
-  position:absolute;left:16px;top:50%;transform:translateY(-50%);
-  color:var(--t3);font-size:16px;pointer-events:none;
-}
-.filter-chips{display:flex;gap:6px;flex-wrap:wrap}
-.chip{
-  display:flex;align-items:center;gap:6px;
-  padding:7px 14px;border-radius:10px;
-  font-size:12.5px;font-weight:500;
-  background:var(--col);border:1px solid var(--border);
-  color:var(--t2);cursor:pointer;transition:all .15s;
-  font-family:'Inter',sans-serif;
-}
-.chip:hover{background:var(--card);color:var(--text)}
-.chip.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
-.chip-n{
-  background:rgba(255,255,255,.1);
-  border-radius:5px;padding:1px 6px;font-size:10.5px;
-}
-.chip.on .chip-n{background:rgba(255,255,255,.2)}
+.cat:hover{background:var(--item);color:var(--text)}
+.cat.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+.cat-n{font-size:10.5px;opacity:.75}
 
-/* ─── COLUMNS ─── */
+/* ── COLS ── */
 .cols{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:20px;
+  gap:16px;
   padding-bottom:48px;
   align-items:start;
 }
+.cols.cols4{grid-template-columns:repeat(4,1fr)}
 
-/* ─── COLUMN ─── */
+/* ── COL ── */
 .col{
   background:var(--col);
   border:1px solid var(--border);
-  border-radius:20px;
+  border-radius:16px;
   overflow:hidden;
 }
 .col-head{
-  padding:20px 20px 16px;
+  padding:18px 18px 14px;
   border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:12px;
-  position:sticky;top:0;
-  background:var(--col);
-  z-index:2;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
 }
-.col-ico{
-  width:38px;height:38px;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;flex-shrink:0;
+.col-head-left{display:flex;align-items:center;gap:10px}
+.col-head-ico{font-size:19px;line-height:1}
+.col-head-name{font-size:14px;font-weight:700;letter-spacing:-.15px}
+.col-head-sub{font-size:11px;color:var(--t3);margin-top:1px}
+.col-count{
+  background:var(--item);border:1px solid var(--border);
+  color:var(--t3);font-size:11px;font-weight:600;
+  padding:3px 10px;border-radius:20px;white-space:nowrap;flex-shrink:0;
 }
-.col-info{flex:1}
-.col-title{font-size:15px;font-weight:700;letter-spacing:-.2px}
-.col-sub{font-size:11px;color:var(--t3);margin-top:2px}
-.col-badge{
-  background:var(--card2);
-  border:1px solid var(--border);
-  color:var(--t3);
-  font-size:11px;font-weight:600;
-  padding:4px 10px;border-radius:20px;
-  white-space:nowrap;
-}
-.col-body{padding:10px}
+.col-body{padding:6px 8px}
 
-/* ─── BOOK ITEM ─── */
-.bitem{
-  border-radius:12px;
-  padding:14px;
-  cursor:pointer;
-  transition:all .15s;
-  position:relative;
-  display:flex;gap:12px;align-items:flex-start;
+/* ── BOOK ITEM ── */
+.bi{
+  border-radius:10px;padding:13px 12px;
+  cursor:pointer;transition:background .13s;
   border:1px solid transparent;
+  position:relative;
 }
-.bitem:hover{
-  background:var(--card);
-  border-color:var(--border);
+.bi:hover{background:var(--item-h)}
+.bi+.bi{margin-top:2px}
+.bi-title{
+  font-size:13.5px;font-weight:700;letter-spacing:-.1px;
+  margin-bottom:3px;padding-right:56px;line-height:1.3;
 }
-.bitem-emo{
-  width:40px;height:52px;border-radius:8px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:24px;flex-shrink:0;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);
+.bi-meta{
+  font-size:11.5px;color:var(--accent);font-weight:500;margin-bottom:6px;
 }
-.bitem-main{flex:1;min-width:0}
-.bitem-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:3px}
-.bitem-title{
-  font-size:13.5px;font-weight:700;
-  line-height:1.3;letter-spacing:-.1px;
-}
-.bitem-dl{
-  flex-shrink:0;
-  display:flex;align-items:center;gap:4px;
-  background:var(--accent-g);
-  color:#fff;font-size:10.5px;font-weight:700;
-  padding:4px 9px;border-radius:7px;border:none;cursor:pointer;
-  font-family:'Inter',sans-serif;
-  transition:all .15s;
-  box-shadow:0 2px 8px rgba(255,107,43,.25);
-  white-space:nowrap;
-}
-.bitem-dl:hover{transform:scale(1.05);box-shadow:0 4px 14px rgba(255,107,43,.45)}
-.bitem-meta{
-  font-size:11px;color:var(--accent);
-  font-weight:500;margin-bottom:6px;
-}
-.bitem-desc{
-  font-size:12px;color:var(--t2);
-  line-height:1.55;
+.bi-desc{
+  font-size:12px;color:var(--t2);line-height:1.55;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
 }
-.bitem-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px}
-.bitem-tag{
-  font-size:10px;padding:2px 7px;border-radius:5px;
-  background:var(--card2);color:var(--t3);
+.bi-dl{
+  position:absolute;top:13px;right:12px;
+  display:flex;align-items:center;gap:4px;
+  background:var(--accent);
+  color:#fff;font-size:10.5px;font-weight:700;
+  padding:4px 9px;border-radius:7px;border:none;cursor:pointer;
+  font-family:'Inter',sans-serif;transition:all .13s;
+  box-shadow:0 2px 8px rgba(232,115,42,.3);
+  white-space:nowrap;
 }
-.bitem-badges{display:flex;gap:4px;margin-top:6px}
-.bib{font-size:9.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;padding:2px 7px;border-radius:5px}
-.bib-new{background:rgba(45,212,160,.12);color:var(--green);border:1px solid rgba(45,212,160,.2)}
-.bib-hot{background:rgba(255,80,60,.12);color:#FF5040;border:1px solid rgba(255,80,60,.2)}
-.bib-ceo{background:rgba(255,200,50,.1);color:#F5C842;border:1px solid rgba(255,200,66,.2)}
+.bi-dl:hover{background:var(--accent-l);transform:scale(1.04)}
+.bi-chips{display:flex;gap:4px;margin-top:7px;flex-wrap:wrap}
+.chip{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;padding:2px 7px;border-radius:5px}
+.c-new{background:rgba(44,200,138,.1);color:var(--green);border:1px solid rgba(44,200,138,.2)}
+.c-hot{background:rgba(232,115,42,.1);color:var(--accent);border:1px solid rgba(232,115,42,.2)}
+.c-ceo{background:rgba(255,200,50,.08);color:#F5C030;border:1px solid rgba(255,200,50,.18)}
+.bi-fav{
+  position:absolute;bottom:12px;right:12px;
+  background:none;border:none;cursor:pointer;
+  font-size:13px;color:var(--t3);transition:all .13s;
+  opacity:0;
+}
+.bi:hover .bi-fav{opacity:1}
+.bi-fav.on{opacity:1;color:#F5C030}
 
-.bitem-divider{height:1px;background:var(--border);margin:2px 0}
-
-/* ─── SOON ITEM ─── */
-.soon-item{
-  border-radius:12px;padding:14px;
+/* ── SOON ITEM ── */
+.si{
   display:flex;align-items:center;justify-content:space-between;
-  gap:10px;
-  border:1px solid transparent;
-  opacity:.55;
+  padding:12px 12px;border-radius:10px;opacity:.5;
 }
-.soon-label{
-  font-size:11px;font-weight:600;color:var(--t3);
-  background:var(--card2);border:1px solid var(--border);
-  padding:4px 10px;border-radius:7px;white-space:nowrap;
+.si+.si,.bi+.si,.si+.bi{margin-top:2px}
+.si-name{font-size:13px;font-weight:600;margin-bottom:2px}
+.si-meta{font-size:11px;color:var(--t3)}
+.si-badge{
+  font-size:10.5px;font-weight:600;color:var(--t3);
+  background:var(--item);border:1px solid var(--border);
+  padding:4px 10px;border-radius:7px;white-space:nowrap;flex-shrink:0;
 }
-.soon-info{flex:1}
-.soon-title{font-size:13px;font-weight:600;margin-bottom:2px}
-.soon-meta{font-size:11px;color:var(--t3)}
 
-/* ─── BOOK OF MONTH ─── */
-.bom-banner{
-  background:var(--col);
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:28px 32px;
-  display:flex;gap:28px;align-items:center;
-  margin-bottom:20px;
-  position:relative;overflow:hidden;
-}
-.bom-banner::before{
-  content:'';
-  position:absolute;top:-40px;right:-40px;
-  width:180px;height:180px;
-  background:radial-gradient(circle,rgba(255,107,43,.1) 0%,transparent 70%);
-  pointer-events:none;
-}
-.bom-book{
-  width:72px;height:100px;border-radius:7px 10px 10px 7px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:44px;flex-shrink:0;
-  box-shadow:-4px 4px 0 rgba(0,0,0,.4),0 12px 28px rgba(0,0,0,.4);
-  position:relative;
-}
-.bom-book::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:8px;
-  background:rgba(0,0,0,.3);border-radius:7px 0 0 7px;
-}
-.bom-info{flex:1}
-.bom-chip{
-  display:inline-flex;align-items:center;gap:5px;
-  background:rgba(245,200,66,.08);
-  border:1px solid rgba(245,200,66,.2);
-  color:#F5C842;
-  font-size:10px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;
-  padding:4px 10px;border-radius:20px;margin-bottom:10px;
-}
-.bom-title{font-size:18px;font-weight:800;letter-spacing:-.3px;margin-bottom:3px}
-.bom-author{font-size:12.5px;color:var(--accent);font-weight:500;margin-bottom:8px}
-.bom-desc{font-size:12.5px;color:var(--t2);line-height:1.55;max-width:400px;margin-bottom:14px}
-.bom-acts{display:flex;gap:8px}
-.btn-dl{
-  display:flex;align-items:center;gap:6px;
-  padding:8px 16px;border-radius:10px;
-  background:var(--accent-g);
-  color:#fff;font-size:12.5px;font-weight:700;
-  border:none;cursor:pointer;font-family:'Inter',sans-serif;
-  transition:all .15s;box-shadow:0 4px 14px rgba(255,107,43,.3);
-}
-.btn-dl:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,107,43,.45)}
-.btn-sec{
-  display:flex;align-items:center;gap:6px;
-  padding:8px 14px;border-radius:10px;
-  background:var(--card);border:1px solid var(--border);
-  color:var(--t2);font-size:12.5px;font-weight:500;
-  cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;
-}
-.btn-sec:hover{background:var(--card2);color:var(--text)}
-.bom-meta{display:flex;gap:14px;align-items:center}
-.bom-meta-i{font-size:11.5px;color:var(--t3);display:flex;align-items:center;gap:4px}
-
-/* ─── MODAL ─── */
+/* ── MODAL ── */
 .overlay{
   position:fixed;inset:0;z-index:200;
-  background:rgba(0,0,0,.75);backdrop-filter:blur(10px);
+  background:rgba(0,0,0,.8);backdrop-filter:blur(10px);
   display:flex;align-items:center;justify-content:center;padding:20px;
-  opacity:0;pointer-events:none;transition:opacity .2s;
+  opacity:0;pointer-events:none;transition:opacity .18s;
 }
 .overlay.open{opacity:1;pointer-events:all}
 .modal{
   background:var(--col);border:1px solid var(--border2);
-  border-radius:24px;padding:36px;
-  max-width:480px;width:100%;
+  border-radius:22px;padding:36px;max-width:460px;width:100%;
   position:relative;
-  transform:translateY(12px);transition:transform .25s cubic-bezier(.34,1.56,.64,1);
+  transform:translateY(10px);transition:transform .22s cubic-bezier(.34,1.56,.64,1);
 }
 .overlay.open .modal{transform:none}
 .modal-x{
   position:absolute;top:14px;right:14px;
-  width:30px;height:30px;background:var(--card);border:none;
-  border-radius:9px;cursor:pointer;font-size:15px;color:var(--t2);
-  display:flex;align-items:center;justify-content:center;transition:all .15s;
+  width:30px;height:30px;background:var(--item);border:none;
+  border-radius:8px;cursor:pointer;font-size:15px;color:var(--t2);
+  display:flex;align-items:center;justify-content:center;transition:.13s;
 }
-.modal-x:hover{background:var(--card2);color:var(--text)}
-.modal-book{
-  width:84px;height:116px;border-radius:7px 12px 12px 7px;
-  display:flex;align-items:center;justify-content:center;font-size:48px;
-  margin:0 auto 22px;
-  box-shadow:-4px 4px 0 rgba(0,0,0,.5),0 14px 36px rgba(0,0,0,.5);
-  position:relative;
-}
-.modal-book::before{content:'';position:absolute;left:0;top:0;bottom:0;width:9px;background:rgba(0,0,0,.3);border-radius:7px 0 0 7px}
-.modal-title{font-size:19px;font-weight:800;text-align:center;letter-spacing:-.3px;margin-bottom:4px}
+.modal-x:hover{background:var(--item-h);color:var(--text)}
+.modal-emoji{font-size:52px;text-align:center;margin-bottom:18px;display:block}
+.modal-title{font-size:18px;font-weight:800;text-align:center;letter-spacing:-.3px;margin-bottom:4px}
 .modal-author{font-size:13px;color:var(--accent);text-align:center;font-weight:500;margin-bottom:14px}
-.modal-desc{font-size:13px;color:var(--t2);line-height:1.65;text-align:center;margin-bottom:24px}
-.modal-meta{display:flex;justify-content:center;gap:20px;margin-bottom:24px}
-.modal-meta-i{font-size:12px;color:var(--t3);display:flex;align-items:center;gap:5px}
-.modal-acts{display:flex;gap:10px;justify-content:center}
+.modal-desc{font-size:13px;color:var(--t2);line-height:1.65;text-align:center;margin-bottom:22px}
+.modal-meta{display:flex;justify-content:center;gap:18px;margin-bottom:22px}
+.modal-meta-i{font-size:12px;color:var(--t3)}
+.modal-btns{display:flex;gap:8px;justify-content:center}
+.btn-dl-lg{
+  padding:9px 20px;border-radius:10px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-l));
+  color:#fff;font-size:13px;font-weight:700;border:none;cursor:pointer;
+  font-family:'Inter',sans-serif;box-shadow:0 4px 14px rgba(232,115,42,.3);transition:.13s;
+}
+.btn-dl-lg:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(232,115,42,.4)}
+.btn-sec{
+  padding:9px 16px;border-radius:10px;
+  background:var(--item);border:1px solid var(--border);
+  color:var(--t2);font-size:13px;font-weight:500;cursor:pointer;
+  font-family:'Inter',sans-serif;transition:.13s;
+}
+.btn-sec:hover{background:var(--item-h);color:var(--text)}
 
-/* ─── TOAST ─── */
+/* ── TOAST ── */
 .toast{
-  position:fixed;bottom:24px;right:24px;z-index:300;
-  background:var(--card);border:1px solid var(--border2);
+  position:fixed;bottom:22px;right:22px;z-index:300;
+  background:var(--col);border:1px solid var(--border2);
   border-radius:12px;padding:12px 18px;
-  display:flex;align-items:center;gap:9px;
+  display:flex;align-items:center;gap:8px;
   font-size:13.5px;font-weight:500;
-  box-shadow:0 10px 40px rgba(0,0,0,.5);
-  transform:translateY(70px);opacity:0;
-  transition:all .3s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 8px 32px rgba(0,0,0,.5);
+  transform:translateY(60px);opacity:0;
+  transition:all .28s cubic-bezier(.34,1.56,.64,1);
 }
 .toast.show{transform:none;opacity:1}
 
-/* ─── EMPTY ─── */
-.empty{text-align:center;padding:40px 20px;color:var(--t3)}
-.empty .ico{font-size:36px;margin-bottom:10px;opacity:.5}
+/* ── EMPTY ── */
+.empty{text-align:center;padding:40px 16px;color:var(--t3);font-size:13px}
 
-/* ─── FAV BTN ─── */
-.fav-btn{
-  position:absolute;top:10px;right:10px;
-  background:none;border:none;cursor:pointer;
-  font-size:14px;color:var(--t3);transition:all .15s;
-  opacity:0;
+/* ── DIVIDER ── */
+.sep{height:1px;background:var(--border);margin:4px 0}
+
+/* ── DOCS GRID ── */
+.docs-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:10px;padding-bottom:48px;
 }
-.bitem:hover .fav-btn{opacity:1}
-.fav-btn.on{opacity:1;color:#F5C842}
-.fav-btn:hover{transform:scale(1.2)}
+.doc-item{
+  background:var(--col);border:1px solid var(--border);border-radius:12px;
+  padding:15px 16px;display:flex;align-items:center;gap:12px;
+  cursor:pointer;transition:.13s;
+}
+.doc-item:hover{background:var(--item)}
+.doc-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.doc-info{flex:1;overflow:hidden}
+.doc-title{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.doc-meta{font-size:11px;color:var(--t3);margin-top:2px}
+.doc-dl{
+  width:30px;height:30px;background:var(--item-h);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;font-size:13px;
+  flex-shrink:0;transition:.13s;
+}
+.doc-item:hover .doc-dl{background:var(--accent);color:#fff}
 
-@media(max-width:1100px){.cols{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:720px){.cols{grid-template-columns:1fr}.hero{flex-direction:column}.hero-stats{justify-content:space-between}}
+/* ── CHALLENGE ── */
+.ch-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+.ch-card{
+  background:var(--col);border:1px solid var(--border);border-radius:14px;
+  padding:18px;display:flex;flex-direction:column;align-items:center;gap:10px;
+}
+.ch-ava{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700}
+.ch-name{font-size:13px;font-weight:600}
+.ch-cnt{font-size:11px;color:var(--t3)}
+.ch-bar{width:100%;height:3px;background:var(--item-h);border-radius:2px;overflow:hidden}
+.ch-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-l));border-radius:2px}
+
+/* ── SECTION HEADING ── */
+.sec-h{font-size:18px;font-weight:800;letter-spacing:-.3px;margin-bottom:6px}
+.sec-sub{font-size:13px;color:var(--t2);margin-bottom:24px}
+
+@media(max-width:1100px){.cols{grid-template-columns:repeat(2,1fr)}.cols.cols4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:680px){.cols,.cols.cols4{grid-template-columns:1fr}.ch-grid{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
 
-<div class="wrap">
+<div class="page">
 
-  <!-- TOP NAV -->
-  <nav class="topnav">
-    <div class="nav-logo">
-      <div class="nav-logo-ico">📚</div>
-      <div>
-        <div class="nav-logo-txt">DriveMe Library</div>
-        <div class="nav-logo-sub">Бібліотека знань компанії</div>
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-top">
+      <div class="logo">
+        <div class="logo-ico">📚</div>
+        <div class="logo-text">
+          <div class="logo-name">Бібліотека знань</div>
+          <div class="logo-sub">DriveMe · Корпоративна бібліотека</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="header-nav">
+          <button class="nav-btn on" onclick="setPage('lib',this)">Бібліотека</button>
+          <button class="nav-btn" onclick="setPage('docs',this)">Документи</button>
+          <button class="nav-btn" onclick="setPage('favs',this)">Обрані <span id="favn" style="color:var(--accent)"></span></button>
+          <button class="nav-btn" onclick="setPage('chal',this)">Виклик місяця</button>
+        </div>
+        <button class="btn-add" onclick="toast('📬','Функцію буде додано незабаром!')">+ Запропонувати</button>
       </div>
     </div>
-    <div class="nav-links">
-      <button class="nav-link active" onclick="setPage('lib')">Бібліотека</button>
-      <button class="nav-link" onclick="setPage('docs')">Документи</button>
-      <button class="nav-link" onclick="setPage('favs')">Обрані <span id="fav-n" style="color:var(--accent)"></span></button>
-      <button class="nav-link" onclick="setPage('challenge')">Виклик місяця</button>
+    <div class="header-sub">
+      <span>Особистий розвиток</span> · <span>Бізнес</span> · <span>Корисна література</span>
     </div>
-    <div class="nav-right">
-      <div class="badge-live">20 книг</div>
-      <button class="btn-suggest" onclick="toast('📬','Функція скоро буде доступна!')">+ Запропонувати</button>
-    </div>
-  </nav>
+  </div>
 
   <!-- PAGE: LIBRARY -->
-  <div id="page-lib">
-
-    <!-- HERO -->
-    <div class="hero">
-      <div class="hero-left">
-        <div class="hero-tag">📚 Бібліотека DriveMe</div>
-        <div class="hero-title"><span>Бібліотека знань</span></div>
-        <div class="hero-sub">Особистий розвиток · Бізнес · Лідерство · Корисна література</div>
-      </div>
-      <div class="hero-stats">
-        <div class="hero-stat">
-          <div class="hero-stat-n">20</div>
-          <div class="hero-stat-l">Книг</div>
-        </div>
-        <div class="hero-stat">
-          <div class="hero-stat-n">8</div>
-          <div class="hero-stat-l">Документів</div>
-        </div>
-        <div class="hero-stat">
-          <div class="hero-stat-n">47</div>
-          <div class="hero-stat-l">Завантажень</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- BOOK OF MONTH -->
-    <div style="padding-top:28px">
-      <div class="bom-banner">
-        <div class="bom-book" style="background:linear-gradient(145deg,#2D1B69,#11998e)">🧩</div>
-        <div class="bom-info">
-          <div class="bom-chip">★ Книга місяця — травень 2026</div>
-          <div class="bom-title">П'ять вад команди</div>
-          <div class="bom-author">Патрік Ленсіоні</div>
-          <div class="bom-desc">Притча про лідерство. Відсутність довіри, страх конфлікту, безвідповідальність — п'ять дисфункцій, що руйнують навіть найсильніші команди.</div>
-          <div class="bom-acts">
-            <button class="btn-dl" onclick="toast('⬇','Завантаження розпочато!')">⬇ FB2</button>
-            <button class="btn-sec" onclick="openM('five')">Детальніше</button>
-            <div class="bom-meta" style="margin-left:4px">
-              <div class="bom-meta-i">📄 741 KB</div>
-              <div class="bom-meta-i">⏱ ~3 год</div>
-              <div class="bom-meta-i">👥 12 читають</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SEARCH -->
-    <div class="search-area">
-      <div class="search-box">
+  <div id="p-lib">
+    <div class="search-row">
+      <div class="search-wrap">
         <span class="search-ico">⌕</span>
-        <input id="q" type="text" placeholder="Пошук по назві, автору, опису…" oninput="renderLib()">
+        <input id="q" type="text" placeholder="Пошук по назві, автору, опису…" oninput="render()">
       </div>
-      <div class="filter-chips">
-        <button class="chip on" id="chip-all" onclick="setCat('all')">Всі <span class="chip-n">20</span></button>
-        <button class="chip" id="chip-personal" onclick="setCat('personal')">🧠 Особистий розвиток <span class="chip-n">8</span></button>
-        <button class="chip" id="chip-business" onclick="setCat('business')">💼 Бізнес <span class="chip-n">8</span></button>
-        <button class="chip" id="chip-leadership" onclick="setCat('leadership')">🎯 Лідерство <span class="chip-n">4</span></button>
+      <div class="cats">
+        <button class="cat on" id="ca" onclick="setC('all',this)">Всі <span class="cat-n">20</span></button>
+        <button class="cat" id="cp" onclick="setC('personal',this)">🧠 Особистий розвиток <span class="cat-n">8</span></button>
+        <button class="cat" id="cb" onclick="setC('business',this)">💼 Бізнес <span class="cat-n">8</span></button>
+        <button class="cat" id="cl" onclick="setC('leadership',this)">🎯 Лідерство <span class="cat-n">4</span></button>
       </div>
     </div>
-
-    <!-- COLUMNS -->
-    <div class="cols" id="lib-cols"></div>
-
-  </div><!-- /page-lib -->
+    <div class="cols cols4" id="cols"></div>
+  </div>
 
   <!-- PAGE: DOCS -->
-  <div id="page-docs" style="display:none;padding:40px 0 48px">
-    <div style="font-size:22px;font-weight:800;letter-spacing:-.5px;margin-bottom:6px">📋 Документи та матеріали</div>
-    <div style="font-size:14px;color:var(--t2);margin-bottom:28px">Внутрішні документи, шаблони та корисні файли DriveMe</div>
-    <div id="docs-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px"></div>
+  <div id="p-docs" style="display:none;padding-top:32px">
+    <div class="sec-h">Документи та матеріали</div>
+    <div class="sec-sub">Внутрішні документи, шаблони та корисні файли DriveMe</div>
+    <div class="docs-grid" id="docs-grid"></div>
   </div>
 
   <!-- PAGE: FAVS -->
-  <div id="page-favs" style="display:none;padding:40px 0 48px">
-    <div style="font-size:22px;font-weight:800;letter-spacing:-.5px;margin-bottom:24px">★ Обрані книги</div>
+  <div id="p-favs" style="display:none;padding-top:32px">
+    <div class="sec-h">Обрані книги</div>
+    <div class="sec-sub">Книги які ти зберіг для себе</div>
     <div id="favs-cnt"></div>
   </div>
 
   <!-- PAGE: CHALLENGE -->
-  <div id="page-challenge" style="display:none;padding:40px 0 48px">
-    <div style="font-size:22px;font-weight:800;letter-spacing:-.5px;margin-bottom:6px">🏆 Виклик місяця</div>
-    <div style="font-size:14px;color:var(--t2);margin-bottom:28px">Читаємо разом — травень 2026</div>
-    <div style="background:var(--col);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:28px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
-        <div>
-          <div style="font-size:16px;font-weight:700;margin-bottom:4px">🎯 Ціль: 2 книги за травень</div>
-          <div style="font-size:12px;color:var(--t3)">Дедлайн: 31 травня 2026</div>
-        </div>
-        <div style="background:rgba(45,212,160,.08);border:1px solid rgba(45,212,160,.2);color:var(--green);font-size:11px;font-weight:600;padding:5px 12px;border-radius:20px">Активний</div>
+  <div id="p-chal" style="display:none;padding-top:32px">
+    <div class="sec-h">Виклик місяця — травень 2026</div>
+    <div class="sec-sub">Читаємо разом — ціль: 2 книги за місяць</div>
+    <div class="ch-grid">
+      <div class="ch-card">
+        <div class="ch-ava" style="background:linear-gradient(135deg,#E8732A,#F5894A)">А</div>
+        <div class="ch-name">Андрій</div><div class="ch-cnt">2 / 2 книги ✅</div>
+        <div class="ch-bar"><div class="ch-fill" style="width:100%"></div></div>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:10px">
-          <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#FF6B2B,#FF8E4B);display:flex;align-items:center;justify-content:center;font-size:20px">👤</div>
-          <div style="font-size:13px;font-weight:600">Андрій</div>
-          <div style="font-size:11px;color:var(--t3)">2 / 2 книги</div>
-          <div style="width:100%;height:3px;background:var(--card2);border-radius:2px"><div style="height:100%;width:100%;background:linear-gradient(90deg,#FF6B2B,#FF8E4B);border-radius:2px"></div></div>
-        </div>
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:10px">
-          <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#4D9CFF,#2DD4A0);display:flex;align-items:center;justify-content:center;font-size:20px">👤</div>
-          <div style="font-size:13px;font-weight:600">Коля</div>
-          <div style="font-size:11px;color:var(--t3)">1 / 2 книги</div>
-          <div style="width:100%;height:3px;background:var(--card2);border-radius:2px"><div style="height:100%;width:50%;background:linear-gradient(90deg,#4D9CFF,#2DD4A0);border-radius:2px"></div></div>
-        </div>
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:10px">
-          <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#9B72FF,#FF6B2B);display:flex;align-items:center;justify-content:center;font-size:20px">👤</div>
-          <div style="font-size:13px;font-weight:600">HR команда</div>
-          <div style="font-size:11px;color:var(--t3)">2 / 2 книги</div>
-          <div style="width:100%;height:3px;background:var(--card2);border-radius:2px"><div style="height:100%;width:100%;background:linear-gradient(90deg,#9B72FF,#FF6B2B);border-radius:2px"></div></div>
-        </div>
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:10px">
-          <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#2DD4A0,#4D9CFF);display:flex;align-items:center;justify-content:center;font-size:20px">👤</div>
-          <div style="font-size:13px;font-weight:600">COO офіс</div>
-          <div style="font-size:11px;color:var(--t3)">1 / 2 книги</div>
-          <div style="width:100%;height:3px;background:var(--card2);border-radius:2px"><div style="height:100%;width:50%;background:linear-gradient(90deg,#2DD4A0,#4D9CFF);border-radius:2px"></div></div>
-        </div>
+      <div class="ch-card">
+        <div class="ch-ava" style="background:linear-gradient(135deg,#5B9FE8,#2CC88A)">К</div>
+        <div class="ch-name">Коля</div><div class="ch-cnt">1 / 2 книги</div>
+        <div class="ch-bar"><div class="ch-fill" style="width:50%"></div></div>
+      </div>
+      <div class="ch-card">
+        <div class="ch-ava" style="background:linear-gradient(135deg,#9B78E0,#E8732A)">HR</div>
+        <div class="ch-name">HR команда</div><div class="ch-cnt">2 / 2 книги ✅</div>
+        <div class="ch-bar"><div class="ch-fill" style="width:100%"></div></div>
+      </div>
+      <div class="ch-card">
+        <div class="ch-ava" style="background:linear-gradient(135deg,#2CC88A,#5B9FE8)">C</div>
+        <div class="ch-name">COO офіс</div><div class="ch-cnt">1 / 2 книги</div>
+        <div class="ch-bar"><div class="ch-fill" style="width:50%"></div></div>
       </div>
     </div>
-    <div style="font-size:16px;font-weight:700;margin-bottom:16px">📖 Книги виклику</div>
-    <div id="ch-books" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px"></div>
+    <div class="sec-h" style="margin-bottom:16px">Книги виклику</div>
+    <div class="cols" style="grid-template-columns:repeat(2,1fr)" id="chal-books"></div>
   </div>
 
-</div><!-- /wrap -->
+</div>
 
 <!-- MODAL -->
 <div class="overlay" id="overlay">
   <div class="modal">
     <button class="modal-x" onclick="closeM()">✕</button>
-    <div class="modal-book" id="m-cover"></div>
-    <div class="modal-title" id="m-title"></div>
-    <div class="modal-author" id="m-author"></div>
-    <div class="modal-desc" id="m-desc"></div>
-    <div class="modal-meta">
-      <div class="modal-meta-i" id="m-fmt"></div>
-    </div>
-    <div class="modal-acts">
-      <button class="btn-dl" id="m-dl">⬇ Завантажити</button>
-      <button class="btn-sec" id="m-fav">★ В обрані</button>
+    <span class="modal-emoji" id="m-e"></span>
+    <div class="modal-title" id="m-t"></div>
+    <div class="modal-author" id="m-a"></div>
+    <div class="modal-desc" id="m-d"></div>
+    <div class="modal-meta"><div class="modal-meta-i" id="m-f"></div></div>
+    <div class="modal-btns">
+      <button class="btn-dl-lg" id="m-dl">⬇ Завантажити</button>
+      <button class="btn-sec" id="m-fv">☆ В обрані</button>
     </div>
   </div>
 </div>
 
 <!-- TOAST -->
-<div class="toast" id="toast-el"><span id="t-ico"></span><span id="t-msg"></span></div>
+<div class="toast" id="toast-el"><span id="ti"></span>&nbsp;<span id="tm"></span></div>
 
 <script>
-const BOOKS=[
-  {id:'atomic',e:'⚡',title:'Атомні звички',author:'Джеймс Клір',fmt:'FB2',sz:'3.2 MB',cat:'personal',tags:['звички','продуктивність'],bg:'linear-gradient(145deg,#1a1a2e,#16213e)',hot:true,new:false,ceo:false,desc:'Система 1% щодня. Чотири закони зміни поведінки: очевидність, привабливість, простота, задоволення. Найпрактичніша книга про зміну себе.'},
-  {id:'drive',e:'🔥',title:'Драйв',author:'Деніель Пінк',fmt:'FB2',sz:'1.7 MB',cat:'personal',tags:['мотивація','психологія'],bg:'linear-gradient(145deg,#92400e,#1c1917)',hot:false,new:false,ceo:false,desc:'Що насправді мотивує: автономія, майстерність, мета. Чому бонуси руйнують внутрішню мотивацію.'},
-  {id:'morning',e:'🌅',title:'Магія ранку',author:'Хел Елрод',fmt:'FB2',sz:'759 KB',cat:'personal',tags:['рутина','продуктивність'],bg:'linear-gradient(145deg,#064e3b,#0f1a13)',hot:false,new:false,ceo:false,desc:'Перший час дня визначає успіх. SAVERS: мовчання, афірмації, візуалізація, вправи, читання, нотатки.'},
-  {id:'richdad',e:'💰',title:'Багатий тато, бідний тато',author:'Роберт Кійосакі',fmt:'FB2',sz:'1.2 MB',cat:'personal',tags:['фінанси','мислення'],bg:'linear-gradient(145deg,#92400e,#1c1917)',hot:false,new:false,ceo:false,desc:'Фінансова грамотність з нуля. Чому треба купувати активи, а не пасиви.'},
-  {id:'deepwork',e:'🎯',title:'Deep Work',author:'Кел Ньюпорт',fmt:'FB2',sz:'1.1 MB',cat:'personal',tags:['продуктивність','фокус'],bg:'linear-gradient(145deg,#064e3b,#0f1a13)',hot:false,new:true,ceo:false,desc:'Здатність зосередитись без відволікань — суперсила 21 століття.'},
-  {id:'grit',e:'💪',title:'Твердість характеру',author:'Анжела Дакворт',fmt:'FB2',sz:'1.4 MB',cat:'personal',tags:['характер','наполегливість'],bg:'linear-gradient(145deg,#7f1d1d,#1c1917)',hot:false,new:true,ceo:false,desc:'Чому пристрасть + наполегливість важливіші за талант.'},
-  {id:'sapiens',e:'🌍',title:'Sapiens',author:'Юваль Ной Харарі',fmt:'FB2',sz:'2.8 MB',cat:'personal',tags:['історія','мислення'],bg:'linear-gradient(145deg,#064e3b,#0f1a13)',hot:false,new:false,ceo:false,desc:'Коротка історія людства. Як Homo Sapiens став панувати над планетою.'},
-  {id:'mindset',e:'🧬',title:'Мислення зростання',author:'Керол Двек',fmt:'FB2',sz:'1.2 MB',cat:'personal',tags:['психологія','навчання'],bg:'linear-gradient(145deg,#7f1d1d,#0f0f1a)',hot:true,new:false,ceo:false,desc:'Fixed vs Growth Mindset. Як переконання «я можу навчитись» змінює все.'},
-
-  {id:'branson',e:'🚀',title:'К чорта все! Берись і роби!',author:'Річард Бренсон',fmt:'FB2',sz:'905 KB',cat:'business',tags:['підприємництво','натхнення'],bg:'linear-gradient(145deg,#7f1d1d,#1c1917)',hot:false,new:false,ceo:false,desc:'Підприємництво без страху. Нестандартні рішення і як побудувати Virgin з нуля.'},
-  {id:'influence',e:'🧲',title:'Психологія впливу',author:'Роберт Чалдіні',fmt:'FB2',sz:'2.3 MB',cat:'business',tags:['психологія','переговори'],bg:'linear-gradient(145deg,#1e3a5f,#0f0f1a)',hot:true,new:false,ceo:false,desc:'6 принципів переконання: взаємність, послідовність, соціальний доказ, авторитет, симпатія, дефіцит.'},
-  {id:'nike',e:'🏃',title:'Не зупиняйся',author:'Філ Найт',fmt:'FB2',sz:'2.1 MB',cat:'business',tags:['підприємництво','Nike'],bg:'linear-gradient(145deg,#92400e,#1c1917)',hot:false,new:false,ceo:false,desc:'Автобіографія засновника Nike. Від 50 доларів і японських кросівок до глобальної імперії.'},
-  {id:'blitz',e:'⚡',title:'Blitzscaling',author:'Рід Хоффман',fmt:'FB2',sz:'1.8 MB',cat:'business',tags:['зростання','стартап'],bg:'linear-gradient(145deg,#1e3a5f,#0f0f1a)',hot:false,new:false,ceo:false,desc:'Як досягти масштабу блискавично швидко. LinkedIn, Airbnb, Uber — як вони це зробили.'},
-  {id:'principles',e:'📐',title:'Принципи',author:'Рей Даліо',fmt:'FB2',sz:'3.4 MB',cat:'business',tags:['рішення','система'],bg:'linear-gradient(145deg,#2d1b69,#11998e)',hot:false,new:false,ceo:false,desc:'Система прийняття рішень від засновника Bridgewater. 500+ принципів для роботи і життя.'},
-  {id:'good2great',e:'🏔️',title:'Від хорошого до великого',author:'Джим Коллінз',fmt:'FB2',sz:'1.9 MB',cat:'business',tags:['стратегія','компанія'],bg:'linear-gradient(145deg,#064e3b,#0f1a13)',hot:false,new:false,ceo:false,desc:'Дослідження 1435 компаній — лише 11 зробили стрибок до величі.'},
-  {id:'essential',e:'✂️',title:'Есенціалізм',author:'Грег МакКеон',fmt:'FB2',sz:'987 KB',cat:'business',tags:['фокус','рішення'],bg:'linear-gradient(145deg,#2d1b69,#1a0a2e)',hot:false,new:true,ceo:false,desc:'Дисциплінована гонитва за меншим. Мистецтво відмовляти несуттєвому.'},
-  {id:'extreme',e:'⚔️',title:'Extreme Ownership',author:'Джоко Вілінк',fmt:'FB2',sz:'1.6 MB',cat:'business',tags:['лідерство','відповідальність'],bg:'linear-gradient(145deg,#1a1a2e,#16213e)',hot:false,new:true,ceo:false,desc:'Принципи командування Navy SEAL для бізнесу. Лідер відповідає за все — без виправдань.'},
-
-  {id:'culture',e:'🎭',title:'Культурний код',author:'Деніел Койл',fmt:'FB2',sz:'1.4 MB',cat:'leadership',tags:['культура','команда'],bg:'linear-gradient(145deg,#2d1b69,#1a0a2e)',hot:false,new:false,ceo:true,desc:'3 принципи виняткових команд: безпека, вразливість, спільна мета. Досвід Google, Pixar і спецназу.'},
-  {id:'netflix',e:'📺',title:'Ніяких правил. Культура Netflix',author:'Рід Хастінгс, Ерін Мейєр',fmt:'FB2',sz:'3.0 MB',cat:'leadership',tags:['культура','лідерство'],bg:'linear-gradient(145deg,#7f1d1d,#0f0f1a)',hot:false,new:false,ceo:false,desc:'Свобода і відповідальність як культура. Як Netflix виріс з DVD-прокату в медіагіганта.'},
-  {id:'five',e:'🧩',title:"П'ять вад команди",author:'Патрік Ленсіоні',fmt:'FB2',sz:'741 KB',cat:'leadership',tags:['команда','лідерство'],bg:'linear-gradient(145deg,#2d1b69,#11998e)',hot:false,new:false,ceo:true,desc:'Притча про лідерство. Відсутність довіри, страх конфлікту, безвідповідальність, уникнення підзвітності, байдужість до результатів.'},
-  {id:'nowhat',e:'🤔',title:'Чому не всі люблять ходити на роботу',author:'Патрік Ленсіоні',fmt:'FB2',sz:'699 KB',cat:'leadership',tags:['команда','HR'],bg:'linear-gradient(145deg,#1e3a5f,#0f0f1a)',hot:false,new:true,ceo:false,desc:'Три причини незадоволеності: анонімність, нерелевантність, невимірюваність результату.'},
+const B=[
+  // PERSONAL
+  {id:'atomic',e:'⚡',t:'Атомні звички',a:'Джеймс Клір',f:'FB2',s:'3.2 MB',c:'personal',hot:true,new:false,ceo:false,
+   d:'Система 1% щодня. Чотири закони зміни поведінки: очевидність, привабливість, простота, задоволення. Найпрактичніша книга про зміну себе.'},
+  {id:'drive',e:'🔥',t:'Драйв',a:'Деніель Пінк',f:'FB2',s:'1.7 MB',c:'personal',hot:false,new:false,ceo:false,
+   d:'Що насправді мотивує: автономія, майстерність, мета. Чому бонуси руйнують внутрішню мотивацію.'},
+  {id:'morning',e:'🌅',t:'Магія ранку',a:'Хел Елрод',f:'FB2',s:'759 KB',c:'personal',hot:false,new:false,ceo:false,
+   d:'Перший час дня визначає успіх. SAVERS: мовчання, афірмації, візуалізація, вправи, читання, нотатки.'},
+  {id:'richdad',e:'💰',t:'Багатий тато, бідний тато',a:'Роберт Кійосакі',f:'FB2',s:'1.2 MB',c:'personal',hot:false,new:false,ceo:false,
+   d:'Фінансова грамотність з нуля. Чому треба купувати активи, а не пасиви.'},
+  {id:'deepwork',e:'🎯',t:'Deep Work',a:'Кел Ньюпорт',f:'FB2',s:'1.1 MB',c:'personal',hot:false,new:true,ceo:false,
+   d:'Здатність зосередитись без відволікань — суперсила 21 століття. Правила глибокої роботи.'},
+  {id:'grit',e:'💪',t:'Твердість характеру',a:'Анжела Дакворт',f:'FB2',s:'1.4 MB',c:'personal',hot:false,new:true,ceo:false,
+   d:'Чому пристрасть + наполегливість важливіші за талант. Дослідження найуспішніших людей.'},
+  {id:'sapiens',e:'🌍',t:'Sapiens',a:'Юваль Ной Харарі',f:'FB2',s:'2.8 MB',c:'personal',hot:false,new:false,ceo:false,
+   d:'Коротка історія людства. Когнітивна, аграрна і наукова революції.'},
+  {id:'mindset',e:'🧬',t:'Мислення зростання',a:'Керол Двек',f:'FB2',s:'1.2 MB',c:'personal',hot:true,new:false,ceo:false,
+   d:'Fixed vs Growth Mindset. Як переконання «я можу навчитись» змінює все — від школи до CEO.'},
+  // BUSINESS
+  {id:'branson',e:'🚀',t:'К чорта все! Берись і роби!',a:'Річард Бренсон',f:'FB2',s:'905 KB',c:'business',hot:false,new:false,ceo:false,
+   d:'Підприємництво без страху. Нестандартні рішення і як побудувати Virgin з нуля.'},
+  {id:'influence',e:'🧲',t:'Психологія впливу',a:'Роберт Чалдіні',f:'FB2',s:'2.3 MB',c:'business',hot:true,new:false,ceo:false,
+   d:'6 принципів переконання: взаємність, послідовність, соціальний доказ, авторитет, симпатія, дефіцит.'},
+  {id:'nike',e:'🏃',t:'Не зупиняйся',a:'Філ Найт',f:'FB2',s:'2.1 MB',c:'business',hot:false,new:false,ceo:false,
+   d:'Автобіографія засновника Nike. Від 50 доларів і японських кросівок до глобальної імперії.'},
+  {id:'blitz',e:'⚡',t:'Blitzscaling',a:'Рід Хоффман',f:'FB2',s:'1.8 MB',c:'business',hot:false,new:false,ceo:false,
+   d:'Як досягти масштабу блискавично швидко. LinkedIn, Airbnb, Uber — як вони це зробили.'},
+  {id:'principles',e:'📐',t:'Принципи',a:'Рей Даліо',f:'FB2',s:'3.4 MB',c:'business',hot:false,new:false,ceo:false,
+   d:'Система прийняття рішень від засновника Bridgewater. 500+ принципів для роботи і життя.'},
+  {id:'good2great',e:'🏔️',t:'Від хорошого до великого',a:'Джим Коллінз',f:'FB2',s:'1.9 MB',c:'business',hot:false,new:false,ceo:false,
+   d:'Дослідження 1435 компаній — лише 11 зробили стрибок до величі. Level 5 Leadership.'},
+  {id:'essential',e:'✂️',t:'Есенціалізм',a:'Грег МакКеон',f:'FB2',s:'987 KB',c:'business',hot:false,new:true,ceo:false,
+   d:'Дисциплінована гонитва за меншим. Мистецтво відмовляти несуттєвому і фокусуватись на головному.'},
+  {id:'extreme',e:'⚔️',t:'Extreme Ownership',a:'Джоко Вілінк',f:'FB2',s:'1.6 MB',c:'business',hot:false,new:true,ceo:false,
+   d:'Принципи командування Navy SEAL для бізнесу. Лідер відповідає за все — без виправдань.'},
+  // LEADERSHIP
+  {id:'culture',e:'🎭',t:'Культурний код',a:'Деніел Койл',f:'FB2',s:'1.4 MB',c:'leadership',hot:false,new:false,ceo:true,
+   d:'3 принципи виняткових команд: безпека, вразливість, спільна мета. Досвід Google, Pixar і спецназу.'},
+  {id:'netflix',e:'📺',t:'Ніяких правил. Культура Netflix',a:'Рід Хастінгс, Ерін Мейєр',f:'FB2',s:'3.0 MB',c:'leadership',hot:false,new:false,ceo:false,
+   d:'Свобода і відповідальність як культура. Як Netflix виріс з DVD-прокату в медіагіганта.'},
+  {id:'five',e:'🧩',t:"П'ять вад команди",a:'Патрік Ленсіоні',f:'FB2',s:'741 KB',c:'leadership',hot:false,new:false,ceo:true,
+   d:'Притча про лідерство. Відсутність довіри, страх конфлікту, безвідповідальність, байдужість до результатів.'},
+  {id:'nowhat',e:'🤔',t:'Чому не всі люблять ходити на роботу',a:'Патрік Ленсіоні',f:'FB2',s:'699 KB',c:'leadership',hot:false,new:true,ceo:false,
+   d:'Три причини незадоволеності: анонімність, нерелевантність, невимірюваність результату.'},
 ];
-
 const DOCS=[
-  {ico:'📊',col:'rgba(77,156,255,.1)',title:'KPI Dashboard — шаблон CEO',meta:'PDF · 1.1 MB · DriveMe Internal'},
-  {ico:'💰',col:'rgba(45,212,160,.1)',title:'Фінансова модель автопарку',meta:'XLSX · DriveMe Internal'},
-  {ico:'📑',col:'rgba(255,107,43,.1)',title:'Uklon — тарифна документація 2026',meta:'PDF · Uklon Partner'},
-  {ico:'📈',col:'rgba(155,114,255,.1)',title:'Excel для бізнес-аналітики',meta:'PDF · 2.4 MB · Навчальний'},
-  {ico:'🚗',col:'rgba(245,200,66,.1)',title:'Регламент роботи водія DriveMe',meta:'PDF · 640 KB · HR Department'},
-  {ico:'🔧',col:'rgba(45,212,160,.1)',title:'Протокол СТО та ДТП',meta:'PDF · 380 KB · Operations'},
-  {ico:'👥',col:'rgba(77,156,255,.1)',title:'Онбординг нового водія',meta:'PDF · 520 KB · HR Department'},
-  {ico:'📋',col:'rgba(255,107,43,.1)',title:'Шаблон щоденного звіту CEO',meta:'PDF · DriveMe Internal'},
+  {i:'📊',bg:'rgba(91,159,232,.1)',t:'Excel для бізнес-аналітики',m:'PDF · 2.4 MB · Навчальний'},
+  {i:'💼',bg:'rgba(155,120,224,.1)',t:'Фінансова модель автопарку',m:'XLSX · DriveMe Internal'},
+  {i:'📈',bg:'rgba(44,200,138,.1)',t:'KPI Dashboard — шаблон CEO',m:'PDF · 1.1 MB · DriveMe Internal'},
+  {i:'📑',bg:'rgba(232,115,42,.1)',t:'Uklon — тарифна документація 2026',m:'PDF · Uklon Partner'},
+  {i:'🚗',bg:'rgba(245,200,50,.1)',t:'Регламент роботи водія DriveMe',m:'PDF · 640 KB · HR Department'},
+  {i:'🔧',bg:'rgba(44,200,138,.1)',t:'Протокол СТО та ДТП',m:'PDF · 380 KB · Operations'},
+  {i:'👥',bg:'rgba(91,159,232,.1)',t:'Онбординг нового водія',m:'PDF · 520 KB · HR Department'},
+  {i:'📋',bg:'rgba(232,115,42,.1)',t:'Шаблон щоденного звіту CEO',m:'PDF · DriveMe Internal'},
 ];
-
 const COLS=[
-  {id:'personal',ico:'🧠',icoBg:'rgba(155,114,255,.12)',title:'Особистий розвиток',sub:'Книги для особистого зростання'},
-  {id:'business',ico:'💼',icoBg:'rgba(77,156,255,.12)',title:'Бізнес-література',sub:'Підприємництво, стратегія, зростання'},
-  {id:'leadership',ico:'🎯',icoBg:'rgba(45,212,160,.12)',title:'Лідерство та команда',sub:'Управління, культура, мотивація'},
+  {id:'personal',ico:'🧠',name:'Особистий розвиток',sub:'8 книг'},
+  {id:'business',ico:'💼',name:'Бізнес-література',sub:'8 книг'},  // was 12 in ref
+  {id:'leadership',ico:'🎯',name:'Лідерство та команда',sub:'4 книги'},
 ];
+const DOCS_COL={ico:'📁',name:'Корисна література',sub:'Файли та шаблони'};
 
-let favs=JSON.parse(localStorage.getItem('dm2-favs')||'[]');
-let curCat='all';
+let favs=JSON.parse(localStorage.getItem('dml-f')||'[]');
+let cat='all';
 
-window.onload=()=>{
-  renderLib();
-  renderDocs();
-  renderFavs();
-  renderChBooks();
-  updateFavBadge();
-};
+window.onload=()=>{render();renderDocs();updateFavn()};
 
-/* ─── PAGES ─── */
-const pages=['lib','docs','favs','challenge'];
-function setPage(p){
-  pages.forEach(x=>document.getElementById('page-'+x).style.display=x===p?'':'none');
-  document.querySelectorAll('.nav-link').forEach((el,i)=>{
-    el.classList.toggle('active',['lib','docs','favs','challenge'][i]===p);
-  });
+// ── PAGES ──
+const PG=['lib','docs','favs','chal'];
+function setPage(p,btn){
+  PG.forEach(x=>document.getElementById('p-'+x).style.display=x===p?'':'none');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'));
+  if(btn)btn.classList.add('on');
   if(p==='favs')renderFavs();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-/* ─── BOOK ITEM HTML ─── */
-function bitem(b){
+// ── CAT ──
+function setC(c,btn){
+  cat=c;
+  ['ca','cp','cb','cl'].forEach(id=>document.getElementById(id)?.classList.remove('on'));
+  if(btn)btn.classList.add('on');
+  render();
+}
+
+// ── BOOK HTML ──
+function bhtml(b){
   const f=favs.includes(b.id);
-  return `<div class="bitem" onclick="openM('${b.id}')">
-    <button class="fav-btn${f?' on':''}" id="fb-${b.id}" onclick="event.stopPropagation();toggleFav('${b.id}')" title="В обрані">${f?'★':'☆'}</button>
-    <div class="bitem-emo" style="background:${b.bg}">${b.e}</div>
-    <div class="bitem-main">
-      <div class="bitem-top">
-        <div class="bitem-title">${b.title}</div>
-        <button class="bitem-dl" onclick="event.stopPropagation();toast('⬇','Завантаження: ${b.title}')">⬇ ${b.fmt}</button>
-      </div>
-      <div class="bitem-meta">${b.author} · ${b.fmt} · ${b.sz}</div>
-      <div class="bitem-desc">${b.desc}</div>
-      <div style="display:flex;gap:5px;margin-top:7px;flex-wrap:wrap">
-        ${b.new?'<span class="bib bib-new">New</span>':''}
-        ${b.hot?'<span class="bib bib-hot">🔥 Hot</span>':''}
-        ${b.ceo?'<span class="bib bib-ceo">CEO Pick</span>':''}
-        ${b.tags.map(t=>`<span class="bitem-tag">${t}</span>`).join('')}
-      </div>
-    </div>
+  return `<div class="bi" onclick="openM('${b.id}')">
+    <button class="bi-dl" onclick="event.stopPropagation();toast('⬇','Завантаження: ${b.t}')">↓ ${b.f}</button>
+    <div class="bi-title">${b.t}</div>
+    <div class="bi-meta">${b.a} · ${b.f} · ${b.s}</div>
+    <div class="bi-desc">${b.d}</div>
+    ${(b.new||b.hot||b.ceo)?`<div class="bi-chips">
+      ${b.new?'<span class="chip c-new">New</span>':''}
+      ${b.hot?'<span class="chip c-hot">Популярне</span>':''}
+      ${b.ceo?'<span class="chip c-ceo">CEO вибір</span>':''}
+    </div>`:''}
+    <button class="bi-fav${f?' on':''}" id="bfv-${b.id}" onclick="event.stopPropagation();fav('${b.id}')">${f?'★':'☆'}</button>
   </div>`;
 }
 
-/* ─── RENDER LIB ─── */
-function renderLib(){
+// ── RENDER LIB ──
+function render(){
   const q=document.getElementById('q').value.toLowerCase().trim();
-  const container=document.getElementById('lib-cols');
+  const container=document.getElementById('cols');
 
-  const cols=curCat==='all'?COLS:COLS.filter(c=>c.id===curCat);
+  let html='';
 
-  container.innerHTML=cols.map(col=>{
-    let books=BOOKS.filter(b=>b.cat===col.id);
-    if(q)books=books.filter(b=>
-      b.title.toLowerCase().includes(q)||
-      b.author.toLowerCase().includes(q)||
-      b.tags.some(t=>t.includes(q))
-    );
-    if(!books.length&&q)return'';
-    return `<div class="col">
+  // Книжкові колонки
+  const cols=cat==='all'?COLS:COLS.filter(c=>c.id===cat);
+  cols.forEach(col=>{
+    let books=B.filter(b=>b.c===col.id);
+    if(q)books=books.filter(b=>b.t.toLowerCase().includes(q)||b.a.toLowerCase().includes(q)||b.d.toLowerCase().includes(q));
+    if(!books.length&&q)return;
+    html+=`<div class="col">
       <div class="col-head">
-        <div class="col-ico" style="background:${col.icoBg}">${col.ico}</div>
-        <div class="col-info">
-          <div class="col-title">${col.title}</div>
-          <div class="col-sub">${col.sub}</div>
+        <div class="col-head-left">
+          <div class="col-head-ico">${col.ico}</div>
+          <div>
+            <div class="col-head-name">${col.name}</div>
+            <div class="col-head-sub">${books.length} книг</div>
+          </div>
         </div>
-        <div class="col-badge">${books.length} книг</div>
+        <div class="col-count">${books.length} книг</div>
       </div>
       <div class="col-body">
-        ${books.map((b,i)=>`${i>0?'<div class="bitem-divider"></div>':''}${bitem(b)}`).join('')}
+        ${books.map((b,i)=>(i>0?'<div class="sep"></div>':'')+bhtml(b)).join('')}
       </div>
     </div>`;
-  }).join('');
+  });
 
-  // корисна лiтература (docs preview) — тільки якщо all
-  if(curCat==='all'&&!q){
-    container.innerHTML+=`<div class="col">
+  // Колонка "Корисна література" тільки якщо cat=all і без пошуку
+  if(cat==='all'&&!q){
+    html+=`<div class="col">
       <div class="col-head">
-        <div class="col-ico" style="background:rgba(255,200,50,.1)">📁</div>
-        <div class="col-info">
-          <div class="col-title">Корисна література</div>
-          <div class="col-sub">Документи, шаблони, файли</div>
+        <div class="col-head-left">
+          <div class="col-head-ico">📁</div>
+          <div>
+            <div class="col-head-name">Корисна література</div>
+            <div class="col-head-sub">Файли та шаблони</div>
+          </div>
         </div>
-        <div class="col-badge">Файли</div>
+        <div class="col-count">Файли</div>
       </div>
       <div class="col-body">
-        ${DOCS.map((d,i)=>`
-          ${i>0?'<div class="bitem-divider"></div>':''}
-          <div class="bitem" onclick="toast('📥','Завантаження: ${d.title}')">
-            <div class="bitem-emo" style="background:${d.col}">${d.ico}</div>
-            <div class="bitem-main">
-              <div class="bitem-top">
-                <div class="bitem-title">${d.title}</div>
-                <span style="font-size:10px;font-weight:600;color:var(--t3);background:var(--card2);padding:3px 8px;border-radius:6px;flex-shrink:0">${i<6?'⬇ PDF':'Скоро'}</span>
-              </div>
-              <div class="bitem-meta">${d.meta}</div>
-            </div>
-          </div>`).join('')}
+        ${DOCS.map((d,i)=>{
+          const avail=i<4;
+          return (i>0?'<div class="sep"></div>':'')+
+          `<div class="${avail?'bi':'si'}" onclick="${avail?"toast('📥','Завантаження: "+d.t+"')":"''"}">
+            ${avail?`<button class="bi-dl" onclick="event.stopPropagation();toast('📥','Завантаження: ${d.t}')">↓ PDF</button>`:''}
+            <div class="${avail?'bi-title':'si-name'}">${d.t}</div>
+            <div class="${avail?'bi-meta':'si-meta'}">${d.m}</div>
+            ${!avail?`<span class="si-badge">Скоро</span>`:''}
+          </div>`;
+        }).join('')}
       </div>
     </div>`;
   }
+
+  container.innerHTML=html||'<div class="empty">Нічого не знайдено</div>';
+  // Якщо шукаємо — показуємо 3 колонки
+  container.className=cat==='all'&&!q?'cols cols4':'cols';
 }
 
-function setCat(cat){
-  curCat=cat;
-  ['all','personal','business','leadership'].forEach(c=>{
-    document.getElementById('chip-'+c)?.classList.toggle('on',c===cat);
-  });
-  renderLib();
-}
-
-/* ─── DOCS ─── */
+// ── DOCS PAGE ──
 function renderDocs(){
   document.getElementById('docs-grid').innerHTML=DOCS.map(d=>`
-    <div style="background:var(--col);border:1px solid var(--border);border-radius:14px;padding:16px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .15s" onmouseenter="this.style.background='var(--card)'" onmouseleave="this.style.background='var(--col)'" onclick="toast('📥','Завантаження: ${d.title}')">
-      <div style="width:44px;height:44px;border-radius:12px;background:${d.col};display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">${d.ico}</div>
-      <div style="flex:1">
-        <div style="font-size:13.5px;font-weight:600;margin-bottom:3px">${d.title}</div>
-        <div style="font-size:11.5px;color:var(--t3)">${d.meta}</div>
+    <div class="doc-item" onclick="toast('📥','Завантаження: ${d.t}')">
+      <div class="doc-ico" style="background:${d.bg}">${d.i}</div>
+      <div class="doc-info">
+        <div class="doc-title">${d.t}</div>
+        <div class="doc-meta">${d.m}</div>
       </div>
-      <div style="width:32px;height:32px;background:var(--card2);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">⬇</div>
+      <div class="doc-dl">↓</div>
     </div>`).join('');
 }
 
-/* ─── FAVS ─── */
+// ── FAVS ──
 function renderFavs(){
-  const books=BOOKS.filter(b=>favs.includes(b.id));
-  const cnt=document.getElementById('favs-cnt');
-  if(!books.length){
-    cnt.innerHTML='<div class="empty"><div class="ico">★</div><div>Ще немає обраних.<br>Натисни ☆ на книзі щоб зберегти.</div></div>';
-    return;
-  }
-  cnt.innerHTML=`<div class="col" style="max-width:680px">${books.map((b,i)=>`${i>0?'<div class="bitem-divider"></div>':''}${bitem(b)}`).join('')}</div>`;
+  const books=B.filter(b=>favs.includes(b.id));
+  const c=document.getElementById('favs-cnt');
+  if(!books.length){c.innerHTML='<div class="empty">Ще немає обраних.<br>Натисни ☆ на книзі щоб зберегти.</div>';return;}
+  c.innerHTML=`<div class="col" style="max-width:600px">
+    <div class="col-body">${books.map((b,i)=>(i>0?'<div class="sep"></div>':'')+bhtml(b)).join('')}</div>
+  </div>`;
 }
 
-/* ─── CHALLENGE ─── */
-function renderChBooks(){
-  document.getElementById('ch-books').innerHTML=[BOOKS.find(b=>b.id==='five'),BOOKS.find(b=>b.id==='culture')].map(b=>`
-    <div class="col"><div class="col-body">${bitem(b)}</div></div>`).join('');
+// ── CHALLENGE BOOKS ──
+document.getElementById('chal-books').innerHTML=
+  ['five','culture'].map(id=>{const b=B.find(x=>x.id===id);return`<div class="col"><div class="col-body">${bhtml(b)}</div></div>`;}).join('');
+
+// ── FAV TOGGLE ──
+function fav(id){
+  favs=favs.includes(id)?favs.filter(f=>f!==id):[...favs,id];
+  localStorage.setItem('dml-f',JSON.stringify(favs));
+  document.querySelectorAll(`[id^="bfv-${id}"]`).forEach(b=>{b.textContent=favs.includes(id)?'★':'☆';b.classList.toggle('on',favs.includes(id))});
+  toast(favs.includes(id)?'★':'☆',favs.includes(id)?'Додано в обрані!':'Видалено з обраних');
+  updateFavn();
+}
+function updateFavn(){
+  const el=document.getElementById('favn');
+  el.textContent=favs.length?` (${favs.length})`:'';
 }
 
-/* ─── FAVS ─── */
-function toggleFav(id){
-  if(favs.includes(id)){favs=favs.filter(f=>f!==id);toast('☆','Видалено з обраних')}
-  else{favs.push(id);toast('★','Додано в обрані!')}
-  localStorage.setItem('dm2-favs',JSON.stringify(favs));
-  updateFavBadge();
-  document.querySelectorAll(`[id^="fb-${id}"]`).forEach(b=>{
-    b.textContent=favs.includes(id)?'★':'☆';
-    b.classList.toggle('on',favs.includes(id));
-  });
-}
-function updateFavBadge(){
-  document.getElementById('fav-n').textContent=favs.length>0?` (${favs.length})`:'';
-}
-
-/* ─── MODAL ─── */
+// ── MODAL ──
 function openM(id){
-  const b=BOOKS.find(x=>x.id===id);if(!b)return;
-  document.getElementById('m-cover').style.background=b.bg;
-  document.getElementById('m-cover').textContent=b.e;
-  document.getElementById('m-title').textContent=b.title;
-  document.getElementById('m-author').textContent=b.author;
-  document.getElementById('m-desc').textContent=b.desc;
-  document.getElementById('m-fmt').textContent=`📄 ${b.fmt} · ${b.sz}`;
+  const b=B.find(x=>x.id===id);if(!b)return;
+  document.getElementById('m-e').textContent=b.e;
+  document.getElementById('m-t').textContent=b.t;
+  document.getElementById('m-a').textContent=b.a;
+  document.getElementById('m-d').textContent=b.d;
+  document.getElementById('m-f').textContent=`${b.f} · ${b.s}`;
   document.getElementById('m-dl').onclick=()=>{closeM();toast('⬇','Завантаження розпочато!')};
-  const fb=document.getElementById('m-fav');
-  fb.textContent=favs.includes(id)?'★ В обраних':'★ В обрані';
-  fb.onclick=()=>{toggleFav(id);fb.textContent=favs.includes(id)?'★ В обраних':'★ В обрані'};
+  const fv=document.getElementById('m-fv');
+  const upFv=()=>{fv.textContent=favs.includes(id)?'★ В обраних':'☆ В обрані'};
+  upFv();fv.onclick=()=>{fav(id);upFv()};
   document.getElementById('overlay').classList.add('open');
 }
 function closeM(){document.getElementById('overlay').classList.remove('open')}
-document.getElementById('overlay').addEventListener('click',e=>{if(e.target===document.getElementById('overlay'))closeM()});
+document.getElementById('overlay').addEventListener('click',e=>{if(e.target.id==='overlay')closeM()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
 
-/* ─── TOAST ─── */
-let _tt;
-function toast(ico,msg){
-  clearTimeout(_tt);
-  document.getElementById('t-ico').textContent=ico;
-  document.getElementById('t-msg').textContent=msg;
+// ── TOAST ──
+let _t;
+function toast(i,m){
+  clearTimeout(_t);
+  document.getElementById('ti').textContent=i;
+  document.getElementById('tm').textContent=m;
   document.getElementById('toast-el').classList.add('show');
-  _tt=setTimeout(()=>document.getElementById('toast-el').classList.remove('show'),2400);
+  _t=setTimeout(()=>document.getElementById('toast-el').classList.remove('show'),2300);
 }
 </script>
 </body>
