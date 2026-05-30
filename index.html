@@ -412,7 +412,7 @@ body::before{
   flex:1;display:flex;flex-direction:column;overflow:hidden;
 }
 .reader-page-content{
-  flex:1;overflow:hidden;padding:40px 24px 20px;
+  flex:1;overflow-y:auto;padding:40px 24px 20px;
   max-width:680px;width:100%;margin:0 auto;
 }
 .reader-page-content h1{font-size:22px;font-weight:800;margin:0 0 20px;letter-spacing:-.4px;line-height:1.3}
@@ -1574,7 +1574,12 @@ function readerFontSize(delta){
   readerFontSizePx = Math.min(26, Math.max(13, readerFontSizePx+delta));
   localStorage.setItem('dml-fs', readerFontSizePx);
   applyReaderFs();
-  if(readerMode==='page') renderCurrentPage();
+  if(readerMode==='page' && readerBlocks.length){
+    // Перераховуємо сторінки після зміни розміру шрифту
+    readerPages = splitPagesByHeight(readerBlocks);
+    if(readerCurrentPage>=readerPages.length) readerCurrentPage=readerPages.length-1;
+    renderCurrentPage();
+  }
 }
 
 // ── MODE TOGGLE ──
@@ -1585,7 +1590,11 @@ function setReaderMode(m){
   document.getElementById('mode-page-btn').classList.toggle('on',   m==='page');
   document.getElementById('reader-scroll-wrap').style.display = m==='scroll'?'':'none';
   document.getElementById('reader-page-wrap').style.display   = m==='page'?'flex':'none';
-  if(m==='page') renderCurrentPage();
+  if(m==='page'){
+    readerPages = splitPagesByHeight(readerBlocks);
+    if(readerCurrentPage>=readerPages.length) readerCurrentPage=0;
+    renderCurrentPage();
+  }
   saveReaderProgress();
 }
 
@@ -1643,21 +1652,51 @@ function parseFB2(text){
   return blocks;
 }
 
-// ── SPLIT BLOCKS INTO PAGES ──
+// ── SPLIT BLOCKS INTO PAGES (height-based) ──
 function splitPages(blocks){
+  // Fallback: word-count if DOM not ready
   const pages=[]; let page=[]; let words=0;
   blocks.forEach(b=>{
-    const w = b.text.split(/\s+/).length;
-    const isHeading = ['h1','h2','h3'].includes(b.type);
-    // Перед заголовком h2 починаємо нову сторінку (якщо вже є контент)
-    if(isHeading && b.type==='h2' && page.length>0){
-      pages.push(page); page=[]; words=0;
-    }
+    const w=b.text.split(/\s+/).length;
+    if(b.type==='h2' && page.length>0){ pages.push(page); page=[]; words=0; }
     page.push(b); words+=w;
-    if(words >= WORDS_PER_PAGE && !isHeading){
-      pages.push(page); page=[]; words=0;
-    }
+    if(words>=280 && !['h1','h2','h3'].includes(b.type)){ pages.push(page); page=[]; words=0; }
   });
+  if(page.length) pages.push(page);
+  return pages;
+}
+
+function splitPagesByHeight(blocks){
+  const content = document.getElementById('reader-page-content');
+  if(!content || content.clientHeight<50) return splitPages(blocks);
+
+  // Доступна висота = висота контейнера мінус padding top(40)+bottom(20)
+  const availH = content.clientHeight - 60;
+  if(availH < 80) return splitPages(blocks);
+
+  // Вимірювальний div всередині content — успадковує всі CSS стилі (шрифт, розміри)
+  const probe = document.createElement('div');
+  probe.style.cssText = 'position:absolute;top:-99999px;left:24px;right:24px;visibility:hidden;pointer-events:none;';
+  content.style.position = 'relative';
+  content.appendChild(probe);
+
+  // Вимірюємо висоту кожного блоку
+  const blockHts = blocks.map(b=>{
+    probe.innerHTML = blocksToHtml([b]);
+    return probe.offsetHeight;
+  });
+  content.removeChild(probe);
+
+  const pages=[];
+  let page=[], pageH=0;
+  for(let i=0;i<blocks.length;i++){
+    const b=blocks[i], bH=blockHts[i];
+    // Перед h2 завжди починаємо нову сторінку (початок розділу)
+    if(b.type==='h2' && page.length>0){ pages.push(page); page=[]; pageH=0; }
+    // Якщо блок не вміщується — нова сторінка
+    else if(page.length>0 && pageH+bH > availH){ pages.push(page); page=[]; pageH=0; }
+    page.push(b); pageH+=bH;
+  }
   if(page.length) pages.push(page);
   return pages;
 }
@@ -1766,7 +1805,7 @@ async function openReader(id){
     if(!readerBlocks.length){
       readerBlocks=[{type:'p', text:'Не вдалось відобразити текст. Спробуй завантажити файл.'}];
     }
-    readerPages = splitPages(readerBlocks);
+    readerPages = splitPagesByHeight(readerBlocks);
 
     // Відновлюємо сторінку
     readerCurrentPage = savedProg?.page||0;
