@@ -331,44 +331,44 @@ body::before{
 @media(max-width:1100px){.cols{grid-template-columns:repeat(2,1fr)}.cols.cols4{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:680px){.cols,.cols.cols4{grid-template-columns:1fr}.ch-grid{grid-template-columns:repeat(2,1fr)}}
 
-/* ── SHELVES ── */
-.shelves{padding-bottom:8px}
-.shelf{margin-bottom:28px}
-.shelf-header{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
-.shelf-label{font-size:17px;font-weight:800;letter-spacing:-.3px}
-.shelf-sub{font-size:12px;color:var(--t3)}
-.shelf-scroll{
-  display:flex;gap:10px;
-  overflow-x:auto;padding-bottom:8px;
-  scrollbar-width:none;
+/* ── FEATURED SHELF ── */
+.featured{padding:24px 0 4px}
+.shelf-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.shelf-tab{
+  padding:8px 18px;border-radius:10px;font-size:13px;font-weight:600;
+  border:1px solid var(--border2);background:var(--col);color:var(--t2);
+  cursor:pointer;font-family:'Inter',sans-serif;transition:all .14s;
 }
-.shelf-scroll::-webkit-scrollbar{display:none}
+.shelf-tab:hover{color:var(--text);border-color:var(--border2)}
+.shelf-tab.on{
+  background:var(--accent-bg);border-color:var(--accent);
+  color:var(--accent);
+}
+.shelf-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
 .sc{
-  flex-shrink:0;width:148px;
   background:var(--col);border:1px solid var(--border);
-  border-radius:14px;padding:14px 12px;
+  border-radius:14px;padding:16px 14px;
   cursor:pointer;transition:all .15s;position:relative;
-  display:flex;flex-direction:column;gap:6px;
+  display:flex;flex-direction:column;gap:7px;
 }
 .sc:hover{background:var(--item);border-color:var(--border2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
-.sc-e{font-size:30px;line-height:1;margin-bottom:2px}
-.sc-t{font-size:12px;font-weight:700;line-height:1.3;color:var(--text);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sc-t{font-size:13px;font-weight:700;line-height:1.35;color:var(--text);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .sc-a{font-size:11px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sc-cat{font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;display:inline-block;width:fit-content}
 .sc-cat.personal{background:rgba(155,120,224,.15);color:var(--purple)}
 .sc-cat.business{background:rgba(91,159,232,.15);color:var(--blue)}
 .sc-cat.leadership{background:rgba(232,115,42,.15);color:var(--accent)}
 .sc-dl{
-  margin-top:auto;padding:5px 8px;border-radius:7px;
+  margin-top:auto;padding:7px 10px;border-radius:8px;
   background:linear-gradient(135deg,var(--accent),var(--accent-l));
-  color:#fff;font-size:10px;font-weight:700;border:none;cursor:pointer;
+  color:#fff;font-size:11px;font-weight:700;border:none;cursor:pointer;
   font-family:'Inter',sans-serif;transition:.13s;text-align:center;
 }
 .sc-dl:hover{opacity:.85}
 .sc-soon{
-  margin-top:auto;padding:5px 8px;border-radius:7px;
+  margin-top:auto;padding:7px 10px;border-radius:8px;
   background:var(--item-h);color:var(--t3);
-  font-size:10px;font-weight:600;text-align:center;
+  font-size:11px;font-weight:600;text-align:center;
 }
 .sc-status{
   position:absolute;top:8px;right:8px;
@@ -377,6 +377,8 @@ body::before{
 .sc-status.s-done{background:rgba(44,200,138,.2);color:var(--green)}
 .sc-status.s-reading{background:rgba(232,115,42,.2);color:var(--accent)}
 .sc-status.s-want{background:rgba(91,159,232,.2);color:var(--blue)}
+@media(max-width:900px){.shelf-row{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:580px){.shelf-row{grid-template-columns:repeat(2,1fr)}}
 
 /* ── LOGIN OVERLAY ── */
 .login-overlay{
@@ -528,8 +530,11 @@ body::before{
 
   <!-- PAGE: LIBRARY -->
   <div id="p-lib">
-    <!-- SHELVES -->
-    <div class="shelves" id="shelves-wrap" style="padding-top:24px"></div>
+    <!-- FEATURED -->
+    <div class="featured">
+      <div class="shelf-tabs" id="shelf-tabs"></div>
+      <div class="shelf-row" id="shelf-row"></div>
+    </div>
     <div class="search-row">
       <div class="search-wrap">
         <span class="search-ico">⌕</span>
@@ -968,15 +973,23 @@ function bhtml(b){
   </div>`;
 }
 
-// ── SHELF CARD HTML ──
+// ── SHELF DEFINITIONS ──
+const SHELVES = [
+  { id:'ceo',  label:'👑 CEO рекомендує',    books:()=>B.filter(b=>b.ceo).slice(0,5) },
+  { id:'hot',  label:'🔥 Популярне',          books:()=>B.filter(b=>b.hot).slice(0,5) },
+  { id:'new',  label:'✨ Нові надходження',   books:()=>B.filter(b=>b.new).slice(0,5) },
+  { id:'best', label:'⭐ Бестселери',         books:()=>B.filter(b=>['atomic','covey','influence','good2great','jobs','culture','five','radical','mindset','covey'].includes(b.id)).slice(0,5) },
+];
+let activeShelf = 'ceo';
+
+// ── SHELF CARD ──
 function schtml(b){
   const st = statuses[b.id];
-  const stMap = {want:'🔖',reading:'📖',done:'✅'};
   const stCls = {want:'s-want',reading:'s-reading',done:'s-done'};
+  const stIcon = {want:'🔖',reading:'📖',done:'✅'};
   const catLabel = {personal:'Особистість',business:'Бізнес',leadership:'Лідерство'};
   return `<div class="sc" onclick="openM('${b.id}')">
-    ${st?`<span class="sc-status ${stCls[st]}">${stMap[st]}</span>`:''}
-    <div class="sc-e">${b.e}</div>
+    ${st?`<span class="sc-status ${stCls[st]}">${stIcon[st]}</span>`:''}
     <div class="sc-t">${b.t}</div>
     <div class="sc-a">${b.a}</div>
     <span class="sc-cat ${b.c}">${catLabel[b.c]||b.c}</span>
@@ -988,47 +1001,18 @@ function schtml(b){
 
 // ── RENDER SHELVES ──
 function renderShelves(){
-  const shelves = [
-    {
-      id:'ceo',
-      icon:'👑',
-      label:'CEO рекомендує',
-      sub:'Особистий вибір Андрія П\'яних',
-      books: B.filter(b=>b.ceo)
-    },
-    {
-      id:'hot',
-      icon:'🔥',
-      label:'Популярне в команді',
-      sub:'Найчастіше читають і завантажують',
-      books: B.filter(b=>b.hot)
-    },
-    {
-      id:'new',
-      icon:'✨',
-      label:'Нові надходження',
-      sub:'Щойно додано до бібліотеки',
-      books: B.filter(b=>b.new).slice(0,10)
-    },
-    {
-      id:'best',
-      icon:'⭐',
-      label:'Бестселери',
-      sub:'Світові хіти — обов\'язкове читання',
-      books: B.filter(b=>['atomic','covey','seven','influence','good2great','jobs','culture','five','radical','mindset'].includes(b.id))
-             .filter(b=>b) // clean
-    }
-  ];
+  // Tabs
+  document.getElementById('shelf-tabs').innerHTML = SHELVES.map(s=>
+    `<button class="shelf-tab${s.id===activeShelf?' on':''}" onclick="switchShelf('${s.id}')">${s.label}</button>`
+  ).join('');
+  // Row
+  const shelf = SHELVES.find(s=>s.id===activeShelf);
+  document.getElementById('shelf-row').innerHTML = (shelf?.books()||[]).map(b=>schtml(b)).join('');
+}
 
-  document.getElementById('shelves-wrap').innerHTML = shelves.map(s=>`
-    <div class="shelf">
-      <div class="shelf-header">
-        <span class="shelf-label">${s.icon} ${s.label}</span>
-        <span class="shelf-sub">${s.sub}</span>
-      </div>
-      <div class="shelf-scroll">${s.books.map(b=>schtml(b)).join('')}</div>
-    </div>
-  `).join('');
+function switchShelf(id){
+  activeShelf = id;
+  renderShelves();
 }
 
 // ── RENDER LIB ──
