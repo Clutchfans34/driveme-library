@@ -351,9 +351,9 @@ body::before{
         <input id="q" type="text" placeholder="Пошук по назві, автору, опису…" oninput="render()">
       </div>
       <div class="cats">
-        <button class="cat on" id="ca" onclick="setC('all',this)">Всі <span class="cat-n">30</span></button>
+        <button class="cat on" id="ca" onclick="setC('all',this)">Всі <span class="cat-n">32</span></button>
         <button class="cat" id="cp" onclick="setC('personal',this)">🧠 Особистий розвиток <span class="cat-n">14</span></button>
-        <button class="cat" id="cb" onclick="setC('business',this)">💼 Бізнес <span class="cat-n">11</span></button>
+        <button class="cat" id="cb" onclick="setC('business',this)">💼 Бізнес <span class="cat-n">13</span></button>
         <button class="cat" id="cl" onclick="setC('leadership',this)">🎯 Лідерство <span class="cat-n">5</span></button>
       </div>
     </div>
@@ -430,7 +430,7 @@ const B=[
   // PERSONAL
   {id:'atomic',e:'⚡',t:'Атомні звички',a:'Джеймс Клір',f:'FB2',s:'3.2 MB',c:'personal',hot:true,new:false,ceo:false,
    d:'Система 1% щодня. Чотири закони зміни поведінки: очевидність, привабливість, простота, задоволення. Найпрактичніша книга про зміну себе.'},
-  {id:'drive',e:'🔥',t:'Драйв',a:'Деніель Пінк',f:'FB2',s:'1.7 MB',c:'personal',hot:false,new:false,ceo:false,
+  {id:'drive',e:'🔥',t:'Драйв',a:'Деніель Пінк',f:'FB2',s:'1.7 MB',c:'personal',hot:false,new:false,ceo:false,file:'books/drive.fb2',
    d:'Що насправді мотивує: автономія, майстерність, мета. Чому бонуси руйнують внутрішню мотивацію.'},
   {id:'morning',e:'🌅',t:'Магія ранку',a:'Хел Елрод',f:'FB2',s:'759 KB',c:'personal',hot:false,new:false,ceo:false,file:'books/morning2.fb2',
    d:'Перший час дня визначає успіх. SAVERS: мовчання, афірмації, візуалізація, вправи, читання, нотатки.'},
@@ -445,7 +445,7 @@ const B=[
   {id:'mindset',e:'🧬',t:'Мислення зростання',a:'Керол Двек',f:'FB2',s:'1.2 MB',c:'personal',hot:true,new:false,ceo:false,
    d:'Fixed vs Growth Mindset. Як переконання «я можу навчитись» змінює все — від школи до CEO.'},
   // BUSINESS
-  {id:'branson',e:'🚀',t:'К чорта все! Берись і роби!',a:'Річард Бренсон',f:'FB2',s:'905 KB',c:'business',hot:false,new:false,ceo:false,
+  {id:'branson',e:'🚀',t:'К чорта все! Берись і роби!',a:'Річард Бренсон',f:'FB2',s:'905 KB',c:'business',hot:false,new:false,ceo:false,file:'books/branson.fb2',
    d:'Підприємництво без страху. Нестандартні рішення і як побудувати Virgin з нуля.'},
   {id:'influence',e:'🧲',t:'Психологія впливу',a:'Роберт Чалдіні',f:'FB2',s:'2.3 MB',c:'business',hot:true,new:false,ceo:false,file:'books/influence2.fb2',
    d:'6 принципів переконання: взаємність, послідовність, соціальний доказ, авторитет, симпатія, дефіцит.'},
@@ -461,6 +461,10 @@ const B=[
    d:'Дисциплінована гонитва за меншим. Мистецтво відмовляти несуттєвому і фокусуватись на головному.'},
   {id:'extreme',e:'⚔️',t:'Extreme Ownership',a:'Джоко Вілінк',f:'FB2',s:'1.6 MB',c:'business',hot:false,new:true,ceo:false,
    d:'Принципи командування Navy SEAL для бізнесу. Лідер відповідає за все — без виправдань.'},
+  {id:'biggame',e:'🎲',t:'Велика гра в бізнес',a:'Бо Берлінгем',f:'FB2',s:'2.5 MB',c:'business',hot:false,new:true,ceo:false,file:'books/biggame.fb2',
+   d:'Єдиний розумний спосіб управління компанією. Як відкрита книга фінансів, спільна мета і залученість команди перетворюють бізнес на гру в яку всі хочуть вигравати.'},
+  {id:'kotler',e:'📣',t:'Основи маркетингу',a:'Філіп Котлер',f:'FB2',s:'8.5 MB',c:'business',hot:false,new:true,ceo:false,file:'books/kotler.fb2',
+   d:'Класика маркетингу. Фундаментальні концепції: сегментування, позиціонування, 4P, поведінка споживачів. Обов\'язкове читання для кожного хто будує бренд або продукт.'},
   {id:'cashflow',e:'💵',t:'Квадрант грошового потоку',a:'Роберт Кійосакі',f:'FB2',s:'3.2 MB',c:'personal',hot:false,new:true,ceo:false,file:'books/cashflow.fb2',
    d:'Продовження «Багатого тата». Чотири квадранти: найманий працівник, самозайнятий, бізнесмен, інвестор. Як перейти на правий бік і отримати фінансову свободу.'},
   {id:'google',e:'🔍',t:'Робота рулить! Культура Google',a:'Ласло Бок',f:'FB2',s:'4.9 MB',c:'leadership',hot:false,new:true,ceo:true,file:'books/google.fb2',
@@ -489,7 +493,7 @@ const B=[
    d:'Свобода і відповідальність як культура. Як Netflix виріс з DVD-прокату в медіагіганта.'},
   {id:'five',e:'🧩',t:"П'ять вад команди",a:'Патрік Ленсіоні',f:'FB2',s:'741 KB',c:'leadership',hot:false,new:false,ceo:true,file:'books/five.fb2',
    d:'Притча про лідерство. Відсутність довіри, страх конфлікту, безвідповідальність, байдужість до результатів.'},
-  {id:'nowhat',e:'🤔',t:'Чому не всі люблять ходити на роботу',a:'Патрік Ленсіоні',f:'FB2',s:'699 KB',c:'leadership',hot:false,new:true,ceo:false,
+  {id:'nowhat',e:'🤔',t:'Чому не всі люблять ходити на роботу',a:'Патрік Ленсіоні',f:'FB2',s:'699 KB',c:'leadership',hot:false,new:true,ceo:false,file:'books/nowhat.fb2',
    d:'Три причини незадоволеності: анонімність, нерелевантність, невимірюваність результату.'},
 ];
 const DOCS=[
