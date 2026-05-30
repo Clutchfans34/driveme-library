@@ -603,7 +603,7 @@ body::before{
 
 /* ── BOOK STATUS BADGE on card ── */
 .bi-status{
-  position:absolute;bottom:10px;left:12px;
+  display:inline-block;
   font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;
   pointer-events:none;
 }
@@ -830,7 +830,6 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
   /* Always show fav on mobile (no hover) */
   .bi-fav{opacity:.4}
   .bi-fav.on{opacity:1}
-  .bi-status{bottom:8px;left:10px;font-size:10px}
 
   /* Login modal */
   .login-overlay{align-items:flex-end;padding:0}
@@ -1437,7 +1436,8 @@ function bhtml(b){
   const st = statuses[b.id];
   const stMap = {want:'🔖 Хочу прочитати', reading:'📖 Читаю', done:'✅ Прочитав'};
   const stCls = {want:'s-want', reading:'s-reading', done:'s-done'};
-  return `<div class="bi" onclick="openM('${b.id}')" style="position:relative;padding-bottom:${st?'28px':''}">
+  const hasChipsOrStatus = b.new||b.hot||b.ceo||st;
+  return `<div class="bi" onclick="openM('${b.id}')" style="position:relative">
     ${b.file
       ? `<span class="bi-fmt">${b.f}</span>`
       : `<span class="bi-soon">Скоро</span>`
@@ -1445,13 +1445,13 @@ function bhtml(b){
     <div class="bi-title">${b.t}</div>
     <div class="bi-meta">${b.a} · ${b.f} · ${b.s}</div>
     <div class="bi-desc">${b.d}</div>
-    ${(b.new||b.hot||b.ceo)?`<div class="bi-chips">
+    ${hasChipsOrStatus?`<div class="bi-chips">
       ${b.new?'<span class="chip c-new">New</span>':''}
       ${b.hot?'<span class="chip c-hot">Популярне</span>':''}
       ${b.ceo?'<span class="chip c-ceo">CEO вибір</span>':''}
-    </div>`:''}
+      ${st?`<span class="bi-status ${stCls[st]}" data-sid="${b.id}">${stMap[st]}</span>`:''}
+    </div>`:`<span class="bi-status" data-sid="${b.id}"></span>`}
     <button class="bi-fav${f?' on':''}" id="bfv-${b.id}" onclick="event.stopPropagation();fav('${b.id}')">${f?'★':'☆'}</button>
-    <span class="bi-status${st?' '+stCls[st]:''}" data-sid="${b.id}">${st?stMap[st]:''}</span>
   </div>`;
 }
 
