@@ -1445,9 +1445,11 @@ async function renderChallenge() {
 async function renderAdmin() {
   document.getElementById('adm-tbody').innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--t3);padding:32px">Завантаження…</td></tr>';
   try {
-    console.log('[Admin] Fetching users from Firestore...');
-    const snap = await db.collection('users').get();
-    console.log('[Admin] Got', snap.size, 'users:', snap.docs.map(d=>d.id));
+    // Таймаут 10 секунд
+    const snap = await Promise.race([
+      db.collection('users').get(),
+      new Promise((_,reject)=>setTimeout(()=>reject(new Error('Timeout — Firebase не відповідає. Перевір підключення або правила Firestore.')),10000))
+    ]);
     const users = snap.docs.map(d=>({id:d.id,...d.data()}));
 
     // Stats
