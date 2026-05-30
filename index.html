@@ -12,6 +12,9 @@
 <meta property="og:site_name" content="DriveMe Бібліотека">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://clutchfans34.github.io/driveme-library/og-image.jpg">
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -327,6 +330,119 @@ body::before{
 
 @media(max-width:1100px){.cols{grid-template-columns:repeat(2,1fr)}.cols.cols4{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:680px){.cols,.cols.cols4{grid-template-columns:1fr}.ch-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* ── LOGIN OVERLAY ── */
+.login-overlay{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(15,10,6,0.97);
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(8px);
+}
+.login-overlay.hidden{display:none}
+.login-box{
+  background:var(--col);border:1px solid var(--border2);
+  border-radius:24px;padding:44px 40px;max-width:420px;width:90%;
+  text-align:center;
+  box-shadow:0 32px 80px rgba(0,0,0,.6);
+}
+.login-logo{font-size:48px;margin-bottom:16px}
+.login-title{font-size:22px;font-weight:800;letter-spacing:-.4px;margin-bottom:6px}
+.login-sub{font-size:13px;color:var(--t2);margin-bottom:32px;line-height:1.5}
+.login-fields{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.login-input{
+  width:100%;padding:13px 16px;
+  background:var(--item);border:1px solid var(--border2);
+  border-radius:12px;color:var(--text);font-family:'Inter',sans-serif;
+  font-size:15px;font-weight:500;outline:none;transition:.14s;
+}
+.login-input::placeholder{color:var(--t3)}
+.login-input:focus{border-color:var(--accent);background:var(--item-h)}
+.login-btn{
+  width:100%;padding:14px;border-radius:12px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-l));
+  color:#fff;font-size:15px;font-weight:700;border:none;cursor:pointer;
+  font-family:'Inter',sans-serif;
+  box-shadow:0 6px 20px rgba(232,115,42,.35);transition:.14s;
+}
+.login-btn:hover{transform:translateY(-1px);box-shadow:0 8px 26px rgba(232,115,42,.45)}
+.login-btn:disabled{opacity:.5;pointer-events:none}
+.login-note{font-size:11px;color:var(--t3);margin-top:16px}
+
+/* ── USER CHIP ── */
+.user-chip{
+  display:flex;align-items:center;gap:8px;
+  background:var(--item);border:1px solid var(--border2);
+  border-radius:10px;padding:6px 12px;cursor:default;
+}
+.user-avatar{
+  width:28px;height:28px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent-l));
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:#fff;flex-shrink:0;
+}
+.user-name-chip{font-size:12px;font-weight:600;color:var(--text)}
+.logout-btn{
+  background:none;border:none;color:var(--t3);cursor:pointer;
+  font-size:14px;padding:2px 4px;border-radius:4px;transition:.13s;
+  line-height:1;
+}
+.logout-btn:hover{color:var(--accent)}
+
+/* ── BOOK STATUS ── */
+.status-row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
+.st-btn{
+  padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;
+  border:1px solid var(--border2);background:var(--item);color:var(--t2);
+  cursor:pointer;font-family:'Inter',sans-serif;transition:.13s;
+}
+.st-btn:hover{border-color:var(--accent-border);color:var(--text)}
+.st-btn.on{background:var(--accent-bg);border-color:var(--accent);color:var(--accent)}
+
+/* ── BOOK STATUS BADGE on card ── */
+.bi-status{
+  position:absolute;bottom:10px;left:12px;
+  font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;
+  pointer-events:none;
+}
+.bi-status.s-want{background:rgba(91,159,232,.15);color:#5B9FE8}
+.bi-status.s-reading{background:rgba(232,115,42,.15);color:var(--accent)}
+.bi-status.s-done{background:rgba(44,200,138,.15);color:var(--green)}
+
+/* ── ADMIN PANEL ── */
+.admin-table{width:100%;border-collapse:collapse;margin-top:8px}
+.admin-table th{
+  text-align:left;font-size:11px;font-weight:700;color:var(--t3);
+  padding:8px 12px;text-transform:uppercase;letter-spacing:.5px;
+  border-bottom:1px solid var(--border);
+}
+.admin-table td{
+  padding:12px 12px;font-size:13px;border-bottom:1px solid var(--border);
+  vertical-align:middle;
+}
+.admin-table tr:hover td{background:var(--item)}
+.adm-ava{
+  width:32px;height:32px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent-l));
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:#fff;margin-right:8px;
+  flex-shrink:0;vertical-align:middle;
+}
+.adm-badge{
+  display:inline-block;padding:3px 8px;border-radius:6px;
+  font-size:11px;font-weight:700;margin-right:4px;margin-bottom:2px;
+}
+.adm-reading{background:rgba(232,115,42,.15);color:var(--accent)}
+.adm-done{background:rgba(44,200,138,.15);color:var(--green)}
+.adm-want{background:rgba(91,159,232,.15);color:#5B9FE8}
+.adm-fav{background:rgba(155,120,224,.15);color:var(--purple)}
+.adm-dl{background:rgba(44,200,138,.1);color:var(--green)}
+.admin-stat-row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:28px}
+.admin-stat{
+  background:var(--col);border:1px solid var(--border2);
+  border-radius:14px;padding:16px 20px;min-width:130px;
+}
+.admin-stat-n{font-size:28px;font-weight:800;color:var(--accent)}
+.admin-stat-l{font-size:11px;color:var(--t3);margin-top:2px}
 </style>
 </head>
 <body>
@@ -343,14 +459,19 @@ body::before{
           <div class="logo-sub">Корпоративна бібліотека знань</div>
         </div>
       </div>
-      <div style="display:flex;align-items:center;gap:8px">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
         <div class="header-nav">
           <button class="nav-btn on" onclick="setPage('lib',this)">Бібліотека</button>
           <button class="nav-btn" onclick="setPage('docs',this)">Документи</button>
           <button class="nav-btn" onclick="setPage('favs',this)">Обрані <span id="favn" style="color:var(--accent)"></span></button>
           <button class="nav-btn" onclick="setPage('chal',this)">Виклик місяця</button>
+          <button class="nav-btn" id="admin-nav-btn" style="display:none;color:var(--accent)" onclick="setPage('admin',this)">👑 Адмін</button>
         </div>
-        <button class="btn-add" onclick="toast('📬','Функцію буде додано незабаром!')">+ Запропонувати</button>
+        <div class="user-chip" id="user-chip" style="display:none">
+          <div class="user-avatar" id="user-avatar-chip">?</div>
+          <span class="user-name-chip" id="user-name-chip">…</span>
+          <button class="logout-btn" onclick="logout()" title="Вийти">⏻</button>
+        </div>
       </div>
     </div>
     <div class="header-sub">
@@ -417,8 +538,44 @@ body::before{
     </div>
     <div class="sec-h" style="margin-bottom:16px">Книги виклику</div>
     <div class="cols" style="grid-template-columns:repeat(2,1fr)" id="chal-books"></div>
+    <!-- PAGE: ADMIN -->
+  <div id="p-admin" style="display:none;padding-top:32px">
+    <div class="sec-h">👑 Адмін-панель</div>
+    <div class="sec-sub">Активність команди DriveMe в бібліотеці</div>
+    <div class="admin-stat-row" id="adm-stats"></div>
+    <div style="background:var(--col);border:1px solid var(--border2);border-radius:16px;padding:4px 0;overflow-x:auto">
+      <table class="admin-table" id="adm-table">
+        <thead>
+          <tr>
+            <th>Співробітник</th>
+            <th>Читає зараз</th>
+            <th>Прочитав</th>
+            <th>Хоче прочитати</th>
+            <th>Обрані ★</th>
+            <th>Завантажив</th>
+            <th>Останній візит</th>
+          </tr>
+        </thead>
+        <tbody id="adm-tbody"><tr><td colspan="7" style="text-align:center;color:var(--t3);padding:32px">Завантаження…</td></tr></tbody>
+      </table>
+    </div>
   </div>
 
+</div>
+
+<!-- LOGIN OVERLAY -->
+<div class="login-overlay" id="login-overlay">
+  <div class="login-box">
+    <div class="login-logo">📚</div>
+    <div class="login-title">Бібліотека DriveMe</div>
+    <div class="login-sub">Корпоративна база знань команди.<br>Введи своє ім'я щоб увійти.</div>
+    <div class="login-fields">
+      <input class="login-input" id="l-name" type="text" placeholder="Ім'я" autocomplete="given-name" oninput="checkLoginReady()">
+      <input class="login-input" id="l-surname" type="text" placeholder="Прізвище" autocomplete="family-name" oninput="checkLoginReady()" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="login-btn" id="login-btn" onclick="doLogin()" disabled>Увійти в бібліотеку →</button>
+    <div class="login-note">Дані синхронізуються між пристроями. Тільки для команди DriveMe.</div>
+  </div>
 </div>
 
 <!-- MODAL -->
@@ -430,6 +587,11 @@ body::before{
     <div class="modal-author" id="m-a"></div>
     <div class="modal-desc" id="m-d"></div>
     <div class="modal-meta"><div class="modal-meta-i" id="m-f"></div></div>
+    <div class="status-row" id="m-status-row">
+      <button class="st-btn" id="st-want"  onclick="setStatus('want')" >🔖 Хочу прочитати</button>
+      <button class="st-btn" id="st-reading" onclick="setStatus('reading')">📖 Читаю</button>
+      <button class="st-btn" id="st-done"  onclick="setStatus('done')" >✅ Прочитав</button>
+    </div>
     <div class="modal-btns">
       <button class="btn-dl-lg" id="m-dl">⬇ Завантажити</button>
       <button class="btn-sec" id="m-fv">☆ В обрані</button>
@@ -593,19 +755,135 @@ const COLS=[
 ];
 const DOCS_ICO=`<span style="width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,#0F6640,#2CC88A);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(15,102,64,.4);flex-shrink:0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></span>`;
 
-let favs=JSON.parse(localStorage.getItem('dml-f')||'[]');
-let cat='all';
+// ══════════════════════════════════════════════════
+//  FIREBASE CONFIG — замінити на свої дані з консолі
+// ══════════════════════════════════════════════════
+const firebaseConfig = {
+  apiKey:            "REPLACE_API_KEY",
+  authDomain:        "REPLACE_PROJECT_ID.firebaseapp.com",
+  projectId:         "REPLACE_PROJECT_ID",
+  storageBucket:     "REPLACE_PROJECT_ID.appspot.com",
+  messagingSenderId: "REPLACE_SENDER_ID",
+  appId:             "REPLACE_APP_ID"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-window.onload=()=>{render();renderDocs();updateFavn()};
+// ── USER STATE ──
+let currentUser = null; // { id, name, surname, displayName, isAdmin }
+let favs = [];
+let statuses = {}; // { bookId: 'want'|'reading'|'done' }
+let downloads = {};
+let cat = 'all';
+let modalBookId = null;
+
+// ── ADMIN IDs (ім'я_прізвище в нижньому регістрі) ──
+const ADMIN_IDS = ['андрій_пяних','андрій_піяних','андрій_п\'яних','andrii_pianykh'];
+
+// ── INIT ──
+window.onload = () => {
+  const saved = localStorage.getItem('dml-user');
+  if (saved) {
+    currentUser = JSON.parse(saved);
+    showApp();
+  } else {
+    document.getElementById('login-overlay').classList.remove('hidden');
+  }
+  renderDocs();
+  // показати кнопку адмін якщо URL ?admin
+  if(new URLSearchParams(location.search).has('admin')) showAdminNav();
+};
+
+// ── LOGIN ──
+function checkLoginReady() {
+  const n = document.getElementById('l-name').value.trim();
+  const s = document.getElementById('l-surname').value.trim();
+  document.getElementById('login-btn').disabled = !(n && s);
+}
+
+async function doLogin() {
+  const name    = document.getElementById('l-name').value.trim();
+  const surname = document.getElementById('l-surname').value.trim();
+  if (!name || !surname) return;
+  const btn = document.getElementById('login-btn');
+  btn.disabled = true; btn.textContent = 'Входимо…';
+
+  const id = (name + '_' + surname).toLowerCase().replace(/\s+/g,'_');
+  const isAdmin = ADMIN_IDS.includes(id);
+  currentUser = { id, name, surname, displayName: name + ' ' + surname, isAdmin };
+  localStorage.setItem('dml-user', JSON.stringify(currentUser));
+
+  // Зберігаємо/оновлюємо профіль у Firestore
+  try {
+    await db.collection('users').doc(id).set({
+      name, surname, displayName: name+' '+surname,
+      lastVisit: firebase.firestore.FieldValue.serverTimestamp(),
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true });
+  } catch(e) { console.warn('Firebase error:', e); }
+
+  document.getElementById('login-overlay').classList.add('hidden');
+  showApp();
+}
+
+function logout() {
+  localStorage.removeItem('dml-user');
+  currentUser = null; favs = []; statuses = {}; downloads = {};
+  document.getElementById('user-chip').style.display = 'none';
+  document.getElementById('login-overlay').classList.remove('hidden');
+  document.getElementById('l-name').value = '';
+  document.getElementById('l-surname').value = '';
+  document.getElementById('login-btn').disabled = true;
+  document.getElementById('login-btn').textContent = 'Увійти в бібліотеку →';
+}
+
+async function showApp() {
+  // Завантажуємо дані користувача з Firestore
+  try {
+    const doc = await db.collection('users').doc(currentUser.id).get();
+    if (doc.exists) {
+      const d = doc.data();
+      favs      = d.favorites  || [];
+      statuses  = d.statuses   || {};
+      downloads = d.downloads  || {};
+    }
+  } catch(e) { console.warn('Firebase load error:', e); }
+
+  // Оновлюємо lastVisit
+  try {
+    db.collection('users').doc(currentUser.id).update({
+      lastVisit: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  } catch(e){}
+
+  // User chip
+  const initials = currentUser.name[0] + (currentUser.surname[0]||'');
+  document.getElementById('user-avatar-chip').textContent = initials.toUpperCase();
+  document.getElementById('user-name-chip').textContent   = currentUser.displayName;
+  document.getElementById('user-chip').style.display = 'flex';
+
+  if (currentUser.isAdmin) showAdminNav();
+
+  render();
+  updateFavn();
+  // Виклик місяця — рендеримо з Firebase
+  renderChallenge();
+}
+
+function showAdminNav() {
+  document.getElementById('admin-nav-btn').style.display = '';
+}
 
 // ── PAGES ──
-const PG=['lib','docs','favs','chal'];
-function setPage(p,btn){
-  PG.forEach(x=>document.getElementById('p-'+x).style.display=x===p?'':'none');
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'));
-  if(btn)btn.classList.add('on');
-  if(p==='favs')renderFavs();
-  window.scrollTo({top:0,behavior:'smooth'});
+const PG = ['lib','docs','favs','chal','admin'];
+function setPage(p, btn) {
+  PG.forEach(x => document.getElementById('p-'+x).style.display = x===p ? '' : 'none');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('on'));
+  if (btn) btn.classList.add('on');
+  if (p === 'favs')  renderFavs();
+  if (p === 'admin') renderAdmin();
+  if (p === 'chal')  renderChallenge();
+  window.scrollTo({top:0, behavior:'smooth'});
 }
 
 // ── CAT ──
@@ -618,8 +896,11 @@ function setC(c,btn){
 
 // ── BOOK HTML ──
 function bhtml(b){
-  const f=favs.includes(b.id);
-  return `<div class="bi" onclick="openM('${b.id}')">
+  const f = favs.includes(b.id);
+  const st = statuses[b.id];
+  const stMap = {want:'🔖 Хочу прочитати', reading:'📖 Читаю', done:'✅ Прочитав'};
+  const stCls = {want:'s-want', reading:'s-reading', done:'s-done'};
+  return `<div class="bi" onclick="openM('${b.id}')" style="position:relative;padding-bottom:${st?'28px':''}">
     ${b.file
       ? `<button class="bi-dl" onclick="event.stopPropagation();dlBook('${b.id}')">↓ ${b.f}</button>`
       : `<span class="bi-soon">Скоро</span>`
@@ -633,6 +914,7 @@ function bhtml(b){
       ${b.ceo?'<span class="chip c-ceo">CEO вибір</span>':''}
     </div>`:''}
     <button class="bi-fav${f?' on':''}" id="bfv-${b.id}" onclick="event.stopPropagation();fav('${b.id}')">${f?'★':'☆'}</button>
+    <span class="bi-status${st?' '+stCls[st]:''}" data-sid="${b.id}">${st?stMap[st]:''}</span>
   </div>`;
 }
 
@@ -711,47 +993,195 @@ function renderDocs(){
     </div>`).join('');
 }
 
-// ── FAVS ──
-function renderFavs(){
-  const books=B.filter(b=>favs.includes(b.id));
-  const c=document.getElementById('favs-cnt');
-  if(!books.length){c.innerHTML='<div class="empty">Ще немає обраних.<br>Натисни ☆ на книзі щоб зберегти.</div>';return;}
+// ── SAVE TO FIREBASE ──
+async function saveUserData() {
+  if (!currentUser) return;
+  try {
+    await db.collection('users').doc(currentUser.id).update({
+      favorites: favs,
+      statuses:  statuses,
+      downloads: downloads,
+      lastVisit: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  } catch(e) { console.warn('Save error:', e); }
+}
+
+// ── FAV TOGGLE ──
+function fav(id) {
+  favs = favs.includes(id) ? favs.filter(f=>f!==id) : [...favs, id];
+  document.querySelectorAll(`[id^="bfv-${id}"]`).forEach(b => {
+    b.textContent = favs.includes(id) ? '★' : '☆';
+    b.classList.toggle('on', favs.includes(id));
+  });
+  toast(favs.includes(id)?'★':'☆', favs.includes(id)?'Додано в обрані!':'Видалено з обраних');
+  updateFavn();
+  saveUserData();
+}
+function updateFavn() {
+  document.getElementById('favn').textContent = favs.length ? ` (${favs.length})` : '';
+}
+
+// ── STATUS ──
+function setStatus(st) {
+  if (!modalBookId) return;
+  if (statuses[modalBookId] === st) {
+    delete statuses[modalBookId]; // повторний клік знімає статус
+  } else {
+    statuses[modalBookId] = st;
+  }
+  renderStatusBtns(modalBookId);
+  updateCardStatus(modalBookId);
+  saveUserData();
+  toast(st==='done'?'✅':st==='reading'?'📖':'🔖',
+        st==='done'?'Відмічено як прочитане':st==='reading'?'Читаєш цю книгу':'Додано до списку читання');
+}
+
+function renderStatusBtns(id) {
+  const st = statuses[id];
+  ['want','reading','done'].forEach(s => {
+    const el = document.getElementById('st-'+s);
+    if (el) el.classList.toggle('on', st===s);
+  });
+}
+
+function updateCardStatus(id) {
+  // Оновити бейджик на картці
+  document.querySelectorAll(`[data-sid="${id}"]`).forEach(el => {
+    const st = statuses[id];
+    if (!st) { el.textContent=''; el.className='bi-status'; return; }
+    const map = {want:'🔖 Хочу прочитати', reading:'📖 Читаю', done:'✅ Прочитав'};
+    const cls = {want:'s-want', reading:'s-reading', done:'s-done'};
+    el.textContent = map[st];
+    el.className = 'bi-status ' + cls[st];
+  });
+}
+
+// ── FAVS PAGE ──
+function renderFavs() {
+  const books = B.filter(b => favs.includes(b.id));
+  const c = document.getElementById('favs-cnt');
+  if (!books.length) { c.innerHTML='<div class="empty">Ще немає обраних.<br>Натисни ☆ на книзі щоб зберегти.</div>'; return; }
   c.innerHTML=`<div class="col" style="max-width:600px">
     <div class="col-body">${books.map((b,i)=>(i>0?'<div class="sep"></div>':'')+bhtml(b)).join('')}</div>
   </div>`;
 }
 
-// ── CHALLENGE BOOKS ──
-document.getElementById('chal-books').innerHTML=
-  ['five','culture'].map(id=>{const b=B.find(x=>x.id===id);return`<div class="col"><div class="col-body">${bhtml(b)}</div></div>`;}).join('');
-
-// ── FAV TOGGLE ──
-function fav(id){
-  favs=favs.includes(id)?favs.filter(f=>f!==id):[...favs,id];
-  localStorage.setItem('dml-f',JSON.stringify(favs));
-  document.querySelectorAll(`[id^="bfv-${id}"]`).forEach(b=>{b.textContent=favs.includes(id)?'★':'☆';b.classList.toggle('on',favs.includes(id))});
-  toast(favs.includes(id)?'★':'☆',favs.includes(id)?'Додано в обрані!':'Видалено з обраних');
-  updateFavn();
+// ── CHALLENGE ──
+async function renderChallenge() {
+  // Беремо реальну статистику: скільки прочитав кожен
+  try {
+    const snap = await db.collection('users').get();
+    const users = snap.docs.map(d=>({id:d.id,...d.data()}));
+    const sorted = users
+      .map(u=>({ name:u.displayName||u.name||u.id, done:Object.values(u.statuses||{}).filter(s=>s==='done').length }))
+      .sort((a,b)=>b.done-a.done);
+    const colors=['linear-gradient(135deg,#E8732A,#F5894A)','linear-gradient(135deg,#5B9FE8,#2CC88A)',
+                  'linear-gradient(135deg,#9B78E0,#E8732A)','linear-gradient(135deg,#2CC88A,#5B9FE8)',
+                  'linear-gradient(135deg,#E8732A,#9B78E0)','linear-gradient(135deg,#5B9FE8,#9B78E0)'];
+    const goal = 2;
+    const chalGrid = document.querySelector('.ch-grid');
+    if (!chalGrid) return;
+    chalGrid.innerHTML = sorted.slice(0,6).map((u,i)=>{
+      const pct = Math.min(100, Math.round(u.done/goal*100));
+      const parts = (u.name||'?').split(' ');
+      const initials = (parts[0]?.[0]||'')+(parts[1]?.[0]||'');
+      return `<div class="ch-card">
+        <div class="ch-ava" style="background:${colors[i%colors.length]}">${initials.toUpperCase()}</div>
+        <div class="ch-name">${u.name}</div>
+        <div class="ch-cnt">${u.done} / ${goal} книги${u.done>=goal?' ✅':''}</div>
+        <div class="ch-bar"><div class="ch-fill" style="width:${pct}%"></div></div>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    console.warn('Challenge load:', e);
+  }
+  document.getElementById('chal-books').innerHTML =
+    ['five','culture'].map(id=>{const b=B.find(x=>x.id===id);return`<div class="col"><div class="col-body">${bhtml(b)}</div></div>`;}).join('');
 }
-function updateFavn(){
-  const el=document.getElementById('favn');
-  el.textContent=favs.length?` (${favs.length})`:'';
+
+// ── ADMIN PANEL ──
+async function renderAdmin() {
+  document.getElementById('adm-tbody').innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--t3);padding:32px">Завантаження…</td></tr>';
+  try {
+    const snap = await db.collection('users').get();
+    const users = snap.docs.map(d=>({id:d.id,...d.data()}));
+
+    // Stats
+    const totalUsers = users.length;
+    const totalDone  = users.reduce((s,u)=>s+Object.values(u.statuses||{}).filter(x=>x==='done').length,0);
+    const totalFavs  = users.reduce((s,u)=>s+(u.favorites||[]).length,0);
+    const totalDl    = users.reduce((s,u)=>s+Object.keys(u.downloads||{}).length,0);
+    document.getElementById('adm-stats').innerHTML = `
+      <div class="admin-stat"><div class="admin-stat-n">${totalUsers}</div><div class="admin-stat-l">Членів команди</div></div>
+      <div class="admin-stat"><div class="admin-stat-n">${totalDone}</div><div class="admin-stat-l">Книг прочитано</div></div>
+      <div class="admin-stat"><div class="admin-stat-n">${totalFavs}</div><div class="admin-stat-l">В обраних</div></div>
+      <div class="admin-stat"><div class="admin-stat-n">${totalDl}</div><div class="admin-stat-l">Завантажень</div></div>`;
+
+    const statusLabel = {want:'🔖 Хочу',reading:'📖 Читаю',done:'✅ Прочитав'};
+    const statusCls   = {want:'adm-want',reading:'adm-reading',done:'adm-done'};
+
+    const fmtDate = ts => {
+      if (!ts) return '—';
+      const d = ts.toDate ? ts.toDate() : new Date(ts);
+      const now = new Date();
+      const diff = Math.floor((now-d)/86400000);
+      if (diff===0) return 'Сьогодні';
+      if (diff===1) return 'Вчора';
+      return `${diff} дн. тому`;
+    };
+
+    const rows = users.sort((a,b)=>{
+      const av = a.lastVisit?.toDate?.()||new Date(0);
+      const bv = b.lastVisit?.toDate?.()||new Date(0);
+      return bv-av;
+    }).map(u => {
+      const sts = u.statuses || {};
+      const reading = Object.entries(sts).filter(([,v])=>v==='reading').map(([k])=>B.find(b=>b.id===k)?.t||k);
+      const done    = Object.entries(sts).filter(([,v])=>v==='done').map(([k])=>B.find(b=>b.id===k)?.t||k);
+      const want    = Object.entries(sts).filter(([,v])=>v==='want').map(([k])=>B.find(b=>b.id===k)?.t||k);
+      const favList = (u.favorites||[]).map(k=>B.find(b=>b.id===k)?.t||k);
+      const dlList  = Object.keys(u.downloads||[]).map(k=>B.find(b=>b.id===k)?.t||k);
+
+      const badge = (arr,cls) => arr.map(t=>`<span class="adm-badge ${cls}" title="${t}">${t.length>18?t.slice(0,16)+'…':t}</span>`).join('') || '<span style="color:var(--t3);font-size:12px">—</span>';
+      const initials = ((u.name||'?')[0]+(u.surname||'')[0]).toUpperCase();
+
+      return `<tr>
+        <td><span class="adm-ava">${initials}</span>${u.displayName||u.id}</td>
+        <td>${badge(reading,'adm-reading')}</td>
+        <td>${badge(done,'adm-done')}</td>
+        <td>${badge(want,'adm-want')}</td>
+        <td>${badge(favList,'adm-fav')}</td>
+        <td>${badge(dlList,'adm-dl')}</td>
+        <td style="color:var(--t3);font-size:12px">${fmtDate(u.lastVisit)}</td>
+      </tr>`;
+    }).join('');
+
+    document.getElementById('adm-tbody').innerHTML = rows || '<tr><td colspan="7" style="text-align:center;color:var(--t3);padding:32px">Поки що нікого немає</td></tr>';
+  } catch(e) {
+    document.getElementById('adm-tbody').innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--accent);padding:32px">Помилка: ${e.message}</td></tr>`;
+  }
 }
 
 // ── MODAL ──
-function openM(id){
-  const b=B.find(x=>x.id===id);if(!b)return;
-  document.getElementById('m-e').textContent=b.e;
-  document.getElementById('m-t').textContent=b.t;
-  document.getElementById('m-a').textContent=b.a;
-  document.getElementById('m-d').innerHTML=(b.ld||b.d).split('\n\n').map(p=>`<p>${p}</p>`).join('');
-  document.getElementById('m-f').textContent=`${b.f} · ${b.s}`;
-  const dlBtn=document.getElementById('m-dl');
-  if(b.file){dlBtn.textContent='⬇ Завантажити';dlBtn.style.opacity='1';dlBtn.style.pointerEvents='auto';dlBtn.onclick=()=>{closeM();dlBook(id)};}
-  else{dlBtn.textContent='⏳ Скоро';dlBtn.style.opacity='0.5';dlBtn.style.pointerEvents='none';}
+function openM(id) {
+  const b = B.find(x=>x.id===id); if (!b) return;
+  modalBookId = id;
+  document.getElementById('m-e').textContent = b.e;
+  document.getElementById('m-t').textContent = b.t;
+  document.getElementById('m-a').textContent = b.a;
+  document.getElementById('m-d').innerHTML = (b.ld||b.d).split('\n\n').map(p=>`<p>${p}</p>`).join('');
+  document.getElementById('m-f').textContent = `${b.f} · ${b.s}`;
+  const dlBtn = document.getElementById('m-dl');
+  if (b.file) {
+    dlBtn.textContent='⬇ Завантажити'; dlBtn.style.opacity='1'; dlBtn.style.pointerEvents='auto';
+    dlBtn.onclick=()=>{ closeM(); dlBook(id); };
+  } else {
+    dlBtn.textContent='⏳ Скоро'; dlBtn.style.opacity='0.5'; dlBtn.style.pointerEvents='none';
+  }
+  renderStatusBtns(id);
   const fv=document.getElementById('m-fv');
   const upFv=()=>{fv.textContent=favs.includes(id)?'★ В обраних':'☆ В обрані'};
-  upFv();fv.onclick=()=>{fav(id);upFv()};
+  upFv(); fv.onclick=()=>{ fav(id); upFv(); };
   document.getElementById('overlay').classList.add('open');
 }
 function closeM(){document.getElementById('overlay').classList.remove('open')}
@@ -759,16 +1189,15 @@ document.getElementById('overlay').addEventListener('click',e=>{if(e.target.id==
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
 
 // ── DOWNLOAD ──
-function dlBook(id){
-  const b=B.find(x=>x.id===id);
-  if(b&&b.file){
-    const a=document.createElement('a');
-    a.href=b.file;
-    a.download=b.t+'.fb2';
-    a.click();
-    toast('⬇',`Завантаження: ${b.t}`);
-  } else {
-    toast('⬇',`Завантаження: ${b?b.t:'файл'}`);
+function dlBook(id) {
+  const b = B.find(x=>x.id===id);
+  if (b && b.file) {
+    const a = document.createElement('a');
+    a.href = b.file; a.download = b.t+'.fb2'; a.click();
+    // Зберігаємо факт завантаження
+    downloads[id] = true;
+    saveUserData();
+    toast('⬇', `Завантаження: ${b.t}`);
   }
 }
 
