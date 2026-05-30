@@ -186,6 +186,12 @@ body::before{
 .c-new{background:rgba(44,200,138,.1);color:var(--green);border:1px solid rgba(44,200,138,.2)}
 .c-hot{background:rgba(232,115,42,.1);color:var(--accent);border:1px solid rgba(232,115,42,.2)}
 .c-ceo{background:rgba(255,200,50,.08);color:#F5C030;border:1px solid rgba(255,200,50,.18)}
+.bi-soon{
+  position:absolute;top:13px;right:12px;
+  font-size:10.5px;font-weight:600;color:var(--t3);
+  background:var(--item-h);border:1px solid var(--border);
+  padding:4px 10px;border-radius:7px;white-space:nowrap;
+}
 .bi-fav{
   position:absolute;bottom:12px;right:12px;
   background:none;border:none;cursor:pointer;
@@ -351,10 +357,10 @@ body::before{
         <input id="q" type="text" placeholder="Пошук по назві, автору, опису…" oninput="render()">
       </div>
       <div class="cats">
-        <button class="cat on" id="ca" onclick="setC('all',this)">Всі <span class="cat-n">38</span></button>
+        <button class="cat on" id="ca" onclick="setC('all',this)">Всі <span class="cat-n">41</span></button>
         <button class="cat" id="cp" onclick="setC('personal',this)">🧠 Особистий розвиток <span class="cat-n">16</span></button>
-        <button class="cat" id="cb" onclick="setC('business',this)">💼 Бізнес <span class="cat-n">14</span></button>
-        <button class="cat" id="cl" onclick="setC('leadership',this)">🎯 Лідерство <span class="cat-n">8</span></button>
+        <button class="cat" id="cb" onclick="setC('business',this)">💼 Бізнес <span class="cat-n">16</span></button>
+        <button class="cat" id="cl" onclick="setC('leadership',this)">🎯 Лідерство <span class="cat-n">9</span></button>
       </div>
     </div>
     <div class="cols cols4" id="cols"></div>
@@ -461,6 +467,12 @@ const B=[
    d:'Дисциплінована гонитва за меншим. Мистецтво відмовляти несуттєвому і фокусуватись на головному.'},
   {id:'extreme',e:'⚔️',t:'Extreme Ownership',a:'Джоко Вілінк',f:'FB2',s:'1.6 MB',c:'business',hot:false,new:true,ceo:false,
    d:'Принципи командування Navy SEAL для бізнесу. Лідер відповідає за все — без виправдань.'},
+  {id:'innovation',e:'💡',t:'Інноваційний менеджмент',a:'Harvard Business Review',f:'FB2',s:'2.5 MB',c:'business',hot:false,new:true,ceo:true,file:'books/innovation.fb2',
+   d:'Збірник HBR про управління інноваціями. Як великі компанії впроваджують зміни, долають опір і будують культуру що постійно оновлюється. Кейси та інструменти.'},
+  {id:'branson2',e:'🌍',t:'Втрачаючи невинність',a:'Річард Бренсон',f:'FB2',s:'1.8 MB',c:'business',hot:false,new:true,ceo:false,file:'books/branson2.fb2',
+   d:'Повна автобіографія засновника Virgin Group. Від дислексії і провалів у школі до створення авіакомпанії, лейблу і космічного туризму. Бізнес як пригода.'},
+  {id:'hrbook',e:'👔',t:'Головний підручник HR у світі',a:'Майкл Армстронг',f:'FB2',s:'4.5 MB',c:'leadership',hot:false,new:true,ceo:false,file:'books/hrbook.fb2',
+   d:'Фундаментальна енциклопедія HR-менеджменту. Найм, адаптація, мотивація, оцінка, розвиток, корпоративна культура — повний арсенал сучасного HR-директора.'},
   {id:'moment',e:'✨',t:'Сила моменту',a:'Чіп Хіз',f:'FB2',s:'2.4 MB',c:'personal',hot:false,new:true,ceo:false,file:'books/moment.fb2',
    d:'Чому одні моменти запам\'ятовуються на все життя, а інші зникають. Як свідомо створювати піки, переломні точки і глибокі зв\'язки — в бізнесі і в житті.'},
   {id:'radical',e:'💬',t:'Радикальна прямота',a:'Кім Скотт',f:'FB2',s:'2.6 MB',c:'leadership',hot:true,new:true,ceo:true,file:'books/radical.fb2',
@@ -558,7 +570,10 @@ function setC(c,btn){
 function bhtml(b){
   const f=favs.includes(b.id);
   return `<div class="bi" onclick="openM('${b.id}')">
-    <button class="bi-dl" onclick="event.stopPropagation();dlBook('${b.id}')">↓ ${b.f}</button>
+    ${b.file
+      ? `<button class="bi-dl" onclick="event.stopPropagation();dlBook('${b.id}')">↓ ${b.f}</button>`
+      : `<span class="bi-soon">Скоро</span>`
+    }
     <div class="bi-title">${b.t}</div>
     <div class="bi-meta">${b.a} · ${b.f} · ${b.s}</div>
     <div class="bi-desc">${b.d}</div>
@@ -682,7 +697,9 @@ function openM(id){
   document.getElementById('m-a').textContent=b.a;
   document.getElementById('m-d').textContent=b.d;
   document.getElementById('m-f').textContent=`${b.f} · ${b.s}`;
-  document.getElementById('m-dl').onclick=()=>{closeM();dlBook(id)};
+  const dlBtn=document.getElementById('m-dl');
+  if(b.file){dlBtn.textContent='⬇ Завантажити';dlBtn.style.opacity='1';dlBtn.style.pointerEvents='auto';dlBtn.onclick=()=>{closeM();dlBook(id)};}
+  else{dlBtn.textContent='⏳ Скоро';dlBtn.style.opacity='0.5';dlBtn.style.pointerEvents='none';}
   const fv=document.getElementById('m-fv');
   const upFv=()=>{fv.textContent=favs.includes(id)?'★ В обраних':'☆ В обрані'};
   upFv();fv.onclick=()=>{fav(id);upFv()};
