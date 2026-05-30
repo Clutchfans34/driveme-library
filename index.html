@@ -715,6 +715,9 @@ body::before{
     gap:8px;
   }
   .search-wrap{max-width:100%;flex:1 1 100%}
+  /* iOS fix: font-size >= 16px prevents auto-zoom on focus */
+  .search-wrap input{font-size:16px}
+  .login-input{font-size:16px}
   .cats{order:2;width:100%;flex-wrap:wrap;gap:6px}
   .cat{font-size:12px;padding:6px 11px}
 
