@@ -351,10 +351,10 @@ body::before{
         <input id="q" type="text" placeholder="Пошук по назві, автору, опису…" oninput="render()">
       </div>
       <div class="cats">
-        <button class="cat on" id="ca" onclick="setC('all',this)">Всі <span class="cat-n">27</span></button>
-        <button class="cat" id="cp" onclick="setC('personal',this)">🧠 Особистий розвиток <span class="cat-n">12</span></button>
+        <button class="cat on" id="ca" onclick="setC('all',this)">Всі <span class="cat-n">30</span></button>
+        <button class="cat" id="cp" onclick="setC('personal',this)">🧠 Особистий розвиток <span class="cat-n">14</span></button>
         <button class="cat" id="cb" onclick="setC('business',this)">💼 Бізнес <span class="cat-n">11</span></button>
-        <button class="cat" id="cl" onclick="setC('leadership',this)">🎯 Лідерство <span class="cat-n">4</span></button>
+        <button class="cat" id="cl" onclick="setC('leadership',this)">🎯 Лідерство <span class="cat-n">5</span></button>
       </div>
     </div>
     <div class="cols cols4" id="cols"></div>
@@ -432,9 +432,9 @@ const B=[
    d:'Система 1% щодня. Чотири закони зміни поведінки: очевидність, привабливість, простота, задоволення. Найпрактичніша книга про зміну себе.'},
   {id:'drive',e:'🔥',t:'Драйв',a:'Деніель Пінк',f:'FB2',s:'1.7 MB',c:'personal',hot:false,new:false,ceo:false,
    d:'Що насправді мотивує: автономія, майстерність, мета. Чому бонуси руйнують внутрішню мотивацію.'},
-  {id:'morning',e:'🌅',t:'Магія ранку',a:'Хел Елрод',f:'FB2',s:'759 KB',c:'personal',hot:false,new:false,ceo:false,
+  {id:'morning',e:'🌅',t:'Магія ранку',a:'Хел Елрод',f:'FB2',s:'759 KB',c:'personal',hot:false,new:false,ceo:false,file:'books/morning2.fb2',
    d:'Перший час дня визначає успіх. SAVERS: мовчання, афірмації, візуалізація, вправи, читання, нотатки.'},
-  {id:'richdad',e:'💰',t:'Багатий тато, бідний тато',a:'Роберт Кійосакі',f:'FB2',s:'1.2 MB',c:'personal',hot:false,new:false,ceo:false,
+  {id:'richdad',e:'💰',t:'Багатий тато, бідний тато',a:'Роберт Кійосакі',f:'FB2',s:'1.2 MB',c:'personal',hot:false,new:false,ceo:false,file:'books/richdad2.fb2',
    d:'Фінансова грамотність з нуля. Чому треба купувати активи, а не пасиви.'},
   {id:'deepwork',e:'🎯',t:'Deep Work',a:'Кел Ньюпорт',f:'FB2',s:'1.1 MB',c:'personal',hot:false,new:true,ceo:false,
    d:'Здатність зосередитись без відволікань — суперсила 21 століття. Правила глибокої роботи.'},
@@ -461,6 +461,12 @@ const B=[
    d:'Дисциплінована гонитва за меншим. Мистецтво відмовляти несуттєвому і фокусуватись на головному.'},
   {id:'extreme',e:'⚔️',t:'Extreme Ownership',a:'Джоко Вілінк',f:'FB2',s:'1.6 MB',c:'business',hot:false,new:true,ceo:false,
    d:'Принципи командування Navy SEAL для бізнесу. Лідер відповідає за все — без виправдань.'},
+  {id:'cashflow',e:'💵',t:'Квадрант грошового потоку',a:'Роберт Кійосакі',f:'FB2',s:'3.2 MB',c:'personal',hot:false,new:true,ceo:false,file:'books/cashflow.fb2',
+   d:'Продовження «Багатого тата». Чотири квадранти: найманий працівник, самозайнятий, бізнесмен, інвестор. Як перейти на правий бік і отримати фінансову свободу.'},
+  {id:'google',e:'🔍',t:'Робота рулить! Культура Google',a:'Ласло Бок',f:'FB2',s:'4.9 MB',c:'leadership',hot:false,new:true,ceo:true,file:'books/google.fb2',
+   d:'Чому мільярди людей хочуть працювати в Google. Секрети найму, мотивації та культури від колишнього HR-директора компанії. Як побудувати команду мрії.'},
+  {id:'importantyears',e:'🎓',t:'Важливі роки',a:'Мег Джей',f:'FB2',s:'1.0 MB',c:'personal',hot:false,new:true,ceo:false,file:'books/importantyears.fb2',
+   d:'Чому не варто відкладати життя на потім. Психолог про те, як рішення у 20-30 років визначають все подальше — кар\'єру, стосунки, особистість.'},
   {id:'tracy',e:'⏱️',t:'Результативний тайм-менеджмент',a:'Брайан Трейсі',f:'FB2',s:'206 KB',c:'personal',hot:false,new:true,ceo:false,file:'books/tracy.fb2',
    d:'Ефективна методика управління власним часом від Брайана Трейсі. Як зосередитись на пріоритетах, позбутись прокрастинації і робити більше за менший час.'},
   {id:'gametheory',e:'♟️',t:'Теорія ігор',a:'Авінаш Діксіт',f:'FB2',s:'5.1 MB',c:'business',hot:false,new:true,ceo:false,file:'books/gametheory.fb2',
