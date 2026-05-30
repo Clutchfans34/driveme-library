@@ -230,17 +230,12 @@ body::before{
   font-size:12px;color:var(--t2);line-height:1.55;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
 }
-.bi-dl{
+.bi-fmt{
   position:absolute;top:13px;right:12px;
-  display:flex;align-items:center;gap:4px;
-  background:var(--accent);
-  color:#fff;font-size:10.5px;font-weight:700;
-  padding:4px 9px;border-radius:7px;border:none;cursor:pointer;
-  font-family:'Inter',sans-serif;transition:all .13s;
-  box-shadow:0 2px 8px rgba(232,115,42,.3);
-  white-space:nowrap;
+  font-size:10.5px;font-weight:600;color:var(--t3);
+  background:var(--item-h);border:1px solid var(--border);
+  padding:4px 10px;border-radius:7px;white-space:nowrap;
 }
-.bi-dl:hover{background:var(--accent-l);transform:scale(1.04)}
 .bi-chips{display:flex;gap:4px;margin-top:7px;flex-wrap:wrap}
 .chip{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;padding:2px 7px;border-radius:5px}
 .c-new{background:rgba(44,200,138,.1);color:var(--green);border:1px solid rgba(44,200,138,.2)}
@@ -516,13 +511,11 @@ body::before{
 .sc-cat.personal{background:rgba(155,120,224,.15);color:var(--purple)}
 .sc-cat.business{background:rgba(91,159,232,.15);color:var(--blue)}
 .sc-cat.leadership{background:rgba(232,115,42,.15);color:var(--accent)}
-.sc-dl{
-  margin-top:auto;padding:7px 10px;border-radius:8px;
-  background:linear-gradient(135deg,var(--accent),var(--accent-l));
-  color:#fff;font-size:11px;font-weight:700;border:none;cursor:pointer;
-  font-family:'Inter',sans-serif;transition:.13s;text-align:center;
+.sc-fmt{
+  margin-top:auto;padding:5px 10px;border-radius:8px;
+  background:var(--item-h);border:1px solid var(--border);
+  color:var(--t3);font-size:11px;font-weight:600;text-align:center;display:block;
 }
-.sc-dl:hover{opacity:.85}
 .sc-soon{
   margin-top:auto;padding:7px 10px;border-radius:8px;
   background:var(--item-h);color:var(--t3);
@@ -1165,7 +1158,7 @@ function bhtml(b){
   const stCls = {want:'s-want', reading:'s-reading', done:'s-done'};
   return `<div class="bi" onclick="openM('${b.id}')" style="position:relative;padding-bottom:${st?'28px':''}">
     ${b.file
-      ? `<button class="bi-dl" onclick="event.stopPropagation();dlBook('${b.id}')">↓ ${b.f}</button>`
+      ? `<span class="bi-fmt">${b.f}</span>`
       : `<span class="bi-soon">Скоро</span>`
     }
     <div class="bi-title">${b.t}</div>
@@ -1202,7 +1195,7 @@ function schtml(b){
     <div class="sc-a">${b.a}</div>
     <span class="sc-cat ${b.c}">${catLabel[b.c]||b.c}</span>
     ${b.file
-      ? `<button class="sc-dl" onclick="event.stopPropagation();dlBook('${b.id}')">↓ ${b.f}</button>`
+      ? `<span class="sc-fmt">${b.f}</span>`
       : `<div class="sc-soon">Скоро</div>`}
   </div>`;
 }
