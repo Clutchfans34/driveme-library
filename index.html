@@ -574,7 +574,7 @@ body::before{
       </div>
     </div>
     <div class="header-sub">
-      <span>Особистий розвиток</span> · <span>Бізнес</span> · <span>Корисна література</span>
+      <span>Особистий розвиток</span> · <span>Бізнес</span> · <span>Внутрішні документи</span>
     </div>
   </div>
 
@@ -1105,15 +1105,15 @@ function render(){
     </div>`;
   });
 
-  // Колонка "Корисна література" тільки якщо cat=all і без пошуку
+  // Колонка "Внутрішні документи" тільки якщо cat=all і без пошуку
   if(cat==='all'&&!q){
     html+=`<div class="col">
       <div class="col-head">
         <div class="col-head-left">
           ${DOCS_ICO}
           <div>
-            <div class="col-head-name">Корисна література</div>
-            <div class="col-head-sub">Файли та шаблони</div>
+            <div class="col-head-name">Внутрішні документи</div>
+            <div class="col-head-sub">Внутрішні файли та шаблони</div>
           </div>
         </div>
         <div class="col-count">Файли</div>
