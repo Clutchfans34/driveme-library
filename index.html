@@ -235,8 +235,8 @@ body::before{
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
 }
 .bi-flag{
-  position:absolute;bottom:12px;right:12px;
-  font-size:22px;line-height:1;pointer-events:none;
+  font-size:18px;line-height:1;pointer-events:none;
+  display:inline-flex;align-items:center;
 }
 .bi-fmt{
   position:absolute;top:13px;right:12px;
@@ -1488,11 +1488,11 @@ function bhtml(b){
       ? `<span class="bi-fmt">${b.f}</span>`
       : `<span class="bi-soon">Скоро</span>`
     }
-    ${b.lang==='Укр'?'<span class="bi-flag">🇺🇦</span>':''}
     <div class="bi-title">${b.t}</div>
     <div class="bi-meta">${b.a} · ${b.f} · ${b.s}</div>
     <div class="bi-desc">${b.d}</div>
-    ${hasChipsOrStatus?`<div class="bi-chips">
+    ${(hasChipsOrStatus||b.lang==='Укр')?`<div class="bi-chips">
+      ${b.lang==='Укр'?'<span class="bi-flag">🇺🇦</span>':''}
       ${b.new?'<span class="chip c-new">New</span>':''}
       ${b.hot?'<span class="chip c-hot">Популярне</span>':''}
       ${b.ceo?'<span class="chip c-ceo">CEO вибір</span>':''}
