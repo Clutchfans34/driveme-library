@@ -351,10 +351,10 @@ body::before{
         <input id="q" type="text" placeholder="Пошук по назві, автору, опису…" oninput="render()">
       </div>
       <div class="cats">
-        <button class="cat on" id="ca" onclick="setC('all',this)">Всі <span class="cat-n">32</span></button>
-        <button class="cat" id="cp" onclick="setC('personal',this)">🧠 Особистий розвиток <span class="cat-n">14</span></button>
-        <button class="cat" id="cb" onclick="setC('business',this)">💼 Бізнес <span class="cat-n">13</span></button>
-        <button class="cat" id="cl" onclick="setC('leadership',this)">🎯 Лідерство <span class="cat-n">5</span></button>
+        <button class="cat on" id="ca" onclick="setC('all',this)">Всі <span class="cat-n">36</span></button>
+        <button class="cat" id="cp" onclick="setC('personal',this)">🧠 Особистий розвиток <span class="cat-n">15</span></button>
+        <button class="cat" id="cb" onclick="setC('business',this)">💼 Бізнес <span class="cat-n">14</span></button>
+        <button class="cat" id="cl" onclick="setC('leadership',this)">🎯 Лідерство <span class="cat-n">7</span></button>
       </div>
     </div>
     <div class="cols cols4" id="cols"></div>
@@ -428,7 +428,7 @@ body::before{
 <script>
 const B=[
   // PERSONAL
-  {id:'atomic',e:'⚡',t:'Атомні звички',a:'Джеймс Клір',f:'FB2',s:'3.2 MB',c:'personal',hot:true,new:false,ceo:false,
+  {id:'atomic',e:'⚡',t:'Атомні звички',a:'Джеймс Клір',f:'FB2',s:'3.2 MB',c:'personal',hot:true,new:false,ceo:false,file:'books/atomic2.fb2',
    d:'Система 1% щодня. Чотири закони зміни поведінки: очевидність, привабливість, простота, задоволення. Найпрактичніша книга про зміну себе.'},
   {id:'drive',e:'🔥',t:'Драйв',a:'Деніель Пінк',f:'FB2',s:'1.7 MB',c:'personal',hot:false,new:false,ceo:false,file:'books/drive.fb2',
    d:'Що насправді мотивує: автономія, майстерність, мета. Чому бонуси руйнують внутрішню мотивацію.'},
@@ -461,6 +461,14 @@ const B=[
    d:'Дисциплінована гонитва за меншим. Мистецтво відмовляти несуттєвому і фокусуватись на головному.'},
   {id:'extreme',e:'⚔️',t:'Extreme Ownership',a:'Джоко Вілінк',f:'FB2',s:'1.6 MB',c:'business',hot:false,new:true,ceo:false,
    d:'Принципи командування Navy SEAL для бізнесу. Лідер відповідає за все — без виправдань.'},
+  {id:'meetings',e:'🛑',t:'Смерть від нарад',a:'Патрік Ленсіоні',f:'FB2',s:'1.0 MB',c:'leadership',hot:false,new:true,ceo:true,file:'books/meetings.fb2',
+   d:'Чому наради — найбільша проблема сучасного бізнесу і як це виправити. Практична модель ефективних зустрічей: щоденні check-in, тижневі тактичні, стратегічні сесії.'},
+  {id:'who',e:'🎯',t:'Хто. Вирішіть вашу проблему №1',a:'Ренді Стріт',f:'FB2',s:'1.0 MB',c:'leadership',hot:false,new:true,ceo:true,file:'books/who.fb2',
+   d:'Найважливіше рішення в бізнесі — кого наймати. Метод SCORE для відбору A-гравців: результати, досвід, відповідність культурі. Як уникнути дорогих помилок найму.'},
+  {id:'burnout',e:'🔥',t:'Вигорання',a:'Емілі Нагоскі',f:'FB2',s:'2.4 MB',c:'personal',hot:false,new:true,ceo:false,file:'books/burnout.fb2',
+   d:'Наука про стрес і вигорання. Як завершити цикл стресу, відновитись і побудувати стійкість. Дослідження про те чому ми виснажуємось і як повернути енергію.'},
+  {id:'economics',e:'📊',t:'Гола економіка',a:'Чарльз Вілан',f:'FB2',s:'930 KB',c:'business',hot:false,new:true,ceo:false,file:'books/economics.fb2',
+   d:'Викриття нудної науки. Економіка без формул — зрозуміло, дотепно, практично. Як ринки, стимули і глобалізація насправді впливають на наше щоденне життя.'},
   {id:'biggame',e:'🎲',t:'Велика гра в бізнес',a:'Бо Берлінгем',f:'FB2',s:'2.5 MB',c:'business',hot:false,new:true,ceo:false,file:'books/biggame.fb2',
    d:'Єдиний розумний спосіб управління компанією. Як відкрита книга фінансів, спільна мета і залученість команди перетворюють бізнес на гру в яку всі хочуть вигравати.'},
   {id:'kotler',e:'📣',t:'Основи маркетингу',a:'Філіп Котлер',f:'FB2',s:'8.5 MB',c:'business',hot:false,new:true,ceo:false,file:'books/kotler.fb2',
