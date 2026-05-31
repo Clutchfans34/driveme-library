@@ -840,29 +840,31 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
 }
 
 /* ── AUDIO PAGE ── */
-.audio-player-bar{background:var(--item);border:1px solid var(--border2);border-radius:16px;padding:20px 24px;margin-top:20px;margin-bottom:8px}
+/* Desktop: centered narrow column */
+.audio-wrap{max-width:580px;margin:0 auto}
+.audio-player-bar{background:var(--item);border:1px solid var(--border2);border-radius:16px;padding:18px 20px;margin-top:20px;margin-bottom:6px}
 .audio-player-bar.hidden{display:none}
-.apb-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.apb-author{font-size:12px;color:var(--t2);margin-bottom:14px}
+.apb-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.apb-author{font-size:11px;color:var(--t2);margin-bottom:12px}
 .apb-progress-wrap{display:flex;align-items:center;gap:10px;margin-bottom:12px}
 .apb-progress{flex:1;height:5px;background:var(--border2);border-radius:5px;cursor:pointer}
 .apb-fill{height:100%;border-radius:5px;background:var(--accent);width:0%;pointer-events:none}
-.apb-time{font-size:11px;color:var(--t3);white-space:nowrap;min-width:80px;text-align:right}
-.apb-controls{display:flex;align-items:center;gap:10px}
-.apb-btn-play{width:44px;height:44px;border-radius:50%;background:var(--accent);border:none;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center;transition:.15s;flex-shrink:0}
+.apb-time{font-size:11px;color:var(--t3);white-space:nowrap;min-width:76px;text-align:right}
+.apb-controls{display:flex;align-items:center;gap:8px}
+.apb-btn-play{width:42px;height:42px;border-radius:50%;background:var(--accent);border:none;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:.15s;flex-shrink:0}
 .apb-btn-play:hover{background:var(--accent-l)}
-.apb-btn-prev,.apb-btn-next{width:34px;height:34px;border-radius:50%;background:var(--item-h);border:1px solid var(--border2);color:var(--t2);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:.15s}
+.apb-btn-prev,.apb-btn-next{width:32px;height:32px;border-radius:50%;background:var(--item-h);border:1px solid var(--border2);color:var(--t2);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:.15s}
 .apb-btn-prev:hover,.apb-btn-next:hover{color:var(--text);border-color:var(--accent)}
-.apb-speed{background:var(--item-h);border:1px solid var(--border2);border-radius:8px;color:var(--t2);font-size:11px;font-weight:700;padding:6px 10px;cursor:pointer;font-family:'Inter',sans-serif;transition:.15s;margin-left:4px}
+.apb-speed{background:var(--item-h);border:1px solid var(--border2);border-radius:8px;color:var(--t2);font-size:11px;font-weight:700;padding:5px 9px;cursor:pointer;font-family:'Inter',sans-serif;transition:.15s;margin-left:2px}
 .apb-speed:hover{color:var(--text);border-color:var(--accent)}
 .apb-autoplay{display:flex;align-items:center;gap:6px;margin-left:auto;font-size:12px;color:var(--t2);cursor:pointer;user-select:none}
-.apb-autoplay input{accent-color:var(--accent);cursor:pointer}
+.apb-autoplay input{accent-color:var(--accent);cursor:pointer;width:16px;height:16px}
 /* Track list */
-.audio-list{margin-top:8px;display:flex;flex-direction:column;gap:2px}
-.audio-row{display:flex;align-items:center;gap:14px;padding:11px 16px;border-radius:12px;cursor:pointer;transition:.13s}
+.audio-list{margin-top:4px;display:flex;flex-direction:column;gap:1px}
+.audio-row{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;cursor:pointer;transition:.13s}
 .audio-row:hover{background:var(--item)}
-.audio-row.playing{background:var(--item);border-left:3px solid var(--accent);padding-left:13px}
-.audio-row-num{font-size:12px;color:var(--t3);width:22px;text-align:center;flex-shrink:0;font-variant-numeric:tabular-nums}
+.audio-row.playing{background:var(--item);border-left:3px solid var(--accent);padding-left:11px}
+.audio-row-num{font-size:12px;color:var(--t3);width:20px;text-align:center;flex-shrink:0;font-variant-numeric:tabular-nums}
 .audio-row.playing .audio-row-num{color:var(--accent)}
 .audio-row-info{flex:1;min-width:0}
 .audio-row-title{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -932,6 +934,21 @@ body.has-player #p-done,body.has-player #p-audio,body.has-player #p-admin{paddin
 
   /* Show mobile nav */
   .mob-nav{display:grid}
+
+  /* Audio mobile */
+  .audio-wrap{max-width:100%}
+  .audio-player-bar{padding:14px 16px;border-radius:14px}
+  .apb-title{font-size:13px}
+  .apb-btn-play{width:46px;height:46px;font-size:18px}
+  .apb-btn-prev,.apb-btn-next{width:36px;height:36px;font-size:15px}
+  .audio-row{padding:12px 10px}
+  .audio-row-size{display:none}
+  .audio-row-title{font-size:14px}
+  .audio-row-author{font-size:12px}
+  .mp-go{display:none}
+  #mini-player{padding:10px 14px;gap:10px}
+  .mp-title{font-size:13px}
+  .mp-author{font-size:11px}
 
   /* Featured shelf — HIDE on mobile */
   .featured{display:none}
@@ -1094,30 +1111,31 @@ body.has-player #p-done,body.has-player #p-audio,body.has-player #p-admin{paddin
 
   <!-- PAGE: AUDIO -->
   <div id="p-audio" style="display:none;padding-top:32px">
-    <div class="sec-h">🎧 Аудіо</div>
-    <div class="sec-sub">Натисни на трек щоб розпочати — далі грає автоматично</div>
-    <!-- Sticky player bar -->
-    <div class="audio-player-bar hidden" id="apb">
-      <div class="apb-title" id="apb-title">—</div>
-      <div class="apb-author" id="apb-author"></div>
-      <div class="apb-progress-wrap">
-        <div class="apb-progress" id="apb-prog" onclick="apbSeek(event)">
-          <div class="apb-fill" id="apb-fill"></div>
+    <div class="audio-wrap">
+      <div class="sec-h">🎧 Аудіо</div>
+      <div class="sec-sub">Натисни на трек — далі грає автоматично</div>
+      <!-- Player bar -->
+      <div class="audio-player-bar hidden" id="apb">
+        <div class="apb-title" id="apb-title">—</div>
+        <div class="apb-author" id="apb-author"></div>
+        <div class="apb-progress-wrap">
+          <div class="apb-progress" id="apb-prog" onclick="apbSeek(event)">
+            <div class="apb-fill" id="apb-fill"></div>
+          </div>
+          <div class="apb-time" id="apb-time">0:00 / 0:00</div>
         </div>
-        <div class="apb-time" id="apb-time">0:00 / 0:00</div>
+        <div class="apb-controls">
+          <button class="apb-btn-prev" onclick="apbPrev()">⏮</button>
+          <button class="apb-btn-play" id="apb-play" onclick="apbPlayPause()">▶</button>
+          <button class="apb-btn-next" onclick="apbNext()">⏭</button>
+          <button class="apb-speed" id="apb-speed" onclick="apbCycleSpeed()">1×</button>
+          <label class="apb-autoplay"><input type="checkbox" id="apb-auto" checked> Авто</label>
+        </div>
       </div>
-      <div class="apb-controls">
-        <button class="apb-btn-prev" onclick="apbPrev()" title="Попередній">⏮</button>
-        <button class="apb-btn-play" id="apb-play" onclick="apbPlayPause()">▶</button>
-        <button class="apb-btn-next" onclick="apbNext()" title="Наступний">⏭</button>
-        <button class="apb-speed" id="apb-speed" onclick="apbCycleSpeed()">1×</button>
-        <label class="apb-autoplay">
-          <input type="checkbox" id="apb-auto" checked> Авто
-        </label>
+      <!-- Track list -->
+      <div class="audio-list" id="audio-list">
+        <div class="audio-empty">Треки ще не додані.</div>
       </div>
-    </div>
-    <div class="audio-list" id="audio-list">
-      <div class="audio-empty">Треки ще не додані.</div>
     </div>
   </div>
 
