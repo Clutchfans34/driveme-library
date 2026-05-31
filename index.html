@@ -872,27 +872,24 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
 .audio-row-author{font-size:11px;color:var(--t3);margin-top:1px}
 .audio-row-size{font-size:11px;color:var(--t3);flex-shrink:0}
 .audio-empty{text-align:center;padding:60px 20px;color:var(--t3);font-size:14px}
-/* Desktop: add bottom padding when mini-player visible */
-body.has-player #p-lib,body.has-player #p-reading,body.has-player #p-favs,
-body.has-player #p-done,body.has-player #p-audio,body.has-player #p-admin{padding-bottom:80px}
 
-/* ── MINI PLAYER (persistent, all pages) ── */
+/* ── MINI PLAYER (inline, below header) ── */
 #mini-player{
-  position:fixed;bottom:0;left:0;right:0;z-index:500;
-  background:var(--col);border-top:1px solid var(--border2);
-  padding:10px 20px;
   display:none;
   align-items:center;gap:12px;
-  backdrop-filter:blur(12px);
-  box-shadow:0 -4px 24px rgba(0,0,0,.3);
+  background:var(--item);
+  border-bottom:1px solid var(--border2);
+  border-top:1px solid var(--border2);
+  padding:10px 24px;
+  position:relative;
 }
 #mini-player.visible{display:flex}
 .mp-info{flex:1;min-width:0;cursor:pointer}
 .mp-title{font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mp-author{font-size:11px;color:var(--t2);margin-top:1px}
-.mp-prog-wrap{position:absolute;top:0;left:0;right:0;height:3px;background:var(--border)}
+.mp-prog-wrap{position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--border)}
 .mp-prog-fill{height:100%;background:var(--accent);width:0%;transition:width .3s linear}
-.mp-btn{width:36px;height:36px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:.15s;flex-shrink:0}
+.mp-btn{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:.15s;flex-shrink:0}
 .mp-btn-play{background:var(--accent);color:#fff}
 .mp-btn-play:hover{background:var(--accent-l)}
 .mp-btn-skip{background:var(--item-h);color:var(--t2);border:1px solid var(--border2)}
@@ -906,8 +903,8 @@ body.has-player #p-done,body.has-player #p-audio,body.has-player #p-admin{paddin
   .page{padding:0 14px}
 
   /* Add bottom padding for fixed nav */
-  #p-lib,#p-reading,#p-favs,#p-done,#p-admin,#p-audio{padding-bottom:140px}
-  #mini-player{padding:8px 12px;bottom:56px} /* above mob-nav */
+  #p-lib,#p-reading,#p-favs,#p-done,#p-admin,#p-audio{padding-bottom:80px}
+  #mini-player{padding:10px 14px;gap:10px}
 
   /* Header */
   .header{padding:14px 0 0}
@@ -1059,6 +1056,19 @@ body.has-player #p-done,body.has-player #p-audio,body.has-player #p-admin{paddin
     <div class="header-sub">
       <span>Особистий розвиток</span> · <span>Бізнес</span> · <span>Внутрішні документи</span>
     </div>
+  </div>
+
+  <!-- INLINE MINI PLAYER (below header, all pages) -->
+  <div id="mini-player" style="display:none">
+    <div class="mp-prog-wrap"><div class="mp-prog-fill" id="mp-fill"></div></div>
+    <button class="mp-btn mp-btn-skip" onclick="apbPrev()">⏮</button>
+    <button class="mp-btn mp-btn-play" id="mp-play" onclick="apbPlayPause()">▶</button>
+    <button class="mp-btn mp-btn-skip" onclick="apbNext()">⏭</button>
+    <div class="mp-info" onclick="setPage('audio');syncMobNav('audio')">
+      <div class="mp-title" id="mp-title">—</div>
+      <div class="mp-author" id="mp-author"></div>
+    </div>
+    <span class="mp-go" onclick="setPage('audio');syncMobNav('audio')">🎧 До плейлиста</span>
   </div>
 
   <!-- PAGE: LIBRARY -->
@@ -2798,7 +2808,6 @@ function apbPlay(idx){
   }
   // Update mini player (always visible)
   document.getElementById('mini-player').classList.add('visible');
-  document.body.classList.add('has-player');
   document.getElementById('mp-title').textContent = b.t;
   document.getElementById('mp-author').textContent = b.a;
   document.getElementById('mp-fill').style.width='0%';
@@ -3033,17 +3042,5 @@ function toast(i,m){
   _t=setTimeout(()=>document.getElementById('toast-el').classList.remove('show'),2300);
 }
 </script>
-<!-- MINI PLAYER -->
-<div id="mini-player">
-  <div class="mp-prog-wrap"><div class="mp-prog-fill" id="mp-fill"></div></div>
-  <button class="mp-btn mp-btn-skip" onclick="apbPrev()" title="Попередній">⏮</button>
-  <button class="mp-btn mp-btn-play" id="mp-play" onclick="apbPlayPause()">▶</button>
-  <button class="mp-btn mp-btn-skip" onclick="apbNext()" title="Наступний">⏭</button>
-  <div class="mp-info" onclick="setPage('audio');syncMobNav('audio')">
-    <div class="mp-title" id="mp-title">—</div>
-    <div class="mp-author" id="mp-author"></div>
-  </div>
-  <span class="mp-go" onclick="setPage('audio');syncMobNav('audio')">🎧 До плейлиста</span>
-</div>
 </body>
 </html>
