@@ -2788,7 +2788,12 @@ const AUDIO_BOOKS = [
   {id:'jefferson_somebody',e:'✈️',t:'Somebody To Love',a:'Jefferson Airplane',s:'7.0 MB',c:'music',d:'Психоделічний рок-гімн епохи Літа Кохання — пристрасний голос Грейс Слік.',file:'audio/jefferson_somebody.mp3'},
   {id:'sonny_cher_babe',e:'💑',t:'I Got You Babe',a:'Sonny & Cher',s:'7.3 MB',c:'music',d:'Безтурботний дует про силу кохання — символ покоління хіпі 60-х.',file:'audio/sonny_cher_babe.mp3'},
   {id:'buffalo_worth',e:'🕊️',t:"For What It's Worth",a:'Buffalo Springfield',s:'6.0 MB',c:'music',d:'Антивоєнний гімн 1967 року — актуальний в будь-яку епоху.',file:'audio/buffalo_worth.mp3'},
+  {id:'ericb_ledge',e:'🎤',t:'Know The Ledge',a:'Eric B. & Rakim',s:'9.2 MB',c:'music',d:'Класика олд-скул хіп-хопу — один з найвидатніших MC всіх часів.',file:'audio/ericb_know_ledge.mp3'},
+  {id:'slickrick_children',e:'📖',t:"Children's Story",a:'Slick Rick',s:'9.2 MB',c:'music',d:'Легендарний наратив Slick Rick — сторітелінг у хіп-хопі на вищому рівні.',file:'audio/slickrick_childrens.mp3'},
+  {id:'gangstarr_mass',e:'🌀',t:'Mass Appeal',a:'Gang Starr',s:'3.4 MB',c:'music',d:'Guru і DJ Premier — інтелектуальний хіп-хоп від одного з найкращих дуетів жанру.',file:'audio/gangstarr_mass.mp3'},
+  {id:'mobbdeep_survival',e:'🏙️',t:'Survival of the Fittest',a:'Mobb Deep',s:'5.1 MB',c:'music',d:'Похмурий саунд Queensbridge — Prodigy і Havoc про виживання в міських джунглях.',file:'audio/mobbdeep_survival.mp3'},
 ];
+(function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}})(AUDIO_BOOKS);
 
 let currentAudio = null; // {id, el (HTMLAudioElement)}
 
