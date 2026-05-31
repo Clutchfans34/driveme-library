@@ -952,7 +952,7 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
   .page{padding:0 14px}
 
   /* Add bottom padding for fixed nav */
-  #p-lib,#p-reading,#p-favs,#p-done,#p-admin,#p-audio{padding-top:56px}
+  #p-lib,#p-reading,#p-favs,#p-done,#p-admin,#p-audio{padding-top:52px}
 
   /* Header */
   .header{padding:14px 0 0}
@@ -999,13 +999,14 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
   /* Search row */
   .search-row{
     flex-wrap:wrap;
-    padding-bottom:14px;
+    padding-top:10px;
+    padding-bottom:10px;
     gap:8px;
   }
   .search-wrap{max-width:100%;flex:1 1 100%}
-  .lang-filter{order:2;margin-left:0;width:100%;justify-content:flex-start}
+  .lang-filter{order:2;margin-left:0;flex:1;justify-content:flex-start}
   .lf-btn{font-size:11.5px;padding:6px 10px}
-  .suggest-btn{order:4;width:100%;justify-content:center}
+  .suggest-btn{order:3;width:auto;padding:7px 12px;font-size:12px;flex-shrink:0}
   /* iOS fix: font-size >= 16px prevents auto-zoom on focus */
   .search-wrap input{font-size:16px}
   .login-input{font-size:16px}
