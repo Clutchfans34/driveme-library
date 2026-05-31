@@ -508,26 +508,10 @@ body::before{
   color:#A78BFA !important;
   border-color:rgba(167,139,250,.3) !important;
   background:rgba(167,139,250,.08) !important;
-  position:relative;overflow:visible !important;
-}
-.nav-audio::before{
-  content:'';position:absolute;inset:-2px;border-radius:12px;
-  background:linear-gradient(135deg,rgba(167,139,250,.4),rgba(232,115,42,.3));
-  opacity:0;z-index:-1;
-  animation:audio-glow 2.4s ease-in-out infinite;
-}
-@keyframes audio-glow{
-  0%,100%{opacity:0;transform:scale(1)}
-  50%{opacity:1;transform:scale(1.04)}
 }
 .nav-audio:hover{color:#C4B5FD !important;border-color:rgba(167,139,250,.6) !important}
 /* Mobile audio tab */
-.mob-nav-audio{color:#A78BFA !important;animation:mob-audio-bounce 2.4s ease-in-out infinite}
-@keyframes mob-audio-bounce{
-  0%,100%{transform:translateY(0)}
-  40%{transform:translateY(-3px)}
-  60%{transform:translateY(-1px)}
-}
+.mob-nav-audio{color:#A78BFA !important}
 .mob-nav-audio.on{color:#A78BFA !important}
 
 .shelf-tab.on{
@@ -844,10 +828,9 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
 /* ── MOBILE NAV BAR ── */
 .mob-nav{
   display:none;
-  position:fixed;bottom:0;left:0;right:0;z-index:300;
-  background:var(--col);border-top:1px solid var(--border2);
-  padding:8px 4px env(safe-area-inset-bottom,0);
-  display:none;
+  position:fixed;top:0;left:0;right:0;z-index:300;
+  background:var(--col);border-bottom:1px solid var(--border2);
+  padding:6px 4px env(safe-area-inset-top,0);
   grid-template-columns:repeat(5,1fr);
   gap:2px;
 }
@@ -938,15 +921,15 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
 /* Mobile: fixed strip ABOVE bottom nav */
 @media(max-width:600px){
   #mini-player{
-    position:fixed;bottom:56px;left:0;right:0;z-index:299;
+    position:fixed;top:52px;left:0;right:0;z-index:299;
     width:100%;min-width:unset;
-    border-radius:0;border-left:none;border-right:none;border-bottom:none;
+    border-radius:0;border-left:none;border-right:none;border-top:none;
     padding:8px 14px;gap:10px;
     background:var(--col);
-    box-shadow:0 -2px 12px rgba(0,0,0,.2);
+    box-shadow:0 2px 12px rgba(0,0,0,.2);
   }
   body.has-player #p-lib,body.has-player #p-reading,body.has-player #p-favs,
-  body.has-player #p-done,body.has-player #p-audio,body.has-player #p-admin{padding-bottom:112px}
+  body.has-player #p-done,body.has-player #p-audio,body.has-player #p-admin{padding-top:96px}
   .mp-btn{width:32px;height:32px;font-size:13px}
 }
 
@@ -956,7 +939,7 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
   .page{padding:0 14px}
 
   /* Add bottom padding for fixed nav */
-  #p-lib,#p-reading,#p-favs,#p-done,#p-admin,#p-audio{padding-bottom:80px}
+  #p-lib,#p-reading,#p-favs,#p-done,#p-admin,#p-audio{padding-top:56px}
 
   /* Header */
   .header{padding:14px 0 0}
@@ -1052,6 +1035,7 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
   .modal{
     border-radius:20px;padding:24px 20px 32px;
     max-width:100%;width:100%;max-height:85vh;
+    margin-top:-20px;
   }
 
   /* Docs column (Внутрішні документи) — goes last */
