@@ -840,30 +840,35 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
 }
 
 /* ── AUDIO PAGE ── */
-.audio-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:20px}
-.audio-card{background:var(--item);border:1px solid var(--border2);border-radius:18px;padding:20px;cursor:pointer;transition:.18s;position:relative;overflow:hidden}
-.audio-card:hover{background:var(--item-h);border-color:var(--accent-border)}
-.audio-card.playing{border-color:var(--accent);background:var(--item-h)}
-.audio-card-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px}
-.audio-cover{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-l));display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
-.audio-info{flex:1;min-width:0}
-.audio-title{font-size:14px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:3px}
-.audio-author{font-size:12px;color:var(--t2)}
-.audio-size{font-size:11px;color:var(--t3);margin-top:4px}
-/* Player controls */
-.audio-player{display:none;flex-direction:column;gap:10px;margin-top:4px}
-.audio-card.playing .audio-player{display:flex}
-.audio-progress-wrap{display:flex;align-items:center;gap:8px}
-.audio-progress{flex:1;height:4px;background:var(--border2);border-radius:4px;cursor:pointer;position:relative}
-.audio-progress-fill{height:100%;border-radius:4px;background:var(--accent);width:0%;transition:width .2s}
-.audio-time{font-size:11px;color:var(--t3);white-space:nowrap;min-width:70px;text-align:right}
-.audio-controls{display:flex;align-items:center;gap:10px}
-.audio-play-btn{width:42px;height:42px;border-radius:50%;background:var(--accent);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:.15s}
-.audio-play-btn:hover{background:var(--accent-l)}
-.audio-speed-btn{background:var(--item-h);border:1px solid var(--border2);border-radius:8px;color:var(--t2);font-size:11px;font-weight:700;padding:5px 9px;cursor:pointer;font-family:'Inter',sans-serif;transition:.15s}
-.audio-speed-btn:hover{color:var(--text);border-color:var(--accent)}
-.audio-open-btn{margin-left:auto;background:none;border:none;color:var(--t3);font-size:20px;cursor:pointer;padding:4px;line-height:1;transition:.15s}
-.audio-open-btn:hover{color:var(--accent)}
+.audio-player-bar{background:var(--item);border:1px solid var(--border2);border-radius:16px;padding:20px 24px;margin-top:20px;margin-bottom:8px}
+.audio-player-bar.hidden{display:none}
+.apb-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.apb-author{font-size:12px;color:var(--t2);margin-bottom:14px}
+.apb-progress-wrap{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.apb-progress{flex:1;height:5px;background:var(--border2);border-radius:5px;cursor:pointer}
+.apb-fill{height:100%;border-radius:5px;background:var(--accent);width:0%;pointer-events:none}
+.apb-time{font-size:11px;color:var(--t3);white-space:nowrap;min-width:80px;text-align:right}
+.apb-controls{display:flex;align-items:center;gap:10px}
+.apb-btn-play{width:44px;height:44px;border-radius:50%;background:var(--accent);border:none;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center;transition:.15s;flex-shrink:0}
+.apb-btn-play:hover{background:var(--accent-l)}
+.apb-btn-prev,.apb-btn-next{width:34px;height:34px;border-radius:50%;background:var(--item-h);border:1px solid var(--border2);color:var(--t2);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:.15s}
+.apb-btn-prev:hover,.apb-btn-next:hover{color:var(--text);border-color:var(--accent)}
+.apb-speed{background:var(--item-h);border:1px solid var(--border2);border-radius:8px;color:var(--t2);font-size:11px;font-weight:700;padding:6px 10px;cursor:pointer;font-family:'Inter',sans-serif;transition:.15s;margin-left:4px}
+.apb-speed:hover{color:var(--text);border-color:var(--accent)}
+.apb-autoplay{display:flex;align-items:center;gap:6px;margin-left:auto;font-size:12px;color:var(--t2);cursor:pointer;user-select:none}
+.apb-autoplay input{accent-color:var(--accent);cursor:pointer}
+/* Track list */
+.audio-list{margin-top:8px;display:flex;flex-direction:column;gap:2px}
+.audio-row{display:flex;align-items:center;gap:14px;padding:11px 16px;border-radius:12px;cursor:pointer;transition:.13s}
+.audio-row:hover{background:var(--item)}
+.audio-row.playing{background:var(--item);border-left:3px solid var(--accent);padding-left:13px}
+.audio-row-num{font-size:12px;color:var(--t3);width:22px;text-align:center;flex-shrink:0;font-variant-numeric:tabular-nums}
+.audio-row.playing .audio-row-num{color:var(--accent)}
+.audio-row-info{flex:1;min-width:0}
+.audio-row-title{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.audio-row.playing .audio-row-title{color:var(--accent)}
+.audio-row-author{font-size:11px;color:var(--t3);margin-top:1px}
+.audio-row-size{font-size:11px;color:var(--t3);flex-shrink:0}
 .audio-empty{text-align:center;padding:60px 20px;color:var(--t3);font-size:14px}
 
 /* ── MOBILE STYLES ── */
@@ -1061,10 +1066,30 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
 
   <!-- PAGE: AUDIO -->
   <div id="p-audio" style="display:none;padding-top:32px">
-    <div class="sec-h">🎧 Аудіокниги</div>
-    <div class="sec-sub">Слухай книги у дорозі — натисни на картку щоб розпочати</div>
-    <div class="audio-grid" id="audio-grid">
-      <div class="audio-empty">Аудіокниги ще не додані.<br>Адмін може завантажити MP3 файли.</div>
+    <div class="sec-h">🎧 Аудіо</div>
+    <div class="sec-sub">Натисни на трек щоб розпочати — далі грає автоматично</div>
+    <!-- Sticky player bar -->
+    <div class="audio-player-bar hidden" id="apb">
+      <div class="apb-title" id="apb-title">—</div>
+      <div class="apb-author" id="apb-author"></div>
+      <div class="apb-progress-wrap">
+        <div class="apb-progress" id="apb-prog" onclick="apbSeek(event)">
+          <div class="apb-fill" id="apb-fill"></div>
+        </div>
+        <div class="apb-time" id="apb-time">0:00 / 0:00</div>
+      </div>
+      <div class="apb-controls">
+        <button class="apb-btn-prev" onclick="apbPrev()" title="Попередній">⏮</button>
+        <button class="apb-btn-play" id="apb-play" onclick="apbPlayPause()">▶</button>
+        <button class="apb-btn-next" onclick="apbNext()" title="Наступний">⏭</button>
+        <button class="apb-speed" id="apb-speed" onclick="apbCycleSpeed()">1×</button>
+        <label class="apb-autoplay">
+          <input type="checkbox" id="apb-auto" checked> Авто
+        </label>
+      </div>
+    </div>
+    <div class="audio-list" id="audio-list">
+      <div class="audio-empty">Треки ще не додані.</div>
     </div>
   </div>
 
@@ -2664,6 +2689,11 @@ function blocksToHtml(blocks){
 }
 
 // ── AUDIO ──
+let apbAudio = null;
+let apbIdx = -1;
+const APB_SPEEDS = [1, 1.25, 1.5, 2];
+let apbSpeedIdx = 0;
+
 const AUDIO_BOOKS = [
   {id:'sinatra_my_way',e:'🎙️',t:'My Way',a:'Frank Sinatra',s:'6.4 MB',c:'music',d:'Легендарна пісня Френка Сінатри — гімн людини яка йшла своїм шляхом.',file:'audio/sinatra_my_way.mp3'},
   {id:'sinatra_strangers',e:'🌙',t:'Strangers In The Night',a:'Frank Sinatra',s:'3.5 MB',c:'music',d:'Класика Сінатри — про двох незнайомців які зустрілися вночі.',file:'audio/sinatra_strangers.mp3'},
@@ -2685,110 +2715,84 @@ const AUDIO_BOOKS = [
 let currentAudio = null; // {id, el (HTMLAudioElement)}
 
 function renderAudio(){
-  const grid = document.getElementById('audio-grid');
-  if(!grid) return;
-  if(!AUDIO_BOOKS.length){
-    grid.innerHTML='<div class="audio-empty">🎧 Аудіокниги ще не додані.<br><span style="font-size:12px;margin-top:8px;display:block">Адмін може завантажити MP3 файли через панель керування</span></div>';
+  const list = document.getElementById('audio-list');
+  if(!list) return;
+  const all = AUDIO_BOOKS;
+  if(!all.length){
+    list.innerHTML='<div class="audio-empty">🎧 Треки ще не додані.</div>';
     return;
   }
-  grid.innerHTML = AUDIO_BOOKS.map(b=>`
-    <div class="audio-card" id="acard-${b.id}" onclick="toggleAudio('${b.id}')">
-      <div class="audio-card-top">
-        <div class="audio-cover">${b.e||'🎧'}</div>
-        <div class="audio-info">
-          <div class="audio-title">${b.t}</div>
-          <div class="audio-author">${b.a}</div>
-          <div class="audio-size">${b.s||''}</div>
-        </div>
+  list.innerHTML = all.map((b,i)=>`
+    <div class="audio-row" id="arow-${b.id}" onclick="apbPlay(${i})">
+      <div class="audio-row-num">${i+1}</div>
+      <div class="audio-row-info">
+        <div class="audio-row-title">${b.t}</div>
+        <div class="audio-row-author">${b.a}</div>
       </div>
-      <div class="audio-player" id="aplayer-${b.id}">
-        <div class="audio-progress-wrap">
-          <div class="audio-progress" id="aprog-${b.id}" onclick="seekAudio(event,'${b.id}')">
-            <div class="audio-progress-fill" id="aprogfill-${b.id}"></div>
-          </div>
-          <div class="audio-time" id="atime-${b.id}">0:00 / 0:00</div>
-        </div>
-        <div class="audio-controls">
-          <button class="audio-play-btn" id="aplaybtn-${b.id}" onclick="event.stopPropagation();playPauseAudio('${b.id}')">▶</button>
-          <button class="audio-speed-btn" id="aspeed-${b.id}" onclick="event.stopPropagation();cycleSpeed('${b.id}')">1×</button>
-        </div>
-      </div>
+      <div class="audio-row-size">${b.s||''}</div>
     </div>
   `).join('');
 }
 
-function toggleAudio(id){
-  const card = document.getElementById('acard-'+id);
-  const isPlaying = card.classList.contains('playing');
-  // Зупиняємо поточне аудіо
-  if(currentAudio && currentAudio.id !== id){
-    stopAudio(currentAudio.id);
-  }
-  if(isPlaying) return; // вже відкрито — не закриваємо кліком на картку
-  card.classList.add('playing');
-  startAudio(id);
+function apbPlay(idx){
+  const all = AUDIO_BOOKS;
+  if(idx<0||idx>=all.length) return;
+  const b = all[idx];
+  // Highlight row
+  document.querySelectorAll('.audio-row').forEach(r=>r.classList.remove('playing'));
+  const row = document.getElementById('arow-'+b.id);
+  if(row){ row.classList.add('playing'); row.scrollIntoView({block:'nearest',behavior:'smooth'}); }
+  // Update player bar
+  document.getElementById('apb').classList.remove('hidden');
+  document.getElementById('apb-title').textContent = b.t;
+  document.getElementById('apb-author').textContent = b.a;
+  document.getElementById('apb-fill').style.width='0%';
+  document.getElementById('apb-time').textContent='0:00 / 0:00';
+  // Audio
+  if(apbAudio){ apbAudio.pause(); apbAudio.src=''; }
+  apbAudio = new Audio(b.file);
+  apbAudio.playbackRate = APB_SPEEDS[apbSpeedIdx];
+  apbAudio.addEventListener('timeupdate', apbTick);
+  apbAudio.addEventListener('ended', apbEnded);
+  apbAudio.play();
+  document.getElementById('apb-play').textContent='⏸';
+  apbIdx = idx;
 }
 
-function startAudio(id){
-  const b = AUDIO_BOOKS.find(x=>x.id===id);
-  if(!b) return;
-  if(!currentAudio || currentAudio.id!==id){
-    if(currentAudio) { currentAudio.el.pause(); }
-    const audio = new Audio(b.file);
-    audio.addEventListener('timeupdate', ()=>updateAudioProgress(id, audio));
-    audio.addEventListener('ended', ()=>stopAudio(id));
-    currentAudio = {id, el:audio, speed:1};
-    audio.play();
-    document.getElementById('aplaybtn-'+id).textContent='⏸';
-  } else {
-    currentAudio.el.play();
-    document.getElementById('aplaybtn-'+id).textContent='⏸';
-  }
+function apbTick(){
+  if(!apbAudio||!apbAudio.duration) return;
+  const pct=apbAudio.currentTime/apbAudio.duration*100;
+  document.getElementById('apb-fill').style.width=pct+'%';
+  document.getElementById('apb-time').textContent=fmtTime(apbAudio.currentTime)+' / '+fmtTime(apbAudio.duration);
 }
 
-function stopAudio(id){
-  const card = document.getElementById('acard-'+id);
-  if(card) card.classList.remove('playing');
-  if(currentAudio && currentAudio.id===id){
-    currentAudio.el.pause();
-  }
-  const btn = document.getElementById('aplaybtn-'+id);
-  if(btn) btn.textContent='▶';
+function apbEnded(){
+  const auto = document.getElementById('apb-auto')?.checked;
+  if(auto && apbIdx+1 < AUDIO_BOOKS.length) apbPlay(apbIdx+1);
+  else document.getElementById('apb-play').textContent='▶';
 }
 
-function playPauseAudio(id){
-  if(!currentAudio || currentAudio.id!==id){ startAudio(id); return; }
-  const audio = currentAudio.el;
-  if(audio.paused){ audio.play(); document.getElementById('aplaybtn-'+id).textContent='⏸'; }
-  else { audio.pause(); document.getElementById('aplaybtn-'+id).textContent='▶'; }
+function apbPlayPause(){
+  if(!apbAudio) return;
+  if(apbAudio.paused){ apbAudio.play(); document.getElementById('apb-play').textContent='⏸'; }
+  else { apbAudio.pause(); document.getElementById('apb-play').textContent='▶'; }
 }
 
-function updateAudioProgress(id, audio){
-  const fill = document.getElementById('aprogfill-'+id);
-  const time = document.getElementById('atime-'+id);
-  if(!fill||!time||!audio.duration) return;
-  const pct = audio.currentTime/audio.duration*100;
-  fill.style.width=pct+'%';
-  time.textContent=fmtTime(audio.currentTime)+' / '+fmtTime(audio.duration);
+function apbPrev(){ if(apbIdx>0) apbPlay(apbIdx-1); }
+function apbNext(){ if(apbIdx+1<AUDIO_BOOKS.length) apbPlay(apbIdx+1); }
+
+function apbSeek(e){
+  if(!apbAudio||!apbAudio.duration) return;
+  const bar=document.getElementById('apb-prog');
+  const rect=bar.getBoundingClientRect();
+  apbAudio.currentTime=(e.clientX-rect.left)/rect.width*apbAudio.duration;
 }
 
-function seekAudio(e, id){
-  e.stopPropagation();
-  if(!currentAudio||currentAudio.id!==id) return;
-  const bar = document.getElementById('aprog-'+id);
-  const rect = bar.getBoundingClientRect();
-  const pct = (e.clientX-rect.left)/rect.width;
-  currentAudio.el.currentTime = pct * currentAudio.el.duration;
-}
-
-const SPEEDS=[1,1.25,1.5,2];
-function cycleSpeed(id){
-  if(!currentAudio||currentAudio.id!==id) return;
-  const idx = SPEEDS.indexOf(currentAudio.speed||1);
-  const next = SPEEDS[(idx+1)%SPEEDS.length];
-  currentAudio.speed=next;
-  currentAudio.el.playbackRate=next;
-  document.getElementById('aspeed-'+id).textContent=next+'×';
+function apbCycleSpeed(){
+  apbSpeedIdx=(apbSpeedIdx+1)%APB_SPEEDS.length;
+  const s=APB_SPEEDS[apbSpeedIdx];
+  if(apbAudio) apbAudio.playbackRate=s;
+  document.getElementById('apb-speed').textContent=s+'×';
 }
 
 function fmtTime(s){
