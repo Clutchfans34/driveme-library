@@ -870,6 +870,33 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
 .audio-row-author{font-size:11px;color:var(--t3);margin-top:1px}
 .audio-row-size{font-size:11px;color:var(--t3);flex-shrink:0}
 .audio-empty{text-align:center;padding:60px 20px;color:var(--t3);font-size:14px}
+/* Desktop: add bottom padding when mini-player visible */
+body.has-player #p-lib,body.has-player #p-reading,body.has-player #p-favs,
+body.has-player #p-done,body.has-player #p-audio,body.has-player #p-admin{padding-bottom:80px}
+
+/* ── MINI PLAYER (persistent, all pages) ── */
+#mini-player{
+  position:fixed;bottom:0;left:0;right:0;z-index:500;
+  background:var(--col);border-top:1px solid var(--border2);
+  padding:10px 20px;
+  display:none;
+  align-items:center;gap:12px;
+  backdrop-filter:blur(12px);
+  box-shadow:0 -4px 24px rgba(0,0,0,.3);
+}
+#mini-player.visible{display:flex}
+.mp-info{flex:1;min-width:0;cursor:pointer}
+.mp-title{font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mp-author{font-size:11px;color:var(--t2);margin-top:1px}
+.mp-prog-wrap{position:absolute;top:0;left:0;right:0;height:3px;background:var(--border)}
+.mp-prog-fill{height:100%;background:var(--accent);width:0%;transition:width .3s linear}
+.mp-btn{width:36px;height:36px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:.15s;flex-shrink:0}
+.mp-btn-play{background:var(--accent);color:#fff}
+.mp-btn-play:hover{background:var(--accent-l)}
+.mp-btn-skip{background:var(--item-h);color:var(--t2);border:1px solid var(--border2)}
+.mp-btn-skip:hover{color:var(--text);border-color:var(--accent)}
+.mp-go{font-size:11px;color:var(--t3);cursor:pointer;white-space:nowrap;flex-shrink:0;padding:4px 8px;border-radius:6px;transition:.13s}
+.mp-go:hover{color:var(--accent)}
 
 /* ── MOBILE STYLES ── */
 @media(max-width:600px){
@@ -877,7 +904,8 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
   .page{padding:0 14px}
 
   /* Add bottom padding for fixed nav */
-  #p-lib,#p-reading,#p-favs,#p-done,#p-admin,#p-audio{padding-bottom:80px}
+  #p-lib,#p-reading,#p-favs,#p-done,#p-admin,#p-audio{padding-bottom:140px}
+  #mini-player{padding:8px 12px;bottom:56px} /* above mob-nav */
 
   /* Header */
   .header{padding:14px 0 0}
@@ -2742,12 +2770,20 @@ function apbPlay(idx){
   document.querySelectorAll('.audio-row').forEach(r=>r.classList.remove('playing'));
   const row = document.getElementById('arow-'+b.id);
   if(row){ row.classList.add('playing'); row.scrollIntoView({block:'nearest',behavior:'smooth'}); }
-  // Update player bar
-  document.getElementById('apb').classList.remove('hidden');
-  document.getElementById('apb-title').textContent = b.t;
-  document.getElementById('apb-author').textContent = b.a;
-  document.getElementById('apb-fill').style.width='0%';
-  document.getElementById('apb-time').textContent='0:00 / 0:00';
+  // Update player bar on audio page
+  const apb = document.getElementById('apb');
+  if(apb){ apb.classList.remove('hidden');
+    document.getElementById('apb-title').textContent = b.t;
+    document.getElementById('apb-author').textContent = b.a;
+    document.getElementById('apb-fill').style.width='0%';
+    document.getElementById('apb-time').textContent='0:00 / 0:00';
+  }
+  // Update mini player (always visible)
+  document.getElementById('mini-player').classList.add('visible');
+  document.body.classList.add('has-player');
+  document.getElementById('mp-title').textContent = b.t;
+  document.getElementById('mp-author').textContent = b.a;
+  document.getElementById('mp-fill').style.width='0%';
   // Audio
   if(apbAudio){ apbAudio.pause(); apbAudio.src=''; }
   apbAudio = new Audio(b.file);
@@ -2756,26 +2792,42 @@ function apbPlay(idx){
   apbAudio.addEventListener('ended', apbEnded);
   apbAudio.play();
   document.getElementById('apb-play').textContent='⏸';
+  document.getElementById('mp-play').textContent='⏸';
   apbIdx = idx;
 }
 
 function apbTick(){
   if(!apbAudio||!apbAudio.duration) return;
   const pct=apbAudio.currentTime/apbAudio.duration*100;
-  document.getElementById('apb-fill').style.width=pct+'%';
-  document.getElementById('apb-time').textContent=fmtTime(apbAudio.currentTime)+' / '+fmtTime(apbAudio.duration);
+  const pctStr=pct+'%';
+  const fill=document.getElementById('apb-fill');
+  if(fill) fill.style.width=pctStr;
+  document.getElementById('mp-fill').style.width=pctStr;
+  const t=fmtTime(apbAudio.currentTime)+' / '+fmtTime(apbAudio.duration);
+  const timeEl=document.getElementById('apb-time');
+  if(timeEl) timeEl.textContent=t;
 }
 
 function apbEnded(){
   const auto = document.getElementById('apb-auto')?.checked;
-  if(auto && apbIdx+1 < AUDIO_BOOKS.length) apbPlay(apbIdx+1);
-  else document.getElementById('apb-play').textContent='▶';
+  if(auto && apbIdx+1 < AUDIO_BOOKS.length){ apbPlay(apbIdx+1); }
+  else {
+    document.getElementById('apb-play').textContent='▶';
+    document.getElementById('mp-play').textContent='▶';
+  }
 }
 
 function apbPlayPause(){
   if(!apbAudio) return;
-  if(apbAudio.paused){ apbAudio.play(); document.getElementById('apb-play').textContent='⏸'; }
-  else { apbAudio.pause(); document.getElementById('apb-play').textContent='▶'; }
+  if(apbAudio.paused){
+    apbAudio.play();
+    document.getElementById('apb-play').textContent='⏸';
+    document.getElementById('mp-play').textContent='⏸';
+  } else {
+    apbAudio.pause();
+    document.getElementById('apb-play').textContent='▶';
+    document.getElementById('mp-play').textContent='▶';
+  }
 }
 
 function apbPrev(){ if(apbIdx>0) apbPlay(apbIdx-1); }
@@ -2963,5 +3015,17 @@ function toast(i,m){
   _t=setTimeout(()=>document.getElementById('toast-el').classList.remove('show'),2300);
 }
 </script>
+<!-- MINI PLAYER -->
+<div id="mini-player">
+  <div class="mp-prog-wrap"><div class="mp-prog-fill" id="mp-fill"></div></div>
+  <button class="mp-btn mp-btn-skip" onclick="apbPrev()" title="Попередній">⏮</button>
+  <button class="mp-btn mp-btn-play" id="mp-play" onclick="apbPlayPause()">▶</button>
+  <button class="mp-btn mp-btn-skip" onclick="apbNext()" title="Наступний">⏭</button>
+  <div class="mp-info" onclick="setPage('audio');syncMobNav('audio')">
+    <div class="mp-title" id="mp-title">—</div>
+    <div class="mp-author" id="mp-author"></div>
+  </div>
+  <span class="mp-go" onclick="setPage('audio');syncMobNav('audio')">🎧 До плейлиста</span>
+</div>
 </body>
 </html>
