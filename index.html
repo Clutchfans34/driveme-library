@@ -916,23 +916,23 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
 }
 #mini-player.visible{display:flex}
 #mini-player.playing{
-  border-color:var(--accent-border);
-  animation:mp-pulse 2s ease-in-out infinite;
+  border-color:rgba(167,139,250,.5);
+  animation:mp-pulse 2.4s ease-in-out infinite;
 }
 @keyframes mp-pulse{
-  0%,100%{box-shadow:0 0 0 0 rgba(232,115,42,0)}
-  50%{box-shadow:0 0 0 4px rgba(232,115,42,.18),0 0 16px rgba(232,115,42,.12)}
+  0%,100%{box-shadow:0 0 0 0 rgba(167,139,250,0)}
+  50%{box-shadow:0 0 0 4px rgba(167,139,250,.2),0 0 18px rgba(167,139,250,.15)}
 }
 .mp-info{flex:1;min-width:0;cursor:pointer}
-.mp-title{font-size:11px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mp-author{font-size:10px;color:var(--t2);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mp-prog-wrap{position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--border)}
-.mp-prog-fill{height:100%;background:var(--accent);width:0%;transition:width .3s linear}
+.mp-prog-fill{height:100%;background:#A78BFA;width:0%;transition:width .3s linear}
 .mp-btn{width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;transition:.15s;flex-shrink:0}
-.mp-btn-play{background:var(--accent);color:#fff}
-.mp-btn-play:hover{background:var(--accent-l)}
-.mp-btn-skip{background:var(--item-h);color:var(--t2);border:1px solid var(--border2)}
-.mp-btn-skip:hover{color:var(--text);border-color:var(--accent)}
+.mp-btn-play{background:#A78BFA;color:#fff}
+.mp-btn-play:hover{background:#C4B5FD}
+.mp-btn-skip{background:rgba(167,139,250,.12);color:#A78BFA;border:1px solid rgba(167,139,250,.3)}
+.mp-btn-skip:hover{color:#C4B5FD;border-color:#A78BFA}
+.mp-title{font-size:11px;font-weight:700;color:#C4B5FD;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mp-author{font-size:10px;color:rgba(167,139,250,.6);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mp-go{display:none}
 
 /* Mobile: fixed strip ABOVE bottom nav */
