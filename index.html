@@ -495,7 +495,8 @@ body::before{
 
 /* ── FEATURED SHELF ── */
 .featured{padding:24px 0 4px}
-.shelf-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.shelf-tabs-row{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.shelf-tabs{display:flex;gap:8px;flex-wrap:wrap;flex:1}
 .shelf-tab{
   padding:8px 18px;border-radius:10px;font-size:13px;font-weight:600;
   border:1px solid var(--border2);background:var(--col);color:var(--t2);
@@ -875,51 +876,51 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
 .audio-empty{text-align:center;padding:60px 20px;color:var(--t3);font-size:14px}
 
 /* ── MINI PLAYER ── */
-/* Desktop: inline strip below header */
 #mini-player{
   display:none;
-  align-items:center;gap:12px;
+  align-items:center;gap:8px;
+  width:25%;min-width:200px;flex-shrink:0;
   background:var(--item);
-  border-bottom:1px solid var(--border2);
-  border-top:1px solid var(--border2);
-  padding:10px 24px;
-  position:relative;
+  border:1px solid var(--border2);
+  border-radius:12px;
+  padding:8px 12px;
+  position:relative;overflow:hidden;
+  transition:box-shadow .3s;
 }
 #mini-player.visible{display:flex}
+#mini-player.playing{
+  border-color:var(--accent-border);
+  animation:mp-pulse 2s ease-in-out infinite;
+}
+@keyframes mp-pulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(232,115,42,0)}
+  50%{box-shadow:0 0 0 4px rgba(232,115,42,.18),0 0 16px rgba(232,115,42,.12)}
+}
 .mp-info{flex:1;min-width:0;cursor:pointer}
-.mp-title{font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mp-author{font-size:11px;color:var(--t2);margin-top:1px}
+.mp-title{font-size:11px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mp-author{font-size:10px;color:var(--t2);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mp-prog-wrap{position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--border)}
 .mp-prog-fill{height:100%;background:var(--accent);width:0%;transition:width .3s linear}
-.mp-btn{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:.15s;flex-shrink:0}
+.mp-btn{width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;transition:.15s;flex-shrink:0}
 .mp-btn-play{background:var(--accent);color:#fff}
 .mp-btn-play:hover{background:var(--accent-l)}
 .mp-btn-skip{background:var(--item-h);color:var(--t2);border:1px solid var(--border2)}
 .mp-btn-skip:hover{color:var(--text);border-color:var(--accent)}
-.mp-go{font-size:11px;color:var(--t3);cursor:pointer;white-space:nowrap;flex-shrink:0;padding:4px 8px;border-radius:6px;transition:.13s}
-.mp-go:hover{color:var(--accent)}
+.mp-go{display:none}
 
-/* Mobile: fixed strip ABOVE bottom nav, doesn't overlap content */
+/* Mobile: fixed strip ABOVE bottom nav */
 @media(max-width:600px){
   #mini-player{
     position:fixed;bottom:56px;left:0;right:0;z-index:299;
-    padding:8px 12px;gap:8px;
-    border-top:1px solid var(--border2);
-    border-bottom:none;
+    width:100%;min-width:unset;
+    border-radius:0;border-left:none;border-right:none;border-bottom:none;
+    padding:8px 14px;gap:10px;
     background:var(--col);
     box-shadow:0 -2px 12px rgba(0,0,0,.2);
   }
-  #mini-player.visible~* .mob-nav,
-  .mob-nav{bottom:0}
-  .mp-go{display:none}
-  .mp-btn{width:32px;height:32px;font-size:12px}
-  /* Push page content up so player doesn't overlap */
-  body.has-player #p-lib,
-  body.has-player #p-reading,
-  body.has-player #p-favs,
-  body.has-player #p-done,
-  body.has-player #p-audio,
-  body.has-player #p-admin{padding-bottom:112px}
+  body.has-player #p-lib,body.has-player #p-reading,body.has-player #p-favs,
+  body.has-player #p-done,body.has-player #p-audio,body.has-player #p-admin{padding-bottom:112px}
+  .mp-btn{width:32px;height:32px;font-size:13px}
 }
 
 /* ── MOBILE STYLES ── */
@@ -1080,24 +1081,24 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
     </div>
   </div>
 
-  <!-- INLINE MINI PLAYER (below header, all pages) -->
-  <div id="mini-player">
-    <div class="mp-prog-wrap"><div class="mp-prog-fill" id="mp-fill"></div></div>
-    <button class="mp-btn mp-btn-skip" onclick="apbPrev()">⏮</button>
-    <button class="mp-btn mp-btn-play" id="mp-play" onclick="apbPlayPause()">▶</button>
-    <button class="mp-btn mp-btn-skip" onclick="apbNext()">⏭</button>
-    <div class="mp-info" onclick="setPage('audio');syncMobNav('audio')">
-      <div class="mp-title" id="mp-title">—</div>
-      <div class="mp-author" id="mp-author"></div>
-    </div>
-    <span class="mp-go" onclick="setPage('audio');syncMobNav('audio')">🎧 До плейлиста</span>
-  </div>
-
   <!-- PAGE: LIBRARY -->
   <div id="p-lib">
     <!-- FEATURED -->
     <div class="featured">
-      <div class="shelf-tabs" id="shelf-tabs"></div>
+      <div class="shelf-tabs-row">
+        <div class="shelf-tabs" id="shelf-tabs"></div>
+        <!-- MINI PLAYER — same row as shelf tabs -->
+        <div id="mini-player">
+          <div class="mp-prog-wrap"><div class="mp-prog-fill" id="mp-fill"></div></div>
+          <button class="mp-btn mp-btn-skip" onclick="apbPrev()">⏮</button>
+          <button class="mp-btn mp-btn-play" id="mp-play" onclick="apbPlayPause()">▶</button>
+          <button class="mp-btn mp-btn-skip" onclick="apbNext()">⏭</button>
+          <div class="mp-info" onclick="setPage('audio');syncMobNav('audio')">
+            <div class="mp-title" id="mp-title">—</div>
+            <div class="mp-author" id="mp-author"></div>
+          </div>
+        </div>
+      </div>
       <div class="shelf-row" id="shelf-row"></div>
     </div>
     <div class="search-row" style="padding-top:28px">
@@ -2834,7 +2835,7 @@ function apbPlay(idx){
     document.getElementById('apb-time').textContent='0:00 / 0:00';
   }
   // Update mini player (always visible)
-  document.getElementById('mini-player').classList.add('visible');
+  document.getElementById('mini-player').classList.add('visible','playing');
   document.body.classList.add('has-player');
   document.getElementById('mp-title').textContent = b.t;
   document.getElementById('mp-author').textContent = b.a;
@@ -2874,14 +2875,17 @@ function apbEnded(){
 
 function apbPlayPause(){
   if(!apbAudio) return;
+  const mp = document.getElementById('mini-player');
   if(apbAudio.paused){
     apbAudio.play();
     document.getElementById('apb-play').textContent='⏸';
     document.getElementById('mp-play').textContent='⏸';
+    mp.classList.add('playing');
   } else {
     apbAudio.pause();
     document.getElementById('apb-play').textContent='▶';
     document.getElementById('mp-play').textContent='▶';
+    mp.classList.remove('playing');
   }
 }
 
