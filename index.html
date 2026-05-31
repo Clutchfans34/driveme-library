@@ -503,6 +503,33 @@ body::before{
   cursor:pointer;font-family:'Inter',sans-serif;transition:all .14s;
 }
 .shelf-tab:hover{color:var(--text);border-color:var(--border2)}
+/* ── AUDIO NAV BUTTON ── */
+.nav-audio{
+  color:#A78BFA !important;
+  border-color:rgba(167,139,250,.3) !important;
+  background:rgba(167,139,250,.08) !important;
+  position:relative;overflow:visible !important;
+}
+.nav-audio::before{
+  content:'';position:absolute;inset:-2px;border-radius:12px;
+  background:linear-gradient(135deg,rgba(167,139,250,.4),rgba(232,115,42,.3));
+  opacity:0;z-index:-1;
+  animation:audio-glow 2.4s ease-in-out infinite;
+}
+@keyframes audio-glow{
+  0%,100%{opacity:0;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.04)}
+}
+.nav-audio:hover{color:#C4B5FD !important;border-color:rgba(167,139,250,.6) !important}
+/* Mobile audio tab */
+.mob-nav-audio{color:#A78BFA !important;animation:mob-audio-bounce 2.4s ease-in-out infinite}
+@keyframes mob-audio-bounce{
+  0%,100%{transform:translateY(0)}
+  40%{transform:translateY(-3px)}
+  60%{transform:translateY(-1px)}
+}
+.mob-nav-audio.on{color:#A78BFA !important}
+
 .shelf-tab.on{
   background:var(--accent-bg);border-color:var(--accent);
   color:var(--accent);
@@ -1065,7 +1092,7 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
           <button class="nav-btn" onclick="setPage('reading',this)">Читаю <span id="readingn" style="color:var(--accent)"></span></button>
           <button class="nav-btn" onclick="setPage('favs',this)">Обрані <span id="favn" style="color:var(--accent)"></span></button>
           <button class="nav-btn" onclick="setPage('done',this)">Прочитано <span id="donen" style="color:var(--accent)"></span></button>
-          <button class="nav-btn" onclick="setPage('audio',this)">🎧 Аудіо</button>
+          <button class="nav-btn nav-audio" onclick="setPage('audio',this)">🎧 Аудіо</button>
           <button class="nav-btn" id="admin-nav-btn" style="display:none;color:var(--accent)" onclick="setPage('admin',this)">👑 Адмін</button>
         </div>
         <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Змінити тему">🌙</button>
@@ -1366,7 +1393,7 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
     <span class="mn-ico">✅</span>
     <span class="mn-lbl">Прочитано</span>
   </button>
-  <button class="mob-nav-btn" id="mn-audio" onclick="setPage('audio',this);syncMobNav('audio')">
+  <button class="mob-nav-btn mob-nav-audio" id="mn-audio" onclick="setPage('audio',this);syncMobNav('audio')">
     <span class="mn-ico">🎧</span>
     <span class="mn-lbl">Аудіо</span>
   </button>
