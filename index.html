@@ -873,7 +873,8 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
 .audio-row-size{font-size:11px;color:var(--t3);flex-shrink:0}
 .audio-empty{text-align:center;padding:60px 20px;color:var(--t3);font-size:14px}
 
-/* ── MINI PLAYER (inline, below header) ── */
+/* ── MINI PLAYER ── */
+/* Desktop: inline strip below header */
 #mini-player{
   display:none;
   align-items:center;gap:12px;
@@ -897,6 +898,29 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
 .mp-go{font-size:11px;color:var(--t3);cursor:pointer;white-space:nowrap;flex-shrink:0;padding:4px 8px;border-radius:6px;transition:.13s}
 .mp-go:hover{color:var(--accent)}
 
+/* Mobile: fixed strip ABOVE bottom nav, doesn't overlap content */
+@media(max-width:600px){
+  #mini-player{
+    position:fixed;bottom:56px;left:0;right:0;z-index:299;
+    padding:8px 12px;gap:8px;
+    border-top:1px solid var(--border2);
+    border-bottom:none;
+    background:var(--col);
+    box-shadow:0 -2px 12px rgba(0,0,0,.2);
+  }
+  #mini-player.visible~* .mob-nav,
+  .mob-nav{bottom:0}
+  .mp-go{display:none}
+  .mp-btn{width:32px;height:32px;font-size:12px}
+  /* Push page content up so player doesn't overlap */
+  body.has-player #p-lib,
+  body.has-player #p-reading,
+  body.has-player #p-favs,
+  body.has-player #p-done,
+  body.has-player #p-audio,
+  body.has-player #p-admin{padding-bottom:112px}
+}
+
 /* ── MOBILE STYLES ── */
 @media(max-width:600px){
   /* Page wrapper */
@@ -904,7 +928,6 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
 
   /* Add bottom padding for fixed nav */
   #p-lib,#p-reading,#p-favs,#p-done,#p-admin,#p-audio{padding-bottom:80px}
-  #mini-player{padding:10px 14px;gap:10px}
 
   /* Header */
   .header{padding:14px 0 0}
@@ -942,8 +965,6 @@ textarea.sug-input{resize:vertical;min-height:80px;line-height:1.5}
   .audio-row-size{display:none}
   .audio-row-title{font-size:14px}
   .audio-row-author{font-size:12px}
-  .mp-go{display:none}
-  #mini-player{padding:10px 14px;gap:10px}
   .mp-title{font-size:13px}
   .mp-author{font-size:11px}
 
@@ -2808,6 +2829,7 @@ function apbPlay(idx){
   }
   // Update mini player (always visible)
   document.getElementById('mini-player').classList.add('visible');
+  document.body.classList.add('has-player');
   document.getElementById('mp-title').textContent = b.t;
   document.getElementById('mp-author').textContent = b.a;
   document.getElementById('mp-fill').style.width='0%';
